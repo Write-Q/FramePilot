@@ -1,0 +1,48 @@
+:root{font-family:"Microsoft YaHei",sans-serif;color:#23352e;background:#f5f6f2;font-size:15px;line-height:1.7}*{box-sizing:border-box}body{margin:0}header,main,footer{width:min(1200px,calc(100% - 40px));margin:auto}header{display:flex;justify-content:space-between;align-items:center;padding:30px 0 20px}small{letter-spacing:.15em;color:#687d6e}h1{font-size:32px;margin:8px 0}h2{font-size:20px}h3{font-size:17px}header p,.hint{color:#637268;font-size:13px}a{color:#2b6650}main{display:grid;grid-template-columns:360px minmax(0,1fr);gap:24px;align-items:start}.panel{background:white;border:1px solid #dce3d9;border-radius:10px;padding:24px}label{display:block;margin:16px 0 6px}textarea,input,select{width:100%;font:inherit;padding:10px;border:1px solid #cbd4c7;border-radius:5px;background:#fff;color:inherit}textarea{resize:vertical}button{font:inherit;border:1px solid #2d624a;border-radius:5px;background:#2d624a;color:white;padding:9px 14px;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:white;color:#2d624a}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row input{flex:1;min-width:120px}.row h2{flex:1}hr{border:0;border-top:1px solid #e1e6df;margin:26px 0}.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}.facet{padding:14px;background:#f6f8f3;border-radius:5px}.facet strong{display:block}.facet small{font-size:11px;letter-spacing:0}.facet p{white-space:pre-wrap;margin:8px 0}.issue{border-left:3px solid #b68c42;background:#faf6ec;padding:12px 15px;margin:12px 0}.issue label{font-size:13px}.issue input{width:auto}blockquote{margin:10px 0;padding-left:12px;border-left:2px solid #d2d7cd;font-size:13px;white-space:pre-wrap}details{margin:20px 0}summary{cursor:pointer;color:#37684d}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:14px;background:#f6f8f3;padding:15px}#message{padding:12px;border-radius:5px;background:#edf3e9;white-space:pre-wrap}#identifier{overflow-wrap:anywhere}footer{padding:28px 0;font-size:12px;color:#778174}[hidden]{display:none!important}:focus-visible{outline:2px solid #4a8567;outline-offset:2px}@media(max-width:850px){main{grid-template-columns:1fr}.cards{grid-template-columns:1fr}header{align-items:flex-start}header a{white-space:nowrap;font-size:12px}.panel{padding:18px}}
+
+#live-text{max-height:280px;overflow:auto;overflow-wrap:anywhere} .results{min-width:0}
+
+/* 清爽的编辑工作台：纸色背景、墨绿重点、清晰的信息层级。 */
+:root{background:#f2f1eb;color:#263c34;line-height:1.75}
+header{padding:36px 0 28px;border-bottom:1px solid #d9dfd5;margin-bottom:28px}
+h1{font-family:"Noto Serif SC","SimSun",serif;font-size:38px;letter-spacing:.02em}
+header small,.eyebrow{font-size:11px;letter-spacing:.13em;color:#587367}
+.panel{border:1px solid #e0e4dc;border-radius:16px;padding:26px;box-shadow:0 5px 24px #23352e05}
+main{grid-template-columns:340px minmax(0,1fr);gap:28px}
+.results{min-height:440px}.results h3{margin-top:32px;padding-top:22px;border-top:1px solid #e6e8e1}
+h2{margin-top:6px}textarea,input,select{border-radius:8px;background:#fcfcfa}
+button{border-radius:8px;transition:background .15s,box-shadow .15s}button:hover:not(:disabled){background:#204b38;color:white;box-shadow:0 3px 9px #204b3817}
+#message{background:#edf2e9;border-left:3px solid #688b69;padding:16px 18px;border-radius:8px}
+#summary{color:#587367;font-size:13px}#identifier{font-size:11px;color:#78867c}
+.cards{gap:14px}.facet{background:#fafbf7;border:1px solid #e8ebe2;border-radius:10px;padding:18px;min-width:0;overflow-wrap:anywhere}
+.facet strong{font-size:16px}.facet small{display:inline-block;color:#71836c}.facet p{font-size:14px}
+.issue{border:1px solid #e8dcc4;border-left:3px solid #b99450;background:#fffdf7;border-radius:9px;padding:18px 20px}
+.issue strong{display:block;margin-top:10px;font-size:15px;line-height:1.8}.suggestion{font-size:14px;color:#52685a;margin-bottom:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.badge{display:inline-block;font-size:11px;padding:2px 9px;border-radius:5px;background:#eee8d8;color:#766032;letter-spacing:.04em}
+.evidence{margin:12px 0 0;font-size:12px}.evidence summary{color:#72816f}.evidence blockquote{color:#6f786e;font-size:12px;overflow-wrap:anywhere}
+#actions{background:#f4f7ef;border-radius:12px;padding:18px;margin-top:24px}#actions label{margin-top:0}
+#live{margin-top:22px;padding:20px;border:1px solid #dce6d5;border-radius:12px;background:#fafcf6}
+#live-stage{font-weight:600;margin:10px 0}#live-stage:before{content:'';display:inline-block;width:7px;height:7px;background:#63856a;border-radius:50%;margin-right:9px}
+#live-text{max-height:340px;overflow:auto;font-size:14px;color:#546a5c}.preview-item{border-top:1px solid #e4eadf;padding:12px 0}.preview-item small{font-size:11px;letter-spacing:0}.preview-item p{white-space:pre-wrap;margin:5px 0;overflow-wrap:anywhere}
+@media(max-width:850px){main{grid-template-columns:1fr}header{margin-bottom:20px}h1{font-size:29px}.panel{padding:20px}.cards{grid-template-columns:1fr}header,main,footer{width:calc(100% - 28px)}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
+
+#facet-tabs{position:sticky;top:0;z-index:2;display:flex;overflow-x:auto;gap:6px;padding:12px 0;background:#fff;scroll-margin-top:12px;border-bottom:1px solid #e0e4dc}
+.facet-tab{flex:0 0 auto;background:transparent;color:#56705e;border:1px solid transparent;font-size:13px;padding:7px 12px}
+.facet-tab[aria-selected="true"]{background:#2d624a;color:white;border-color:#2d624a}
+#card.cards{display:block;margin-top:14px}#card .facet{max-height:420px;overflow-y:auto;scrollbar-gutter:stable}
+#facet-context{padding:10px 14px;background:#faf3e4;border-left:3px solid #b99450;font-size:13px;overflow-wrap:anywhere}
+.related-facets{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:12px 0;font-size:12px;color:#647963}
+.related-link{padding:3px 10px;font-size:12px;color:#2d624a;background:#edf3e9;border:1px solid #d7e2d2;border-radius:16px}
+
+/* 标签与卡片作为整体吸顶，给下方审核与反馈保留可见空间。 */
+#facet-dock{position:sticky;top:0;z-index:3;background:#fff;padding-bottom:12px;border-bottom:1px solid #e0e4dc;box-shadow:0 8px 12px -12px #23352e66;max-height:52dvh;display:flex;flex-direction:column}
+#facet-dock #facet-tabs{position:static;flex-shrink:0}
+#facet-dock #facet-context{flex-shrink:0;max-height:60px;overflow:auto;margin:6px 0}
+#facet-dock #card{min-height:0;overflow:auto;margin-top:8px}
+#facet-dock #card .facet{max-height:none;overflow:visible}
+@media(max-width:850px){#facet-dock{max-height:45dvh}}
+
+.direction{padding:15px;border:1px solid #dce3d9;border-radius:10px;background:#fafcf7}.direction input{width:auto;margin-right:10px}.direction p{font-size:14px;margin:8px 0}.issue select{font-size:13px}.issue textarea{margin-top:8px}#directions-panel{padding-bottom:20px}
+
+#error-panel{margin:18px 0;padding:18px;border:1px solid #d6a798;border-left:4px solid #a54e36;background:#fff6f1;border-radius:10px;scroll-margin-top:16px;overflow-wrap:anywhere}#error-panel h3{margin:0;padding:0;border:0;color:#8e3c2c}#error-next{font-size:13px;color:#77574d}#error-detail{background:#f9ebe4}
