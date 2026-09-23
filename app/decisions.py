@@ -1,5 +1,6 @@
 """把用户逐条选择转换为明确授权；AI 原建议只从服务端记录读取。"""
 
+# 将用户选择转成明确指令；adopt 的原建议从服务端取，避免客户端篡改。
 def resolve_decisions(state, decisions):
     known = {item['id']: item for item in state['issues']}
     resolved = []

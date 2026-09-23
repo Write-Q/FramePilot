@@ -16,6 +16,7 @@ from app.service import StoryService, Conflict
 from app.streaming import stream_operation
 
 
+# 组装 FastAPI 应用；注入 provider/data_dir 便于测试替换模型和数据库。
 def create_app(*, data_dir=None, provider=None):
     @asynccontextmanager
     async def lifespan(app):
@@ -31,6 +32,7 @@ def create_app(*, data_dir=None, provider=None):
     static = Path(__file__).parent / 'static'
     app.mount('/static', StaticFiles(directory=static), name='static')
 
+    # 将业务异常映射为 HTTP 状态码；模型流程失败由服务层保存为项目状态。
     def invoke(operation):
         try:
             return operation()
@@ -58,6 +60,7 @@ def create_app(*, data_dir=None, provider=None):
                 'configured': bool(os.getenv('DEEPSEEK_API_KEY')), 'max_revisions': 3, 'max_calls': 10}
 
     @app.post('/api/projects', status_code=201, summary='创建故事并进行首次审核')
+    # 非流式新建接口：等待流程到达暂停或结束后返回。
     def create_project(request: CreateProject):
         return invoke(lambda: app.state.stories.create(request))
 
@@ -70,10 +73,12 @@ def create_app(*, data_dir=None, provider=None):
         return invoke(lambda: app.state.stories.versions(project_id))
 
     @app.post('/api/projects/{project_id}/resume', summary='提交修改要求或确认当前版本')
+    # 恢复已有项目的人工暂停，而不是重新创建项目。
     def resume(project_id: str, request: ResumeProject):
         return invoke(lambda: app.state.stories.resume(project_id, request))
 
     @app.post('/api/projects/stream', summary='流式创建与审核故事')
+    # 流式新建接口：通过 SSE 持续传递阶段、增量预览和最终结果。
     def create_stream(request: CreateProject):
         return stream_operation(lambda: app.state.stories.create(request))
 
@@ -90,6 +95,7 @@ def create_app(*, data_dir=None, provider=None):
         return stream_operation(lambda: app.state.stories.retry(project_id))
 
     @app.get('/api/projects/{project_id}/diff', summary='比较两个已保存的正文版本')
+    # 比较已保存正文版本，生成文本差异；不修改或回滚正文。
     def diff(project_id: str, from_version: int, to_version: int):
         versions = invoke(lambda: app.state.stories.versions(project_id))
         by_id = {v['version']: v for v in versions}
@@ -101,6 +107,7 @@ def create_app(*, data_dir=None, provider=None):
         return {'diff': result}
 
     @app.get('/api/projects/{project_id}/export', summary='导出当前剧本、原稿与决策记录')
+    # 导出交接材料；导出操作不等于审核通过或视频生成。
     def export(project_id: str):
         project = invoke(lambda: app.state.stories.get(project_id))
         state = project['state']

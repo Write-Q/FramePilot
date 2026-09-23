@@ -7,9 +7,11 @@ from app.events import progress_sink
 from app.service import Conflict
 
 
+# 把同步业务操作桥接成 SSE HTTP 响应；事件预览不是最终校验结果。
 def stream_operation(operation):
     queue = Queue(maxsize=256)
     disconnected = Event()
+    # 向有界队列投递事件；浏览器断开后停止通知，但不会取消业务操作。
     def send(item):
         while not disconnected.is_set():
             try:
@@ -17,6 +19,7 @@ def stream_operation(operation):
                 return
             except Full:
                 pass
+    # 后台线程执行业务操作，并把结果或错误写入事件队列。
     def worker():
         token = progress_sink.set(send)
         try:
@@ -30,6 +33,7 @@ def stream_operation(operation):
         finally:
             progress_sink.reset(token)
             send(None)
+    # HTTP 响应生成器：读取事件、发送心跳，并标记连接结束。
     def body():
         Thread(target=worker, daemon=True).start()
         try:

@@ -42,9 +42,11 @@ class StoryService:
             self.provider.close()
 
     @staticmethod
+    # 把业务 project_id 映射到图的 thread_id；recursion_limit 是技术保险，不是修订轮数。
     def config(project_id):
         return {'configurable': {'thread_id': project_id}, 'recursion_limit': 40}
 
+    # 统一执行或恢复图，处理错误，读取检查点并保存面向接口的业务快照。
     def _run(self, project_id, input_data):
         emit('project', id=project_id)
         config = self.config(project_id)
@@ -73,6 +75,7 @@ class StoryService:
         self.repo.save(project_id, state, pending)
         return self.repo.get(project_id)
 
+    # 创建初始状态；direct 只保存原稿，其余模式启动工作流。
     def create(self, request):
         if not self.operation_lock.acquire(blocking=False):
             raise Conflict('当前有任务正在执行，请稍后再试。')
@@ -94,6 +97,7 @@ class StoryService:
         finally:
             self.operation_lock.release()
 
+    # 先验证版本、暂停编号、决策权限及预算，再用 Command 恢复暂停节点。
     def resume(self, project_id, request):
         if not self.operation_lock.acquire(blocking=False):
             raise Conflict('当前有任务正在执行，请勿重复提交。')
@@ -147,6 +151,7 @@ class StoryService:
         finally:
             self.operation_lock.release()
 
+    # 只重试失败节点；沿用项目编号、检查点和累计调用额度。
     def retry(self, project_id):
         if not self.operation_lock.acquire(blocking=False):
             raise Conflict('当前有任务执行中，请稍后重试。')

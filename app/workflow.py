@@ -10,7 +10,9 @@ from app.domain import StoryState, Extraction, Revision, Review, StoryPlan, Brai
 from app.provider import ProviderError
 
 
+# 组装状态图；内部节点闭包共用模型适配器、业务仓库和检查点存储。
 def build_graph(provider, repo, checkpointer):
+    # 节点调用模型的统一入口：先占调用额度，再校验结构并记录请求结果。
     def ask(state, task, schema, validation_feedback=None):
         call_id = repo.reserve_call(state['project_id'], task)
         payload = {key: state.get(key) for key in (
@@ -29,6 +31,7 @@ def build_graph(provider, repo, checkpointer):
         repo.finish_call(call_id, 'succeeded', usage)
         return parsed.model_dump()
 
+    # 校验标为原稿/用户来源的引用，不能证明概括的语义判断一定正确。
     def check_card(state, card):
         user_text = state['constraints'] + '\n' + '\n'.join(state['feedback_history'])
         for name, facet in card.items():
@@ -38,14 +41,17 @@ def build_graph(provider, repo, checkpointer):
                 if not quote or quote not in haystack:
                     raise ProviderError(f'理解卡片的 {name} 来源引用不是对应材料中的连续原文。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。')
 
+    # 自由模式：先构思故事骨架。
     def plan(state):
         return ask(state, 'plan', StoryPlan)
 
+    # 协作模式：生成候选方向，并由程序分配方向编号。
     def brainstorm(state):
         result = ask(state, 'brainstorm', Brainstorm)
         return {'directions': [dict(option, id=f"direction_{index}") for index, option in enumerate(result['directions'])],
                 'status': 'awaiting_direction', 'stop_reason': '请选择或调整一个故事方向，再开始编写。'}
 
+    # 人工选择方向的暂停点；恢复后记录授权并推进正文版本。
     def direction_choice(state):
         answer = interrupt({'version': state['version'], 'status': state['status'],
                             'directions': state['directions'], 'actions': ['choose']})
@@ -56,12 +62,14 @@ def build_graph(provider, repo, checkpointer):
                 'decision_history': [*state.get('decision_history', []), {'version': state['version'], 'action': 'choose', 'direction': selected, 'feedback': answer['feedback']}],
                 'status': 'running'}
 
+    # 按故事骨架首次写出正文及卡片；与后续 revise 修订分开计数。
     def compose(state):
         result = ask(state, 'compose', Revision)
         check_card(state, result['card'])
         repo.version({**state, **result})
         return result
 
+    # 理解已有输入并生成卡片；来源引用不合格时最多纠正一次。
     def extract(state):
         result = ask(state, 'extract', Extraction)
         try:
@@ -73,6 +81,7 @@ def build_graph(provider, repo, checkpointer):
         repo.version({**state, **result})
         return result
 
+    # 审核当前稿、验证引用、补充问题编号并保留未处理旧问题。
     def review(state):
         result = ask(state, 'review', Review)
         sources = {'original': state['original_story'], 'draft': state['draft'],
@@ -100,6 +109,7 @@ def build_graph(provider, repo, checkpointer):
         return {'stagnant_rounds': stagnant, 'issues': issues, 'reviewed_version': state['version'],
                 'review_history': [*state['review_history'], {'version': state['version'], 'issues': issues}]}
 
+    # 确定性路由：判断人工介入、无进展、修订上限和调用预算。
     def decide(state):
         issues = state['issues']
         if not issues:
@@ -116,6 +126,7 @@ def build_graph(provider, repo, checkpointer):
             status, reason, next_step = 'running', '', 'revise'
         return {'status': status, 'stop_reason': reason, 'next_step': next_step}
 
+    # 按审核及用户授权改稿，保存新版本，再回到审核。
     def revise(state):
         # 再次保护边界，避免未来改图时绕过路由上限。
         if state['revision_count'] >= 3:
@@ -128,6 +139,7 @@ def build_graph(provider, repo, checkpointer):
         repo.version({**state, **updates})
         return updates
 
+    # 人工暂停点；confirm 结束，clarify 仅复审，revise 修改后复审。
     def human(state):
         # interrupt 前不执行模型请求或数据写入，恢复时节点会从头运行。
         answer = interrupt({'version': state['version'], 'status': state['status'],

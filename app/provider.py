@@ -22,6 +22,7 @@ class ProviderError(RuntimeError):
 
 
 class ModelProvider(Protocol):
+    # 模型适配接口：task 指任务名，payload 是业务材料，schema 是输出结构；返回结果字典和用量。
     def generate(self, task: str, payload: dict, schema: dict) -> tuple[dict, dict]: ...
 
 
@@ -42,6 +43,7 @@ class DeepSeekProvider:
             ('system', '{instructions}'), ('human', '{payload_json}'),
         ])
 
+    # 模型适配接口：task 指任务名，payload 是业务材料，schema 是输出结构；返回结果字典和用量。
     def generate(self, task, payload, schema):
         if not self.key:
             raise ProviderError('未找到 DEEPSEEK_API_KEY，请设置环境变量或本地 .env。')
