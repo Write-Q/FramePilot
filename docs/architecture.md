@@ -1,3 +1,5 @@
+> 当前数据库实现已迁移到 PostgreSQL；下文保留开发历史。最新存储设计见 [PostgreSQL 迁移说明](postgresql.md)。
+
 # 第一轮实现：从业务图到代码框架
 
 ## 一次请求的路径
@@ -98,3 +100,7 @@ ResumeProject 新增 choose、clarify，逐条 IssueDecision（adopt/replace/kee
 protected_issues 保留未选择的旧问题；decision_history 保存来源版本、操作和最终授权。只澄清时不创建正文版本，复审仍受额度控制。diff/export 是只读派生输出；retry 只允许 failed 状态、剩余额度和可恢复检查点，从原线程失败节点继续。
 
 前端不再拿“接受现状”的勾选替代“采用建议”。候选方向、逐条选择、整体补充、仅澄清和确认各自有明确提交入口。接口和浏览器集成均使用模拟供应商验证，真实效果仍需评测。
+
+## PostgreSQL 持久化（2026-09-23）
+
+业务表使用 SQLAlchemy 与 Alembic；状态快照使用 JSONB。图检查点改为 PostgresSaver，独立连接池。SQLite 仅供离线旧库导入，运行时不再支持回退。调用预算用项目行锁保证跨连接原子预占；应用仍保留进程内操作锁并要求单进程部署。

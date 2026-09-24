@@ -1,10 +1,12 @@
 """应用服务：业务版本、图恢复和接口之间的边界。仅支持单进程部署。"""
-import sqlite3
-from pathlib import Path
+from contextlib import ExitStack
+from psycopg.rows import dict_row
+from psycopg_pool import ConnectionPool
 from threading import Lock
 from uuid import uuid4
 
-from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.postgres import PostgresSaver
+from app.database import database_url, checkpoint_conninfo
 from langgraph.types import Command
 
 from app.decisions import resolve_decisions
@@ -19,12 +21,22 @@ class Conflict(ValueError):
 
 
 class StoryService:
-    def __init__(self, data_dir, provider, max_calls=10):
-        data_dir = Path(data_dir)
-        data_dir.mkdir(parents=True, exist_ok=True)
-        self.repo = Repository(data_dir / 'stories.sqlite3')
-        self.graph_conn = sqlite3.connect(data_dir / 'checkpoints.sqlite3', check_same_thread=False)
-        self.graph = build_graph(provider, self.repo, SqliteSaver(self.graph_conn))
+    def __init__(self, db_url, provider, max_calls=10):
+        value = database_url(db_url).render_as_string(hide_password=False)
+        self._resources = ExitStack()
+        try:
+            self.repo = Repository(value)
+            self._resources.callback(self.repo.close)
+            # 图检查点使用独立连接池，业务数据通过 Repository 读写。
+            pool = self._resources.enter_context(ConnectionPool(
+                checkpoint_conninfo(value), min_size=1, max_size=4,
+                kwargs={'autocommit': True, 'prepare_threshold': 0, 'row_factory': dict_row},
+                timeout=10))
+            pool.wait(timeout=10)
+            self.graph = build_graph(provider, self.repo, PostgresSaver(pool))
+        except Exception:
+            self._resources.close()
+            raise
         self.provider = provider
         self.max_calls = max_calls
         self.operation_lock = Lock()
@@ -36,8 +48,7 @@ class StoryService:
         self.close()
 
     def close(self):
-        self.repo.close()
-        self.graph_conn.close()
+        self._resources.close()
         if hasattr(self.provider, 'close'):
             self.provider.close()
 

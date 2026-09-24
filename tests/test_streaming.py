@@ -27,8 +27,8 @@ def test_provider_emits_chunks(monkeypatch):
         progress_sink.reset(token)
 
 
-def test_stream_endpoint_persists_result(tmp_path):
-    with TestClient(create_app(data_dir=tmp_path, provider=FakeModel())) as client:
+def test_stream_endpoint_persists_result(database_url):
+    with TestClient(create_app(database_url=database_url, provider=FakeModel())) as client:
         response = client.post('/api/projects/stream', json={'story': STORY})
         assert response.status_code == 200
         assert 'text/event-stream' in response.headers['content-type']

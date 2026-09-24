@@ -50,9 +50,9 @@ def resume(service, project, action='confirm', feedback='', accepted=None):
         action=action, feedback=feedback, accepted_issue_ids=accepted or []))
 
 
-def test_clean_story_waits_for_confirmation(tmp_path):
+def test_clean_story_waits_for_confirmation(database_url):
     model = FakeModel()
-    with StoryService(tmp_path, model) as service:
+    with StoryService(database_url, model) as service:
         project = service.create(CreateProject(story=STORY))
         assert project['state']['status'] == 'awaiting_confirmation'
         assert project['calls_used'] == 2
@@ -64,21 +64,21 @@ def test_clean_story_waits_for_confirmation(tmp_path):
 
 
 @pytest.mark.parametrize('mode', ['faithful', 'collaborative'])
-def test_non_free_mode_does_not_rewrite_without_user(tmp_path, mode):
+def test_non_free_mode_does_not_rewrite_without_user(database_url, mode):
     model = FakeModel([[issue()]])
-    with StoryService(tmp_path, model) as service:
+    with StoryService(database_url, model) as service:
         project = service.create(CreateProject(story=STORY, mode=mode))
         assert project['state']['status'] == 'awaiting_input'
         assert 'revise' not in model.calls
 
 
-def test_free_mode_stops_at_three_revisions(tmp_path):
+def test_free_mode_stops_at_three_revisions(database_url):
     problems = []
     for quote in ['小禾', '钥匙', '阿林', '打开门']:
         problem = issue(); problem['evidence'] = [{'source':'original','quote':quote}]
         problems.append([problem])
     model = FakeModel(problems)
-    with StoryService(tmp_path, model) as service:
+    with StoryService(database_url, model) as service:
         project = service.create(CreateProject(story=STORY, mode='free'))
         assert project['state']['revision_count'] == 3
         assert project['state']['status'] == 'limit_reached'
@@ -87,18 +87,18 @@ def test_free_mode_stops_at_three_revisions(tmp_path):
         assert len(service.versions(project['id'])) == 4
 
 
-def test_free_mode_constraints_pause(tmp_path):
-    with StoryService(tmp_path, FakeModel([[issue('constraint', True)]])) as service:
+def test_free_mode_constraints_pause(database_url):
+    with StoryService(database_url, FakeModel([[issue('constraint', True)]])) as service:
         project = service.create(CreateProject(story=STORY, mode='free'))
         assert project['state']['status'] == 'awaiting_input'
         with pytest.raises(Conflict):
             resume(service, project, accepted=[p['id'] for p in project['state']['issues']])
 
 
-def test_resume_after_restart_and_replay_rejected(tmp_path):
-    with StoryService(tmp_path, FakeModel([[issue()]])) as service:
+def test_resume_after_restart_and_replay_rejected(database_url):
+    with StoryService(database_url, FakeModel([[issue()]])) as service:
         project = service.create(CreateProject(story=STORY))
-    with StoryService(tmp_path, FakeModel()) as service:
+    with StoryService(database_url, FakeModel()) as service:
         updated = resume(service, project, 'revise', '请补充阿林归还钥匙，再开门。')
         assert updated['state']['version'] == 2
         assert updated['state']['revision_count'] == 1
@@ -108,8 +108,8 @@ def test_resume_after_restart_and_replay_rejected(tmp_path):
         assert resume(service, updated)['state']['status'] == 'confirmed'
 
 
-def test_call_limit_survives_pause(tmp_path):
-    with StoryService(tmp_path, FakeModel([[issue()]]), max_calls=3) as service:
+def test_call_limit_survives_pause(database_url):
+    with StoryService(database_url, FakeModel([[issue()]]), max_calls=3) as service:
         project = service.create(CreateProject(story=STORY, mode='free'))
         assert project['state']['status'] == 'budget_exhausted'
         with pytest.raises(Conflict):
@@ -117,24 +117,24 @@ def test_call_limit_survives_pause(tmp_path):
         assert service.get(project['id'])['calls_used'] == 3
 
 
-def test_provider_failure_is_not_success(tmp_path):
-    with StoryService(tmp_path, FakeModel(fail=True)) as service:
+def test_provider_failure_is_not_success(database_url):
+    with StoryService(database_url, FakeModel(fail=True)) as service:
         project = service.create(CreateProject(story=STORY))
         assert project['state']['status'] == 'failed'
         assert project['calls_used'] == 1
         assert not project['interrupt']
 
 
-def test_fabricated_evidence_rejected(tmp_path):
+def test_fabricated_evidence_rejected(database_url):
     invalid = issue()
     invalid['evidence'][0]['quote'] = '原文根本没有这句话'
-    with StoryService(tmp_path, FakeModel([[invalid]])) as service:
+    with StoryService(database_url, FakeModel([[invalid]])) as service:
         project = service.create(CreateProject(story=STORY))
         assert project['state']['status'] == 'failed'
 
 
-def test_acknowledgement_is_explicit(tmp_path):
-    with StoryService(tmp_path, FakeModel([[issue()]])) as service:
+def test_acknowledgement_is_explicit(database_url):
+    with StoryService(database_url, FakeModel([[issue()]])) as service:
         project = service.create(CreateProject(story=STORY))
         with pytest.raises(Conflict):
             resume(service, project)

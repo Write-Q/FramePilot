@@ -22,9 +22,9 @@ class BrokenQuoteModel(FakeModel):
         return {'card': result}, {}
 
 
-def test_bad_card_quote_gets_one_counted_repair(tmp_path):
+def test_bad_card_quote_gets_one_counted_repair(database_url):
     model = BrokenQuoteModel()
-    with StoryService(tmp_path, model) as service:
+    with StoryService(database_url, model) as service:
         result = service.create(CreateProject(story=STORY))
         assert result['state']['status'] == 'awaiting_confirmation'
         assert result['calls_used'] == 3
@@ -32,9 +32,9 @@ def test_bad_card_quote_gets_one_counted_repair(tmp_path):
         assert result['state']['card']['characters']['evidence'] in STORY
 
 
-def test_repeated_bad_quote_stops_without_false_review(tmp_path):
+def test_repeated_bad_quote_stops_without_false_review(database_url):
     model = BrokenQuoteModel(repair=False)
-    with StoryService(tmp_path, model) as service:
+    with StoryService(database_url, model) as service:
         result = service.create(CreateProject(story=STORY))
         assert result['state']['status'] == 'failed'
         assert result['calls_used'] == 2
@@ -42,8 +42,8 @@ def test_repeated_bad_quote_stops_without_false_review(tmp_path):
         assert result['state']['reviewed_version'] == 0
 
 
-def test_card_repair_cannot_bypass_budget(tmp_path):
-    with StoryService(tmp_path, BrokenQuoteModel(), max_calls=1) as service:
+def test_card_repair_cannot_bypass_budget(database_url):
+    with StoryService(database_url, BrokenQuoteModel(), max_calls=1) as service:
         result = service.create(CreateProject(story=STORY))
         assert result['calls_used'] == 1
         assert result['state']['status'] == 'budget_exhausted'

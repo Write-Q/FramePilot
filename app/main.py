@@ -11,17 +11,18 @@ from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.domain import CreateProject, ResumeProject
-from app.provider import DeepSeekProvider, ROOT
+from app.provider import DeepSeekProvider
+from app.database import database_url as resolve_database_url
 from app.service import StoryService, Conflict
 from app.streaming import stream_operation
 
 
-# 组装 FastAPI 应用；注入 provider/data_dir 便于测试替换模型和数据库。
-def create_app(*, data_dir=None, provider=None):
+# 组装 FastAPI 应用；注入 provider/database_url 便于测试替换模型和数据库。
+def create_app(*, database_url=None, provider=None):
     @asynccontextmanager
     async def lifespan(app):
         app.state.stories = StoryService(
-            data_dir or os.getenv('FRAMEPILOT_DATA_DIR', str(ROOT / 'data')),
+            resolve_database_url(database_url).render_as_string(hide_password=False),
             provider or DeepSeekProvider(),
         )
         yield
@@ -57,7 +58,7 @@ def create_app(*, data_dir=None, provider=None):
     def health():
         return {'status': 'ok', 'provider': 'deepseek',
                 'model': os.getenv('DEEPSEEK_MODEL', 'deepseek-chat'),
-                'configured': bool(os.getenv('DEEPSEEK_API_KEY')), 'max_revisions': 3, 'max_calls': 10}
+                'database': 'postgresql', 'configured': bool(os.getenv('DEEPSEEK_API_KEY')), 'max_revisions': 3, 'max_calls': 10}
 
     @app.post('/api/projects', status_code=201, summary='创建故事并进行首次审核')
     # 非流式新建接口：等待流程到达暂停或结束后返回。

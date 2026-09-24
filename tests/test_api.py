@@ -5,8 +5,8 @@ from tests.test_story import FakeModel, STORY
 
 
 @pytest.fixture
-def client(tmp_path):
-    with TestClient(create_app(data_dir=tmp_path, provider=FakeModel())) as value:
+def client(database_url):
+    with TestClient(create_app(database_url=database_url, provider=FakeModel())) as value:
         yield value
 
 

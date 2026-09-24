@@ -24,9 +24,9 @@ class CreativeModel(FakeModel):
 def reply(service,p,action,**kwargs):
     return service.resume(p['id'],ResumeProject(version=p['state']['version'],interrupt_id=p['interrupt']['id'],action=action,**kwargs))
 
-def test_collaborative_idea_waits_for_direction_then_composes(tmp_path):
+def test_collaborative_idea_waits_for_direction_then_composes(database_url):
     model=CreativeModel(idea=True)
-    with StoryService(tmp_path,model) as s:
+    with StoryService(database_url,model) as s:
         p=s.create(CreateProject(story='猫文明',mode='collaborative'))
         assert p['state']['status']=='awaiting_direction'
         assert model.calls==['extract','brainstorm']
@@ -37,10 +37,10 @@ def test_collaborative_idea_waits_for_direction_then_composes(tmp_path):
         assert p['state']['original_story']=='猫文明'
         assert len(s.versions(p['id']))==2
 
-def test_adopt_and_replace_are_server_resolved_and_audited(tmp_path):
+def test_adopt_and_replace_are_server_resolved_and_audited(database_url):
     a=issue();b=issue('creative');b['suggestion']='这是被替换的建议'
     model=CreativeModel(reviews=[[a,b],[]])
-    with StoryService(tmp_path,model) as s:
+    with StoryService(database_url,model) as s:
         p=s.create(CreateProject(story=STORY))
         ids=[x['id'] for x in p['state']['issues']]
         p=reply(s,p,'revise',decisions=[{'issue_id':ids[0],'choice':'adopt'},
@@ -51,9 +51,9 @@ def test_adopt_and_replace_are_server_resolved_and_audited(tmp_path):
         assert len(p['state']['decision_history'])==1
         assert p['state']['version']==2
 
-def test_clarification_never_rewrites_even_in_free_mode(tmp_path):
+def test_clarification_never_rewrites_even_in_free_mode(database_url):
     model=CreativeModel(reviews=[[issue(needs_user=True)],[]])
-    with StoryService(tmp_path,model) as s:
+    with StoryService(database_url,model) as s:
         p=s.create(CreateProject(story=STORY,mode='free'))
         old=p['state']['draft'];calls=p['calls_used']
         p=reply(s,p,'clarify',feedback='这是刻意保留的伏笔。')
@@ -62,9 +62,9 @@ def test_clarification_never_rewrites_even_in_free_mode(tmp_path):
         assert p['state']['revision_count']==0
         assert p['calls_used']==calls+1
 
-def test_unselected_problem_remains_and_unknown_decision_rejected(tmp_path):
+def test_unselected_problem_remains_and_unknown_decision_rejected(database_url):
     model=CreativeModel(reviews=[[issue(),issue('creative')],[]])
-    with StoryService(tmp_path,model) as s:
+    with StoryService(database_url,model) as s:
         p=s.create(CreateProject(story=STORY))
         with pytest.raises(Conflict):
             reply(s,p,'revise',decisions=[{'issue_id':'bad','choice':'adopt'}])
@@ -72,40 +72,40 @@ def test_unselected_problem_remains_and_unknown_decision_rejected(tmp_path):
         # 模型漏报不应使未处理问题被默认为接受。
         assert p['state']['issues']
 
-def test_direct_entry_does_not_call_model(tmp_path):
+def test_direct_entry_does_not_call_model(database_url):
     model=CreativeModel()
-    with StoryService(tmp_path,model) as s:
+    with StoryService(database_url,model) as s:
         p=s.create(CreateProject(story=STORY,mode='direct'))
         assert p['state']['status']=='ready_for_production'
         assert p['state']['draft']==STORY
         assert p['calls_used']==0
 
-def test_direction_choice_survives_restart(tmp_path):
-    with StoryService(tmp_path,CreativeModel(idea=True)) as s:
+def test_direction_choice_survives_restart(database_url):
+    with StoryService(database_url,CreativeModel(idea=True)) as s:
         p=s.create(CreateProject(story='猫文明'))
-    with StoryService(tmp_path,CreativeModel()) as s:
+    with StoryService(database_url,CreativeModel()) as s:
         result=reply(s,p,'choose',direction_id=p['state']['directions'][1]['id'],feedback='保留温暖结尾')
         assert result['state']['outline']=='猫邮差送错一封邀请信。'
         assert result['state']['decision_history'][0]['feedback']=='保留温暖结尾'
         with pytest.raises(Conflict): reply(s,p,'choose',direction_id=p['state']['directions'][1]['id'])
 
-def test_adopt_is_not_available_in_free_mode(tmp_path):
-    with StoryService(tmp_path,CreativeModel(reviews=[[issue(needs_user=True)]])) as s:
+def test_adopt_is_not_available_in_free_mode(database_url):
+    with StoryService(database_url,CreativeModel(reviews=[[issue(needs_user=True)]])) as s:
         p=s.create(CreateProject(story=STORY,mode='free'))
         with pytest.raises(Conflict):
             reply(s,p,'revise',decisions=[{'issue_id':p['state']['issues'][0]['id'],'choice':'adopt'}])
 
-def test_clarification_does_not_launch_free_loop_when_unresolved(tmp_path):
+def test_clarification_does_not_launch_free_loop_when_unresolved(database_url):
     model=CreativeModel(reviews=[[issue(needs_user=True)],[issue()]])
-    with StoryService(tmp_path,model) as s:
+    with StoryService(database_url,model) as s:
         p=s.create(CreateProject(story=STORY,mode='free'))
         p=reply(s,p,'clarify',feedback='这里只解释背景，请保留正文。')
         assert p['state']['status']=='awaiting_input'
         assert p['state']['revision_count']==0
         assert 'revise' not in model.calls
 
-def test_clarification_respects_persistent_budget(tmp_path):
-    with StoryService(tmp_path,CreativeModel(reviews=[[issue()]]),max_calls=2) as s:
+def test_clarification_respects_persistent_budget(database_url):
+    with StoryService(database_url,CreativeModel(reviews=[[issue()]]),max_calls=2) as s:
         p=s.create(CreateProject(story=STORY))
         with pytest.raises(Conflict): reply(s,p,'clarify',feedback='这是伏笔')
         assert s.get(p['id'])['calls_used']==2
