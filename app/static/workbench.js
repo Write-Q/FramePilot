@@ -4,14 +4,14 @@ const labels = {theme:'主题与情绪',characters:'人物',plot:'剧情',props:
 const sources = {original:'原稿明确',user:'用户指定',ai_suggestion:'AI 建议',unknown:'尚未确定'};
 const statuses = {awaiting_input:'等待补充',awaiting_confirmation:'等待确认',confirmed:'已确认',limit_reached:'已达修订上限',budget_exhausted:'调用额度不足',failed:'执行失败',running:'执行中',no_progress:'自动修订无进展',awaiting_direction:'等待选择方向',ready_for_production:'原稿待交接'};
 function el(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;}
-async function api(url,body){const r=await fetch(url,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});const data=await r.json();if(!r.ok)throw new Error(typeof data.detail==='string'?data.detail:'输入格式有误，请检查必填内容。');return data;}
-async function busy(fn){$('error-panel').hidden=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);$('message').textContent='正在处理，请勿重复提交。模型调用可能需要一两分钟。';try{await fn();}catch(e){$('message').textContent=e.message;showError(e.message);}finally{document.querySelectorAll('button').forEach(b=>b.disabled=false);}}
+async function api(url,body){const r=await fetch(url,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});const data=await r.json();if(!r.ok)throw new Error(Presentation.validation(data.detail));return data;}
+async function busy(fn){$('error-panel').hidden=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);$('message').textContent='正在处理，请勿重复提交。模型调用可能需要一两分钟。';try{await fn();}catch(e){$('message').textContent=Presentation.error(e.message);showError(e.message);}finally{document.querySelectorAll('button').forEach(b=>b.disabled=false);}}
 async function render(value){
  if(project?.id!==value.id)activeFacet='theme';project=value;const s=value.state;
  $('output').hidden=false;$('project-id').value=value.id;localStorage.setItem('framepilot:last-project',value.id);
- $('message').textContent=s.error||s.stop_reason||'请审阅当前版本。';$('error-panel').hidden=true;if(s.error)showError(s.error);
+ $('message').textContent=(s.error?Presentation.error(s.error):Presentation.text(s.stop_reason))||'请审阅当前版本。';$('error-panel').hidden=true;if(s.error)showError(s.error);
  const modes={direct:'原稿直接制作',collaborative:'协作创作',free:'自由编剧',faithful:'旧版忠于原稿'};
- $('summary').textContent=`${modes[s.mode]} · ${statuses[s.status]||s.status} · 版本 ${s.version} · 修订 ${s.revision_count}/3 · 请求 ${value.calls_used}/${value.max_calls}`;
+ $('summary').textContent=`${Presentation.label(modes,s.mode,'待确认模式')} · ${Presentation.label(statuses,s.status,'状态待确认')} · 版本 ${s.version} · 修订 ${s.revision_count}/3 · 请求 ${value.calls_used}/${value.max_calls}`;
  $('retry').hidden=s.status!=='failed'||value.calls_used>=value.max_calls;$('identifier').textContent='项目编号：'+value.id;$('draft').textContent=s.draft;
  $('original').textContent=s.original_story;$('outline').textContent=s.outline||'尚未生成故事骨架。';
  $('facet-dock').hidden=!Object.keys(s.card||{}).length;renderFacetTabs(s.card||{});
@@ -22,13 +22,13 @@ async function render(value){
  else if(!s.issues.length)$('issues').append(el('p','本次审核未发现待处理问题，仍请人工检查。'));
  for(const issue of s.issues){
    const box=el('article',undefined,'issue');box.dataset.issueId=issue.id;
-   box.append(el('span',categories[issue.category]||'待审阅','badge'),el('strong',issue.description),el('p',issue.suggestion,'suggestion'));
+   box.append(el('span',categories[issue.category]||'待审阅','badge'),el('strong',Presentation.text(issue.description)),el('p',Presentation.text(issue.suggestion),'suggestion'));
    if(issue.carried_forward)box.append(el('p',`未处理项，依据来自版本 ${issue.version}，尚未因新版生成而视为接受。`,'hint'));
    appendRelated(box,issue);if(issue.evidence?.length)box.append(evidenceDetails(issue.evidence));
    if(s.mode==='collaborative'&&value.interrupt&&s.status!=='awaiting_direction'){
-     const label=el('label','这条建议怎么处理？');const select=el('select');select.className='issue-choice';select.setAttribute('aria-label','处理建议：'+issue.description);
+     const label=el('label','这条建议怎么处理？');const select=el('select');select.className='issue-choice';select.setAttribute('aria-label','处理建议：'+Presentation.text(issue.description));
      for(const [key,text] of [['','暂不处理'],['adopt','采用 AI 修改建议'],['replace','用我的方案替换'],['keep','保留原设定，解释原因']]){const option=el('option',text);option.value=key;select.append(option);}
-     const input=el('textarea');input.className='issue-replacement';input.maxLength=1500;input.rows=2;input.hidden=true;input.setAttribute('aria-label','你的方案或保留理由：'+issue.description);
+     const input=el('textarea');input.className='issue-replacement';input.maxLength=1500;input.rows=2;input.hidden=true;input.setAttribute('aria-label','你的方案或保留理由：'+Presentation.text(issue.description));
      select.onchange=()=>{input.hidden=!['replace','keep'].includes(select.value);input.placeholder=select.value==='keep'?'说明为什么保留，系统会重新审核解释。':'写下你希望如何修改，替代 AI 原建议。';};
      label.append(select);box.append(label,input);
    }
@@ -42,7 +42,7 @@ async function render(value){
  $('feedback').placeholder=s.mode==='collaborative'?'可选：补充跨卡片的整体要求；逐条方案请在上方选择。':'说明新的要求、需要修改的内容，或要澄清的设定。';
  $('mode-help').textContent=s.mode==='collaborative'?'逐条选择不会立即改稿。统一提交后生成新版；仅解释设定请用“仅澄清并复审”。':'自由编剧会在约束内自动修订；仅澄清只重新审核，不改稿。';
  $('decision-history').replaceChildren();
- for(const entry of s.decision_history||[]){const d=el('details');d.append(el('summary',`版本 ${entry.version} · ${{revise:'修改',clarify:'澄清',choose:'选择方向'}[entry.action]||entry.action}`),el('p',entry.feedback));for(const item of entry.decisions||[])d.append(el('p',`${{adopt:'采用建议',replace:'替换建议',keep:'保留设定'}[item.choice]}：${item.instruction}`));$('decision-history').append(d);}
+ for(const entry of s.decision_history||[]){const d=el('details');d.append(el('summary',`版本 ${entry.version} · ${{revise:'修改',clarify:'澄清',choose:'选择方向'}[entry.action]||'其他操作'}`),el('p',entry.feedback));for(const item of entry.decisions||[])d.append(el('p',Presentation.decision(item)));$('decision-history').append(d);}
  $('versions').replaceChildren();const versions=await api(`/api/projects/${value.id}/versions`);
  for(const v of versions){const d=el('details');d.append(el('summary',`版本 ${v.version}`),el('pre',v.draft));if(v.version>1){const button=el('button','与上一版对比','secondary');button.type='button';const diff=el('pre');diff.hidden=true;button.onclick=()=>busy(async()=>{const result=await api(`/api/projects/${value.id}/diff?from_version=${v.version-1}&to_version=${v.version}`);diff.textContent=result.diff||'正文没有变化。';diff.hidden=false;});d.append(button,diff);}$('versions').append(d);}
  $('export').href=`/api/projects/${value.id}/export`;
@@ -78,7 +78,7 @@ $('project-id').value=localStorage.getItem('framepilot:last-project')||'';
 async function streamApi(url, body) {
   $('live').hidden=false; $('output').hidden=true; $('live-text').textContent=''; $('live-stage').textContent='正在连接…';
   const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!response.ok){let data;try{data=await response.json();}catch{}const detail=data?.detail;const message=typeof detail==='string'?detail:Array.isArray(detail)?detail.map(e=>(e.loc||[]).filter(k=>k!=='body').join('.')+'：'+e.msg).join('；'):`请求失败（HTTP ${response.status}），请稍后重试。`;throw new Error(message);}
+  if(!response.ok){let data;try{data=await response.json();}catch{}const detail=data?.detail;const message=detail?Presentation.validation(detail):`请求失败（HTTP ${response.status}），请稍后重试。`;throw new Error(message);}
   const reader=response.body.getReader(), decoder=new TextDecoder();
   let pending='', result=null, generated='';
   try {
@@ -95,7 +95,7 @@ async function streamApi(url, body) {
             $('project-id').value=data.id;localStorage.setItem('framepilot:last-project',data.id);
           }else if(item.event==='stage'){
             generated='';$('live-text').textContent='正在整理内容…';
-            $('live-stage').textContent=({brainstorm:'提出候选故事方向',plan:'构思故事骨架',compose:'编写完整剧本',extract:'提取故事卡片',review:'审核连续性与合理性',revise:'修订故事'})[data.task]||data.task;
+            $('live-stage').textContent=({brainstorm:'提出候选故事方向',plan:'构思故事骨架',compose:'编写完整剧本',extract:'提取故事卡片',review:'审核连续性与合理性',revise:'修订故事'})[data.task]||'正在处理故事';
           }else if(item.event==='delta'){
             generated+=data.text;renderPreview(generated);
           }else if(item.event==='error'){throw new Error(data.message);
@@ -127,7 +127,7 @@ function renderPreview(raw){
      const value=JSON.parse(match[2]);if(!value.trim())continue;
      const section=el('div',undefined,'preview-item');
      const names={title:'故事方向',outline:'故事骨架',text:'故事要素',description:'正在核对',suggestion:'建议方向',draft:'故事草稿'};
-     section.append(el('small',names[match[1]]),el('p',value));fragment.append(section);count++;
+     section.append(el('small',names[match[1]]),el('p',Presentation.preview(match[1],value)));fragment.append(section);count++;
    }catch{}
  }
  if(count)$('live-text').replaceChildren(fragment);
@@ -142,7 +142,7 @@ function selectFacet(key,issue=null,focus=false){
    const selected=tab.dataset.facet===key;tab.setAttribute('aria-selected',String(selected));tab.tabIndex=selected?0:-1;
  });
  document.querySelectorAll('.facet[role="tabpanel"]').forEach(panel=>panel.hidden=panel.dataset.facet!==key);
- $('facet-context').hidden=!issue;$('facet-context').textContent=issue?'正在查看建议：'+issue.description:'';
+ $('facet-context').hidden=!issue;$('facet-context').textContent=issue?'正在查看建议：'+Presentation.text(issue.description):'';
  if(focus){const tab=$('tab-'+key);tab.focus({preventScroll:true});$('facet-tabs').scrollIntoView({block:'start',behavior:'instant'});}
 }
 function renderFacetTabs(card){
@@ -157,7 +157,7 @@ function renderFacetTabs(card){
    $('facet-tabs').append(tab);
    const facet=card[key],panel=el('section',undefined,'facet');panel.id='panel-'+key;panel.dataset.facet=key;panel.tabIndex=0;
    panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',tab.id);
-   panel.append(el('strong',labels[key]),el('small',sources[facet.source]||facet.source),el('p',facet.text));
+   panel.append(el('strong',labels[key]),el('small',Presentation.label(sources,facet.source,'来源待核对')),el('p',facet.text));
    if(facet.evidence)panel.append(evidenceDetails([{quote:facet.evidence}]));$('card').append(panel);
  }
  selectFacet(keys.includes(activeFacet)?activeFacet:keys[0]);
@@ -179,7 +179,7 @@ function updateEntryLabel(){
 $('mode').addEventListener('change',updateEntryLabel);updateEntryLabel();
 
 function showError(message){
- const raw=String(message||'未知错误');let explanation=raw;
+ const raw=String(message||'未知错误');let explanation=Presentation.error(raw);
  if(raw.includes('来源引用')||raw.includes('不存在的原文')){
    const facet=Object.keys(labels).find(key=>raw.includes(' '+key+' '));
    explanation=`AI 返回的${facet?labels[facet]+'卡片':'审核结果'}包含无法在原文中核对的引用，因此本次结果没有通过校验。这不是要求你修改原稿。`;

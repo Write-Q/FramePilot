@@ -13,6 +13,7 @@ from psycopg.types.json import Jsonb
 from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.checkpoint.sqlite import SqliteSaver
 from app.database import database_url, checkpoint_conninfo
+from app.legacy_domain import sync_project_on_psycopg
 
 
 def backup_source(source):
@@ -66,6 +67,9 @@ def migrate(source, url=None):
             for row in calls:
                 conn.execute('INSERT INTO fp_calls(id,project_id,task,status,usage) VALUES (%s,%s,%s,%s,%s)',
                              (row['id'], row['project_id'], row['task'], row['status'], Jsonb(json.loads(row['usage']))))
+            # 与原数据导入同事务建立默认章节；失败时整体回滚。
+            for row in projects:
+                sync_project_on_psycopg(conn, row['id'])
             # 按时间从旧到新导入，保留 checkpoint_id、父检查点和 channel_versions。
             for item in reversed(checkpoints):
                 base = item.parent_config or {'configurable': {

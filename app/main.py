@@ -1,6 +1,5 @@
 """FramePilot 本地故事创作工作台：HTTP 层只做输入、输出与错误映射。"""
 import os
-import json
 import difflib
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -10,6 +9,7 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
+from app.presentation import export_story
 from app.domain import CreateProject, ResumeProject
 from app.provider import DeepSeekProvider
 from app.database import database_url as resolve_database_url
@@ -26,6 +26,8 @@ def create_app(*, database_url=None, provider=None):
             provider or DeepSeekProvider(),
         )
         yield
+        if hasattr(app.state, 'game'):
+            app.state.game.store.close()
         app.state.stories.close()
 
     app = FastAPI(title='FramePilot · 故事创作', version='0.2.0', docs_url=None,
@@ -112,11 +114,11 @@ def create_app(*, database_url=None, provider=None):
     def export(project_id: str):
         project = invoke(lambda: app.state.stories.get(project_id))
         state = project['state']
-        review_status = '未经故事审核' if state['mode'] == 'direct' else f"审核版本：{state['reviewed_version']}；当前版本：{state['version']}；状态：{state['status']}"
-        text = f"# FramePilot 剧本交接\n\n{review_status}\n\n## 当前剧本\n\n{state['draft']}\n\n## 最初输入\n\n{state['original_story']}\n\n## 用户要求\n\n{state['constraints']}\n\n## 未解决问题与决策记录\n\n"
-        text += json.dumps({'issues':state['issues'], 'decisions':state.get('decision_history', [])},ensure_ascii=False,indent=2)
+        text = export_story(state)
         return PlainTextResponse(text, headers={'Content-Disposition':'attachment; filename="framepilot-story.md"'})
 
+    from app.game.api import install_game
+    install_game(app, database_url)
     return app
 
 

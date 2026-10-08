@@ -36,3 +36,11 @@ class ModelCall(Base):
     task: Mapped[str] = mapped_column(String(64))
     status: Mapped[str] = mapped_column(String(32))
     usage: Mapped[dict] = mapped_column(JSONB, default=dict)
+
+# Register the additive domain without replacing the legacy ORM classes.
+from sqlalchemy import UniqueConstraint as _UniqueConstraint
+from app.domain_schema import register_domain as _register_domain
+ModelCall.__table__.append_constraint(_UniqueConstraint('project_id', 'id', name='uq_fp_calls_project_id_id'))
+domain_tables = _register_domain(Base.metadata)
+from app.game.schema import register_game as _register_game
+game_session_table = _register_game(Base.metadata)

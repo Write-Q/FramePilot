@@ -1,10 +1,11 @@
 """SQLAlchemy 业务仓库；短事务在模型请求前提交，不占着锁等待网络。"""
 from datetime import datetime, timezone
-from sqlalchemy import create_engine, select, func, update
+from sqlalchemy import create_engine, select, func, update, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.dialects.postgresql import insert
 from app.database import database_url
 from app.models import Project, StoryVersion, ModelCall
+from app.legacy_domain import sync_project
 
 
 class BudgetExceeded(RuntimeError):
@@ -23,20 +24,27 @@ class Repository:
         with self.sessions.begin() as session:
             session.add(Project(id=project_id, snapshot={'state': state, 'interrupt': None},
                                 max_calls=max_calls, created_at=datetime.now(timezone.utc)))
+            session.flush()
+            sync_project(session.connection(), project_id)
 
     def save(self, project_id, state, pending):
         with self.sessions.begin() as session:
+            session.execute(select(Project.id).where(Project.id == project_id).with_for_update()).scalar_one()
             result = session.execute(update(Project).where(Project.id == project_id)
                 .values(snapshot={'state': state, 'interrupt': pending}))
             if result.rowcount != 1:
                 raise KeyError(project_id)
+            sync_project(session.connection(), project_id)
+            session.execute(text('UPDATE fp_project_details SET updated_at=now() WHERE project_id=:id'), {'id':project_id})
 
     def version(self, state):
         # 同一版本不覆盖；冲突处理替代 SQLite INSERT OR IGNORE。
         with self.sessions.begin() as session:
+            session.execute(select(Project.id).where(Project.id == state['project_id']).with_for_update()).scalar_one()
             session.execute(insert(StoryVersion).values(project_id=state['project_id'],
                 version=state['version'], draft=state['draft'], card=state['card'])
                 .on_conflict_do_nothing(index_elements=['project_id', 'version']))
+            sync_project(session.connection(), state['project_id'])
 
     def get(self, project_id):
         with self.sessions() as session:
