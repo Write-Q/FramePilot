@@ -1,12 +1,57 @@
 const $ = id => document.getElementById(id);
 let project = null;
+// 标签页内保存未提交意见；按项目、版本与暂停点隔离，不能当成正式业务记录。
+const editorMemory = new Map();
+function editorScope(value){return `${value.state.version}:${value.interrupt?.id||''}`;}
+function saveEditorDraft(){
+ if(!project)return;
+ const draft={scope:editorScope(project),feedback:$('feedback').value,directionFeedback:$('direction-feedback').value,
+   directionId:document.querySelector('[name="direction"]:checked')?.value||'',
+   decisions:[...document.querySelectorAll('.issue-choice')].map(select=>({id:select.closest('.issue').dataset.issueId,
+     choice:select.value,text:select.closest('.issue').querySelector('.issue-replacement').value})),
+   accepted:[...document.querySelectorAll('[name="accept-issue"]:checked')].map(input=>input.value)};
+ editorMemory.set(project.id,draft);
+ try{sessionStorage.setItem('framepilot:editor:'+project.id,JSON.stringify(draft));}catch{}
+}
+function forgetEditorDraft(value){
+ if(!value)return;
+ editorMemory.delete(value.id);
+ try{sessionStorage.removeItem('framepilot:editor:'+value.id);}catch{}
+}
+function restoreEditorDraft(value){
+ let draft=editorMemory.get(value.id);
+ if(!draft){try{draft=JSON.parse(sessionStorage.getItem('framepilot:editor:'+value.id)||'null');}catch{}}
+ if(draft?.scope!==editorScope(value)){forgetEditorDraft(value);draft=null;}
+ $('feedback').value=typeof draft?.feedback==='string'?draft.feedback:'';
+ $('direction-feedback').value=typeof draft?.directionFeedback==='string'?draft.directionFeedback:'';
+ for(const radio of document.querySelectorAll('[name="direction"]'))radio.checked=radio.value===draft?.directionId;
+ for(const select of document.querySelectorAll('.issue-choice')){
+   const saved=(Array.isArray(draft?.decisions)?draft.decisions:[]).find(item=>item.id===select.closest('.issue').dataset.issueId);
+   select.value=[...select.options].some(option=>option.value===saved?.choice)?saved.choice:'';
+   const input=select.closest('.issue').querySelector('.issue-replacement');
+   input.value=typeof saved?.text==='string'?saved.text:'';
+   select.dispatchEvent(new Event('change'));
+ }
+ for(const input of document.querySelectorAll('[name="accept-issue"]'))input.checked=Array.isArray(draft?.accepted)&&draft.accepted.includes(input.value);
+}
+function clearActionMessage(){const message=$('action-message');if(message){message.hidden=true;message.textContent='';}}
+function showActionMessage(text,action){
+ $('message').textContent=text;
+ let message=$('action-message');
+ if(!message){message=el('p');message.id='action-message';message.setAttribute('role','alert');message.tabIndex=-1;}
+ (action==='choose'?$('directions-panel'):$('actions')).append(message);
+ message.textContent=text;message.hidden=false;
+ message.scrollIntoView({block:'center',behavior:'instant'});message.focus({preventScroll:true});
+}
 const labels = {theme:'主题与情绪',characters:'人物',plot:'剧情',props:'道具',scenes:'场景',actions:'动作与表演',camera:'镜头语言',visual_style:'视觉风格',sound:'声音',pacing:'节奏与规格'};
 const sources = {original:'原稿明确',user:'用户指定',ai_suggestion:'AI 建议',unknown:'尚未确定'};
 const statuses = {awaiting_input:'等待补充',awaiting_confirmation:'等待确认',confirmed:'已确认',limit_reached:'已达修订上限',budget_exhausted:'调用额度不足',failed:'执行失败',running:'执行中',no_progress:'自动修订无进展',awaiting_direction:'等待选择方向',ready_for_production:'原稿待交接'};
 function el(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;}
 async function api(url,body){const r=await fetch(url,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});const data=await r.json();if(!r.ok)throw new Error(Presentation.validation(data.detail));return data;}
-async function busy(fn){$('error-panel').hidden=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);$('message').textContent='正在处理，请勿重复提交。模型调用可能需要一两分钟。';try{await fn();}catch(e){$('message').textContent=Presentation.error(e.message);showError(e.message);}finally{document.querySelectorAll('button').forEach(b=>b.disabled=false);}}
-async function render(value){
+async function busy(fn){clearActionMessage();$('error-panel').hidden=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);$('message').textContent='正在处理，请勿重复提交。模型调用可能需要一两分钟。';try{await fn();}catch(e){$('message').textContent=Presentation.error(e.message);showError(e.message);}finally{document.querySelectorAll('button').forEach(b=>b.disabled=false);}}
+async function render(value,{discardDraft=false}={}){
+ if(discardDraft)forgetEditorDraft(project);else saveEditorDraft();
+ clearActionMessage();
  if(project?.id!==value.id)activeFacet='theme';project=value;const s=value.state;
  $('output').hidden=false;$('project-id').value=value.id;localStorage.setItem('framepilot:last-project',value.id);
  $('message').textContent=(s.error?Presentation.error(s.error):Presentation.text(s.stop_reason))||'请审阅当前版本。';$('error-panel').hidden=true;if(s.error)showError(s.error);
@@ -41,6 +86,7 @@ async function render(value){
  $('revise').textContent=s.mode==='collaborative'?'按所选方案修改并审核':'按补充要求修改并审核';
  $('feedback').placeholder=s.mode==='collaborative'?'可选：补充跨卡片的整体要求；逐条方案请在上方选择。':'说明新的要求、需要修改的内容，或要澄清的设定。';
  $('mode-help').textContent=s.mode==='collaborative'?'逐条选择不会立即改稿。统一提交后生成新版；仅解释设定请用“仅澄清并复审”。':'自由编剧会在约束内自动修订；仅澄清只重新审核，不改稿。';
+ restoreEditorDraft(value);
  $('decision-history').replaceChildren();
  for(const entry of s.decision_history||[]){const d=el('details');d.append(el('summary',`版本 ${entry.version} · ${{revise:'修改',clarify:'澄清',choose:'选择方向'}[entry.action]||'其他操作'}`),el('p',entry.feedback));for(const item of entry.decisions||[])d.append(el('p',Presentation.decision(item)));$('decision-history').append(d);}
  $('versions').replaceChildren();const versions=await api(`/api/projects/${value.id}/versions`);
@@ -60,19 +106,22 @@ $('retry').onclick=()=>busy(async()=>render(await streamApi(`/api/projects/${pro
 $('refresh').onclick=()=>busy(async()=>render(await api('/api/projects/'+project.id)));
 async function resume(action){
  if(!project?.interrupt)return;
+ clearActionMessage();
  const decisions=['revise','clarify'].includes(action)?selectedDecisions():[];
  const feedback=action==='confirm'?'':(action==='choose'?$('direction-feedback').value:$('feedback').value).trim();
  const direction_id=document.querySelector('[name="direction"]:checked')?.value||'';
- if(action==='choose'&&!direction_id){$('message').textContent='请先选择一个故事方向。';return;}
- if(['revise','clarify'].includes(action)&&!feedback&&!decisions.length){$('message').textContent='请选择建议或填写补充内容。';return;}
- if(decisions.some(d=>['replace','keep'].includes(d.choice)&&!d.text)){$('message').textContent='请填写替代方案或保留理由。';return;}
- if(action==='clarify'&&decisions.some(d=>d.choice!=='keep')){$('message').textContent='仅澄清不能采用修改建议，请改用“按所选方案修改并审核”。';return;}
- if(action==='confirm'&&(selectedDecisions().length||$('feedback').value.trim())){$('message').textContent='还有未提交的修改或澄清，请先提交，或清空后确认当前版本。';return;}
- await busy(async()=>{const result=await streamApi(`/api/projects/${project.id}/resume/stream`,{version:project.state.version,interrupt_id:project.interrupt.id,action,feedback,decisions,direction_id,accepted_issue_ids:[...document.querySelectorAll('[name="accept-issue"]:checked')].map(n=>n.value)});await render(result);$('feedback').value='';});
+ if(action==='choose'&&!direction_id){showActionMessage('请先选择一个故事方向。',action);return;}
+ if(['revise','clarify'].includes(action)&&!feedback&&!decisions.length){showActionMessage('请选择建议或填写补充内容。',action);return;}
+ if(decisions.some(d=>['replace','keep'].includes(d.choice)&&!d.text)){showActionMessage('请填写替代方案或保留理由。',action);return;}
+ if(action==='clarify'&&decisions.some(d=>d.choice!=='keep')){showActionMessage('仅澄清不能采用修改建议，请改用“按所选方案修改并审核”。',action);return;}
+ if(action==='confirm'&&(selectedDecisions().length||$('feedback').value.trim())){showActionMessage('还有未提交的修改或澄清，请先提交，或清空后确认当前版本。',action);return;}
+ await busy(async()=>{const result=await streamApi(`/api/projects/${project.id}/resume/stream`,{version:project.state.version,interrupt_id:project.interrupt.id,action,feedback,decisions,direction_id,accepted_issue_ids:[...document.querySelectorAll('[name="accept-issue"]:checked')].map(n=>n.value)});await render(result,{discardDraft:!['failed','budget_exhausted'].includes(result.state.status)});});
 }
 $('revise').onclick=()=>resume('revise');$('confirm').onclick=()=>resume('confirm');
 $('clarify').onclick=()=>resume('clarify');$('choose-direction').onclick=()=>resume('choose');
 $('project-id').value=localStorage.getItem('framepilot:last-project')||'';
+document.addEventListener('input',saveEditorDraft);
+document.addEventListener('change',saveEditorDraft);
 
 
 async function streamApi(url, body) {

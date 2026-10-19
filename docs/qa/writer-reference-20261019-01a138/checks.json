@@ -1,0 +1,151 @@
+{
+  "prompt_version": "story-v7",
+  "trials": [
+    {
+      "id": "mystery-1",
+      "calls": 7,
+      "tokens": 37904,
+      "exact_local_edit": true,
+      "confirmed": true,
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "review_blocks_exact_edit": true,
+      "clarification_used": true,
+      "retained_issues": 3,
+      "call_statuses": {
+        "succeeded": 7
+      },
+      "first_characters": 544,
+      "final_characters": 559
+    },
+    {
+      "id": "comedy-1",
+      "calls": 6,
+      "tokens": 24738,
+      "exact_local_edit": true,
+      "confirmed": true,
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "review_blocks_exact_edit": false,
+      "clarification_used": false,
+      "retained_issues": 3,
+      "call_statuses": {
+        "succeeded": 6
+      },
+      "first_characters": 363,
+      "final_characters": 377
+    },
+    {
+      "id": "scifi-1",
+      "calls": 6,
+      "tokens": 20390,
+      "exact_local_edit": true,
+      "confirmed": true,
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "review_blocks_exact_edit": false,
+      "clarification_used": false,
+      "retained_issues": 0,
+      "call_statuses": {
+        "succeeded": 6
+      },
+      "first_characters": 373,
+      "final_characters": 387
+    },
+    {
+      "id": "mystery-2",
+      "calls": 7,
+      "tokens": 30659,
+      "exact_local_edit": true,
+      "confirmed": true,
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "review_blocks_exact_edit": false,
+      "clarification_used": false,
+      "retained_issues": 1,
+      "call_statuses": {
+        "succeeded": 6,
+        "invalid_output": 1
+      },
+      "first_characters": 506,
+      "final_characters": 521
+    },
+    {
+      "id": "comedy-2",
+      "calls": 6,
+      "tokens": 23871,
+      "exact_local_edit": true,
+      "confirmed": true,
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "review_blocks_exact_edit": false,
+      "clarification_used": false,
+      "retained_issues": 3,
+      "call_statuses": {
+        "succeeded": 6
+      },
+      "first_characters": 356,
+      "final_characters": 370
+    },
+    {
+      "id": "scifi-2",
+      "calls": 6,
+      "tokens": 21892,
+      "exact_local_edit": true,
+      "confirmed": true,
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "review_blocks_exact_edit": false,
+      "clarification_used": false,
+      "retained_issues": 0,
+      "call_statuses": {
+        "succeeded": 6
+      },
+      "first_characters": 432,
+      "final_characters": 446
+    }
+  ],
+  "confirmed": 6,
+  "exact_local_edits": 6,
+  "reference_calls_verified": 32,
+  "raw_schema_failures": [
+    {
+      "call": 25,
+      "trial": "mystery-2",
+      "task": "review",
+      "errors": [
+        {
+          "type": "literal_error",
+          "loc": [
+            "issues",
+            0,
+            "related_facets",
+            2
+          ],
+          "msg": "Input should be 'theme', 'characters', 'plot', 'props', 'scenes', 'actions', 'camera', 'visual_style', 'sound' or 'pacing'"
+        }
+      ]
+    }
+  ],
+  "main_calls": 38,
+  "main_tokens": 159454,
+  "replay_calls": 3,
+  "replay_passed": 3,
+  "replay_tokens": 12191,
+  "total_real_calls": 41,
+  "total_tokens": 171645,
+  "database_cleaned": true,
+  "manual_review": {
+    "false_change_scope_reports": [
+      "mystery-1",
+      "mystery-2"
+    ],
+    "blocked_confirmation_then_clarified": [
+      "mystery-1"
+    ],
+    "nonblocking_false_report_retained": [
+      "mystery-2"
+    ],
+    "note": "Both revisions exactly match expected insertion and preserve all newline characters; human inspection classifies the model reports, not an automatic semantic detector."
+  }
+}

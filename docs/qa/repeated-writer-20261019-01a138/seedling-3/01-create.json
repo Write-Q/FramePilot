@@ -1,0 +1,138 @@
+{
+  "id": "2d921891a12e4cbdad874c0e3b235d96",
+  "state": {
+    "card": {
+      "plot": {
+        "text": "起因、发展、转折、结尾均未说明；仅明确主线是扶正幼苗，结尾温暖。",
+        "source": "user",
+        "evidence": "主线是扶正幼苗；无对白、无画外音、无魔法，不增加新人物或第二地点；结尾温暖"
+      },
+      "props": {
+        "text": "幼苗：被扶正的对象；其余道具未说明。",
+        "source": "user",
+        "evidence": "主线是扶正幼苗"
+      },
+      "sound": {
+        "text": "无对白、无画外音；其余声音规格未说明。",
+        "source": "user",
+        "evidence": "无对白、无画外音、无魔法"
+      },
+      "theme": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      },
+      "camera": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      },
+      "pacing": {
+        "text": "总时长30秒，按4个编号镜头段落输出，每段含大致秒数，合计30秒；具体节奏未说明。",
+        "source": "user",
+        "evidence": "剧本按4个编号镜头段落输出，每段含大致秒数和可见动作，合计30秒"
+      },
+      "scenes": {
+        "text": "自家院子：唯一地点；年代与室内外未说明；核心事件为扶正幼苗。",
+        "source": "user",
+        "evidence": "唯一地点自家院子"
+      },
+      "actions": {
+        "text": "扶正幼苗；其余可见动作未说明。",
+        "source": "user",
+        "evidence": "主线是扶正幼苗"
+      },
+      "characters": {
+        "text": "小禾：唯一人物，身份与年龄外貌未说明；剧情作用为在自家院子扶正幼苗。",
+        "source": "user",
+        "evidence": "唯一人物小禾，唯一地点自家院子；主线是扶正幼苗"
+      },
+      "visual_style": {
+        "text": "写实风格；其余视觉规格未说明。",
+        "source": "user",
+        "evidence": "30秒写实短片"
+      }
+    },
+    "mode": "collaborative",
+    "draft": "雨后的小支架",
+    "error": "",
+    "issues": [],
+    "status": "awaiting_direction",
+    "version": 1,
+    "directions": [
+      {
+        "id": "direction_0",
+        "title": "雨痕与支架",
+        "outline": "小禾在雨后院子里发现幼苗被泥水压弯，先用手轻扶，再用细枝和旧布条做临时支架。冲突是支架总滑落、幼苗反复歪倒；发展是小禾蹲下反复调整绑法，动作从急躁变耐心；结尾支架稳住，小禾退后一步看幼苗在湿土里立直，暖光落在叶尖。"
+      },
+      {
+        "id": "direction_1",
+        "title": "水珠的重量",
+        "outline": "小禾注意到幼苗叶上挂满雨珠，压得茎弯向地面。目标是把幼苗扶正又不伤叶。冲突是每碰一次水珠滚落、幼苗弹回；发展是小禾先轻抖叶片去水，再慢慢培土扶茎；结尾幼苗挺起，最后一颗水珠滑落，小禾掌心沾泥却露出微笑。"
+      },
+      {
+        "id": "direction_2",
+        "title": "院角的一步",
+        "outline": "小禾从院子另一侧走来，发现墙根幼苗被雨水冲歪。目标是在不踩湿泥的情况下扶正它。冲突是脚下打滑、够不到苗茎；发展是小禾搬来一块旧砖垫脚，俯身用双手拢土固定根部；结尾幼苗立正，小禾收回砖块，院角恢复安静，暖意留在动作里。"
+      }
+    ],
+    "input_kind": "idea",
+    "project_id": "2d921891a12e4cbdad874c0e3b235d96",
+    "constraints": "30秒写实短片；唯一人物小禾，唯一地点自家院子；主线是扶正幼苗；无对白、无画外音、无魔法，不增加新人物或第二地点；结尾温暖。剧本按4个编号镜头段落输出，每段含大致秒数和可见动作，合计30秒。不要另列片名、创作说明或备选结尾。",
+    "stop_reason": "请选择或调整一个故事方向，再开始编写。",
+    "original_story": "雨后的小支架",
+    "review_history": [],
+    "revision_count": 0,
+    "feedback_history": [],
+    "reviewed_version": 0,
+    "accepted_issue_ids": []
+  },
+  "interrupt": {
+    "id": "cf03f4fcc118d8b04a8abe47147aa2b5",
+    "status": "awaiting_direction",
+    "actions": [
+      "choose"
+    ],
+    "version": 1,
+    "directions": [
+      {
+        "id": "direction_0",
+        "title": "雨痕与支架",
+        "outline": "小禾在雨后院子里发现幼苗被泥水压弯，先用手轻扶，再用细枝和旧布条做临时支架。冲突是支架总滑落、幼苗反复歪倒；发展是小禾蹲下反复调整绑法，动作从急躁变耐心；结尾支架稳住，小禾退后一步看幼苗在湿土里立直，暖光落在叶尖。"
+      },
+      {
+        "id": "direction_1",
+        "title": "水珠的重量",
+        "outline": "小禾注意到幼苗叶上挂满雨珠，压得茎弯向地面。目标是把幼苗扶正又不伤叶。冲突是每碰一次水珠滚落、幼苗弹回；发展是小禾先轻抖叶片去水，再慢慢培土扶茎；结尾幼苗挺起，最后一颗水珠滑落，小禾掌心沾泥却露出微笑。"
+      },
+      {
+        "id": "direction_2",
+        "title": "院角的一步",
+        "outline": "小禾从院子另一侧走来，发现墙根幼苗被雨水冲歪。目标是在不踩湿泥的情况下扶正它。冲突是脚下打滑、够不到苗茎；发展是小禾搬来一块旧砖垫脚，俯身用双手拢土固定根部；结尾幼苗立正，小禾收回砖块，院角恢复安静，暖意留在动作里。"
+      }
+    ]
+  },
+  "created_at": "2026-10-19T01:47:10.574728+00:00",
+  "max_calls": 10,
+  "calls_used": 2,
+  "calls": [
+    {
+      "task": "extract",
+      "status": "succeeded",
+      "usage": {
+        "total_tokens": 1380,
+        "prompt_tokens": 993,
+        "completion_tokens": 387
+      }
+    },
+    {
+      "task": "brainstorm",
+      "status": "succeeded",
+      "usage": {
+        "total_tokens": 1205,
+        "prompt_tokens": 926,
+        "completion_tokens": 279
+      }
+    }
+  ]
+}

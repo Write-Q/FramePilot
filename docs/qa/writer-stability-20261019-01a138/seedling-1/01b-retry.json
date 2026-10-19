@@ -1,0 +1,156 @@
+{
+  "id": "5480c3edf1f141608c226ff7759c4b51",
+  "state": {
+    "card": {
+      "plot": {
+        "text": "起因：雨后幼苗倒伏。\n发展：小禾在自家院子扶正幼苗。\n转折：未说明。\n结尾：温暖收束。",
+        "source": "user",
+        "evidence": "主线是扶正幼苗；无对白、无画外音、无魔法，不增加新人物或第二地点；结尾温暖"
+      },
+      "props": {
+        "text": "小支架：用于扶正幼苗，持有与转移情况未说明。\n幼苗：被扶正的对象。",
+        "source": "user",
+        "evidence": "主线是扶正幼苗"
+      },
+      "sound": {
+        "text": "无对白、无画外音。",
+        "source": "user",
+        "evidence": "无对白、无画外音、无魔法"
+      },
+      "theme": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      },
+      "camera": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      },
+      "pacing": {
+        "text": "总时长30秒，按4个编号镜头段落输出，每段含大致秒数，合计30秒。",
+        "source": "user",
+        "evidence": "剧本按4个编号镜头段落输出，每段含大致秒数和可见动作，合计30秒"
+      },
+      "scenes": {
+        "text": "自家院子：唯一地点，雨后；年代与室内外未说明。",
+        "source": "user",
+        "evidence": "唯一地点自家院子"
+      },
+      "actions": {
+        "text": "扶正幼苗；无对白、无画外音、无魔法。",
+        "source": "user",
+        "evidence": "主线是扶正幼苗；无对白、无画外音、无魔法"
+      },
+      "characters": {
+        "text": "小禾：唯一人物，身份与年龄未说明；剧情作用为在自家院子扶正幼苗。",
+        "source": "user",
+        "evidence": "唯一人物小禾，唯一地点自家院子；主线是扶正幼苗"
+      },
+      "visual_style": {
+        "text": "写实风格。",
+        "source": "user",
+        "evidence": "30秒写实短片"
+      }
+    },
+    "mode": "collaborative",
+    "draft": "雨后的小支架",
+    "error": "",
+    "issues": [],
+    "status": "awaiting_direction",
+    "version": 1,
+    "directions": [
+      {
+        "id": "direction_0",
+        "title": "雨后扶苗：小支架的稳妥支撑",
+        "outline": "小禾在雨后院子里发现一株幼苗倒伏，泥水压弯了茎。目标是把幼苗扶正并让它站稳。冲突是湿土松软、支架难以固定，扶起又滑倒。发展：小禾先清理根部积水，再用小支架从两侧轻轻夹住幼苗，调整角度直到茎叶重新朝上。结尾：雨珠从叶尖滑落，幼苗在支架旁挺直，小禾蹲着看了片刻，院子恢复安静温暖。约30秒，4段动作清晰。"
+      },
+      {
+        "id": "direction_1",
+        "title": "雨后扶苗：先护根再立苗",
+        "outline": "小禾看到雨后幼苗歪倒，想立刻扶正，却发现一拔就带起松动的根。目标转为先护住根部再立支架。冲突是时间与耐心：幼苗脆弱，动作稍重就会折断。发展：小禾用手轻压根部泥土，把小支架插在迎风一侧，再慢慢把幼苗靠回支架。结尾：幼苗稳住，小禾退开一步，雨后院子的光线落在新叶上，温暖收束。约30秒，无对白。"
+      },
+      {
+        "id": "direction_2",
+        "title": "雨后扶苗：一株一支架的对照",
+        "outline": "小禾在院子里发现倒伏幼苗旁还有一株略歪的幼苗，决定只先扶正最严重的一株。目标明确：用一个小支架救回倒伏的苗。冲突是支架位置反复不合适，扶正后幼苗仍向一侧倾。发展：小禾观察茎的弯曲方向，把支架移到背风侧，重新系稳。结尾：倒伏幼苗重新立起，旁边那株略歪的苗在风中轻摆，小禾收好剩余材料，画面停在雨后的院子，温暖而克制。约30秒，4段。"
+      }
+    ],
+    "input_kind": "fragment",
+    "project_id": "5480c3edf1f141608c226ff7759c4b51",
+    "constraints": "30秒写实短片；唯一人物小禾，唯一地点自家院子；主线是扶正幼苗；无对白、无画外音、无魔法，不增加新人物或第二地点；结尾温暖。剧本按4个编号镜头段落输出，每段含大致秒数和可见动作，合计30秒。不要另列片名、创作说明或备选结尾。",
+    "stop_reason": "请选择或调整一个故事方向，再开始编写。",
+    "original_story": "雨后的小支架",
+    "review_history": [],
+    "revision_count": 0,
+    "feedback_history": [],
+    "reviewed_version": 0,
+    "accepted_issue_ids": []
+  },
+  "interrupt": {
+    "id": "1f3bbfd56f3ca3f6325fe8634c588d68",
+    "status": "awaiting_direction",
+    "actions": [
+      "choose"
+    ],
+    "version": 1,
+    "directions": [
+      {
+        "id": "direction_0",
+        "title": "雨后扶苗：小支架的稳妥支撑",
+        "outline": "小禾在雨后院子里发现一株幼苗倒伏，泥水压弯了茎。目标是把幼苗扶正并让它站稳。冲突是湿土松软、支架难以固定，扶起又滑倒。发展：小禾先清理根部积水，再用小支架从两侧轻轻夹住幼苗，调整角度直到茎叶重新朝上。结尾：雨珠从叶尖滑落，幼苗在支架旁挺直，小禾蹲着看了片刻，院子恢复安静温暖。约30秒，4段动作清晰。"
+      },
+      {
+        "id": "direction_1",
+        "title": "雨后扶苗：先护根再立苗",
+        "outline": "小禾看到雨后幼苗歪倒，想立刻扶正，却发现一拔就带起松动的根。目标转为先护住根部再立支架。冲突是时间与耐心：幼苗脆弱，动作稍重就会折断。发展：小禾用手轻压根部泥土，把小支架插在迎风一侧，再慢慢把幼苗靠回支架。结尾：幼苗稳住，小禾退开一步，雨后院子的光线落在新叶上，温暖收束。约30秒，无对白。"
+      },
+      {
+        "id": "direction_2",
+        "title": "雨后扶苗：一株一支架的对照",
+        "outline": "小禾在院子里发现倒伏幼苗旁还有一株略歪的幼苗，决定只先扶正最严重的一株。目标明确：用一个小支架救回倒伏的苗。冲突是支架位置反复不合适，扶正后幼苗仍向一侧倾。发展：小禾观察茎的弯曲方向，把支架移到背风侧，重新系稳。结尾：倒伏幼苗重新立起，旁边那株略歪的苗在风中轻摆，小禾收好剩余材料，画面停在雨后的院子，温暖而克制。约30秒，4段。"
+      }
+    ]
+  },
+  "created_at": "2026-10-19T01:53:56.681614+00:00",
+  "max_calls": 10,
+  "calls_used": 4,
+  "calls": [
+    {
+      "task": "extract",
+      "status": "invalid_evidence",
+      "usage": {
+        "total_tokens": 1477,
+        "prompt_tokens": 1060,
+        "completion_tokens": 417
+      }
+    },
+    {
+      "task": "extract",
+      "status": "invalid_evidence",
+      "usage": {
+        "total_tokens": 1716,
+        "prompt_tokens": 1132,
+        "completion_tokens": 584
+      }
+    },
+    {
+      "task": "extract",
+      "status": "succeeded",
+      "usage": {
+        "total_tokens": 1468,
+        "prompt_tokens": 1060,
+        "completion_tokens": 408
+      }
+    },
+    {
+      "task": "brainstorm",
+      "status": "succeeded",
+      "usage": {
+        "total_tokens": 1407,
+        "prompt_tokens": 1013,
+        "completion_tokens": 394
+      }
+    }
+  ]
+}

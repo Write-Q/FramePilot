@@ -1,0 +1,27 @@
+{
+  "final_confirmed": true,
+  "exact_local_edit": true,
+  "clarify_no_rewrite": true,
+  "clarify_no_new_version": true,
+  "restart_read_ok": true,
+  "export_ok": true,
+  "first_draft_characters": 389,
+  "final_draft_characters": 406,
+  "calls": 8,
+  "versions": [
+    1,
+    2,
+    3
+  ],
+  "call_tasks": [
+    "extract",
+    "brainstorm",
+    "compose",
+    "compose",
+    "review",
+    "revise",
+    "review",
+    "review"
+  ],
+  "final_review_issues": []
+}

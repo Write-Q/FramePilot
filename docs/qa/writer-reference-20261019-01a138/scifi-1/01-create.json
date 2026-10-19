@@ -1,0 +1,138 @@
+{
+  "id": "22b04112f3e74b3b95c3bef625155932",
+  "state": {
+    "card": {
+      "plot": {
+        "text": "起因、发展、转折与结尾均未说明；仅明确主线是照顾幼苗。",
+        "source": "user",
+        "evidence": "主线是照顾幼苗。"
+      },
+      "props": {
+        "text": "控制台：用于调节人工重力，属明确授权的科幻设定；持有与转移情况未说明。",
+        "source": "user",
+        "evidence": "允许通过控制台调节人工重力，这是明确授权的科幻设定，不能仅因现实常识判错。"
+      },
+      "sound": {
+        "text": "无对白、无画外音。",
+        "source": "user",
+        "evidence": "无对白、无画外音，不新增人物或第二地点。"
+      },
+      "theme": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      },
+      "camera": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      },
+      "pacing": {
+        "text": "40秒科幻短片，按4个编号镜头段落输出，每段10秒；结尾温暖。",
+        "source": "user",
+        "evidence": "按4个编号镜头段落输出，每段10秒，结尾温暖，不额外列创作说明。"
+      },
+      "scenes": {
+        "text": "轨道站温室：故事唯一地点；年代、室内外未说明。",
+        "source": "user",
+        "evidence": "唯一人物林遥，唯一地点是轨道站温室；"
+      },
+      "actions": {
+        "text": "未说明具体动作；仅明确主线动作围绕照顾幼苗展开。",
+        "source": "user",
+        "evidence": "主线是照顾幼苗。"
+      },
+      "characters": {
+        "text": "林遥：故事唯一人物；身份、年龄、外貌未说明；剧情作用为在轨道站温室照顾幼苗。",
+        "source": "user",
+        "evidence": "唯一人物林遥，唯一地点是轨道站温室；"
+      },
+      "visual_style": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      }
+    },
+    "mode": "collaborative",
+    "draft": "温室的绿灯",
+    "error": "",
+    "issues": [],
+    "status": "awaiting_direction",
+    "version": 1,
+    "directions": [
+      {
+        "id": "direction_0",
+        "title": "重力轻一点",
+        "outline": "林遥发现幼苗在标准重力下茎叶低垂，于是走向控制台逐级调低人工重力。低重力中幼苗缓缓舒展、浮起，林遥伸手护住飘动的叶片，露出笑意。结尾：幼苗在柔和绿光中挺立，林遥静静守望，温暖收束。"
+      },
+      {
+        "id": "direction_1",
+        "title": "十秒的失重",
+        "outline": "林遥按养护程序给幼苗做短时失重锻炼，控制台倒计时十秒。失重中水珠悬浮成串，幼苗叶片轻颤，林遥紧张地盯着读数。重力恢复后幼苗比之前更精神，林遥轻触叶尖，安心微笑。结尾：温室绿灯映着舒展的幼苗，温暖收束。"
+      },
+      {
+        "id": "direction_2",
+        "title": "绿灯校准",
+        "outline": "温室警报提示重力场波动，幼苗生长受扰。林遥在控制台前反复校准参数，一次次观察幼苗反应，过程紧张而专注。最终重力稳定，幼苗抽出新叶，林遥长舒一口气。结尾：她与幼苗在绿灯下相对静立，温暖收束。"
+      }
+    ],
+    "input_kind": "idea",
+    "project_id": "22b04112f3e74b3b95c3bef625155932",
+    "constraints": "40秒科幻短片；唯一人物林遥，唯一地点是轨道站温室；主线是照顾幼苗。允许通过控制台调节人工重力，这是明确授权的科幻设定，不能仅因现实常识判错。无对白、无画外音，不新增人物或第二地点。按4个编号镜头段落输出，每段10秒，结尾温暖，不额外列创作说明。",
+    "stop_reason": "请选择或调整一个故事方向，再开始编写。",
+    "original_story": "温室的绿灯",
+    "review_history": [],
+    "revision_count": 0,
+    "feedback_history": [],
+    "reviewed_version": 0,
+    "accepted_issue_ids": []
+  },
+  "interrupt": {
+    "id": "80d7f61ef57721a4e0ac52cc6cb00e0e",
+    "status": "awaiting_direction",
+    "actions": [
+      "choose"
+    ],
+    "version": 1,
+    "directions": [
+      {
+        "id": "direction_0",
+        "title": "重力轻一点",
+        "outline": "林遥发现幼苗在标准重力下茎叶低垂，于是走向控制台逐级调低人工重力。低重力中幼苗缓缓舒展、浮起，林遥伸手护住飘动的叶片，露出笑意。结尾：幼苗在柔和绿光中挺立，林遥静静守望，温暖收束。"
+      },
+      {
+        "id": "direction_1",
+        "title": "十秒的失重",
+        "outline": "林遥按养护程序给幼苗做短时失重锻炼，控制台倒计时十秒。失重中水珠悬浮成串，幼苗叶片轻颤，林遥紧张地盯着读数。重力恢复后幼苗比之前更精神，林遥轻触叶尖，安心微笑。结尾：温室绿灯映着舒展的幼苗，温暖收束。"
+      },
+      {
+        "id": "direction_2",
+        "title": "绿灯校准",
+        "outline": "温室警报提示重力场波动，幼苗生长受扰。林遥在控制台前反复校准参数，一次次观察幼苗反应，过程紧张而专注。最终重力稳定，幼苗抽出新叶，林遥长舒一口气。结尾：她与幼苗在绿灯下相对静立，温暖收束。"
+      }
+    ]
+  },
+  "created_at": "2026-10-19T02:17:38.319530+00:00",
+  "max_calls": 10,
+  "calls_used": 2,
+  "calls": [
+    {
+      "task": "extract",
+      "status": "succeeded",
+      "usage": {
+        "total_tokens": 1967,
+        "prompt_tokens": 1665,
+        "completion_tokens": 302
+      }
+    },
+    {
+      "task": "brainstorm",
+      "status": "succeeded",
+      "usage": {
+        "total_tokens": 1218,
+        "prompt_tokens": 978,
+        "completion_tokens": 240
+      }
+    }
+  ]
+}

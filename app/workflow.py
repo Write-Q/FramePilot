@@ -6,30 +6,91 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.types import interrupt
 from pydantic import ValidationError
 
-from app.domain import StoryState, Extraction, Revision, Review, StoryPlan, Brainstorm
-from app.provider import ProviderError
+from app.domain import StoryState, Extraction, Revision, Review, StoryPlan, Brainstorm, DraftBody
+from app.provider import ProviderError, StructuredOutputError
+from app.evidence_refs import EvidenceContract
+from app.revision_context import revision_context
+
+
+class QuoteValidationError(ProviderError):
+    """自由引用Provider的兼容校验，来源编号协议仍需经此检查。"""
 
 
 # 组装状态图；内部节点闭包共用模型适配器、业务仓库和检查点存储。
 def build_graph(provider, repo, checkpointer):
     # 节点调用模型的统一入口：先占调用额度，再校验结构并记录请求结果。
-    def ask(state, task, schema, validation_feedback=None):
+    def ask_once(state, task, schema, validation_feedback=None, validate=None):
         call_id = repo.reserve_call(state['project_id'], task)
         payload = {key: state.get(key) for key in (
             'revision_instructions', 'outline', 'original_story', 'draft', 'mode', 'constraints', 'card', 'issues', 'feedback_history')}
         if validation_feedback:
             payload['validation_feedback'] = validation_feedback
+        if task == 'review' and 'previous_draft' in state:
+            payload['revision_context'] = revision_context(state['previous_draft'], state['draft'])
+        usage = {}
+        raw = None
         try:
-            raw, usage = provider.generate(task, payload, schema.model_json_schema())
-            parsed = schema.model_validate(raw)
-        except ValidationError:
-            repo.finish_call(call_id, 'invalid_output')
-            raise ProviderError('模型输出未通过数据约定检查，未采用该结果。') from None
+            contract = EvidenceContract(schema.model_json_schema(), payload) if getattr(provider, 'evidence_references', False) else None
+            if contract and contract.enabled:
+                payload['evidence_catalog'] = contract.catalog
+            raw, usage = provider.generate(task, payload, contract.schema if contract else schema.model_json_schema())
+            if contract and contract.enabled:
+                canonical = contract.resolve(raw)
+            else:
+                canonical = raw
+            parsed = schema.model_validate(canonical)
+            result = parsed.model_dump()
+            if validate:
+                validate(result)
+        except QuoteValidationError:
+            repo.finish_call(call_id, 'invalid_evidence', usage)
+            raise
+        except StructuredOutputError as exc:
+            if usage:
+                exc.usage = usage
+            repo.finish_call(call_id, 'invalid_output', exc.usage)
+            raise
+        except ValidationError as exc:
+            repo.finish_call(call_id, 'invalid_output', usage)
+            errors = exc.errors(include_input=False, include_context=False, include_url=False)
+            details = '; '.join(f"{'.'.join(map(str, e['loc']))}: {e['type']}" for e in errors)
+            raise StructuredOutputError('模型输出未通过数据约定检查，未采用该结果。请纠正字段后输出完整结果：'+details,
+                                        output=raw, usage=usage,
+                                        card_only=bool(errors) and all(e['loc'] and e['loc'][0] == 'card' for e in errors)) from None
         except Exception:
             repo.finish_call(call_id, 'failed')
             raise
         repo.finish_call(call_id, 'succeeded', usage)
-        return parsed.model_dump()
+        return result
+
+    def ask(state, task, schema, validation_feedback=None, validate=None, repair_structure=True):
+        try:
+            return ask_once(state, task, schema, validation_feedback, validate)
+        except StructuredOutputError as exc:
+            # 已在纠正调用中或候选正文需要单独保护时，不再嵌套重试。
+            if not repair_structure or validation_feedback is not None:
+                raise
+            try:
+                return ask_once(state, task, schema, str(exc), validate)
+            except ProviderError as corrected_error:
+                corrected_error.correction_used = True
+                raise
+
+    def preserved_body(raw):
+        if not isinstance(raw, dict) or not set(raw) <= {'draft', 'card', 'input_kind'}:
+            return None
+        try:
+            body = DraftBody.model_validate({'draft': raw.get('draft')})
+        except ValidationError:
+            return None
+        kind = raw.get('input_kind', 'complete')
+        if kind not in ('idea', 'fragment', 'complete'):
+            return None
+        return {'draft': body.draft, 'input_kind': kind, 'card': raw.get('card', {})}
+
+    def pending_result(task, candidate, error='', exhausted=False):
+        return {'pending_generation': {'task': task, 'result': candidate,
+                                       'validation_feedback': error, 'retry_required': exhausted}}
 
     # 校验标为原稿/用户来源的引用，不能证明概括的语义判断一定正确。
     def check_card(state, card):
@@ -39,7 +100,46 @@ def build_graph(provider, repo, checkpointer):
             if source in ('original', 'user'):
                 haystack = state['original_story'] if source == 'original' else user_text
                 if not quote or quote not in haystack:
-                    raise ProviderError(f'理解卡片的 {name} 来源引用不是对应材料中的连续原文。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。')
+                    raise QuoteValidationError(f'理解卡片的 {name} 来源引用不是对应材料中的连续原文：{quote!r}。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。')
+
+    def generate_candidate(state, task):
+        # 生成与纠正分属检查点节点；手动重试纠正也不重新生成正文。
+        candidate = {}
+        def validate(result):
+            candidate.update(result)
+            check_card(state, result['card'])
+        try:
+            result = ask(state, task, Revision, validate=validate, repair_structure=False)
+        except QuoteValidationError as exc:
+            return pending_result(task, candidate, str(exc))
+        except StructuredOutputError as exc:
+            saved = preserved_body(exc.output) if exc.card_only else None
+            if saved is not None:
+                return pending_result(task, saved, str(exc))
+            try:
+                result = ask_once(state, task, Revision, str(exc), validate)
+            except QuoteValidationError as corrected_error:
+                return pending_result(task, candidate, str(corrected_error), exhausted=True)
+            except StructuredOutputError as corrected_error:
+                saved = preserved_body(corrected_error.output) if corrected_error.card_only else None
+                if saved is not None:
+                    return pending_result(task, saved, str(corrected_error), exhausted=True)
+                raise
+        return pending_result(task, result)
+
+    def accept_candidate(state, task):
+        candidate = state['pending_generation']
+        if not candidate or candidate['task'] != task:
+            raise ProviderError('候选正文检查点不匹配，请重新载入项目。')
+        if candidate.get('retry_required'):
+            raise ProviderError('本轮自动纠正后卡片仍不合格，已保留候选正文；可手动重试卡片纠正。')
+        result = candidate['result']
+        if candidate['validation_feedback']:
+            corrected = ask({**state, **result}, 'repair_card', Extraction,
+                            validation_feedback=candidate['validation_feedback'],
+                            validate=lambda r: check_card(state, r['card']))
+            result = {**result, 'card': corrected['card']}
+        return result
 
     # 自由模式：先构思故事骨架。
     def plan(state):
@@ -64,33 +164,43 @@ def build_graph(provider, repo, checkpointer):
 
     # 按故事骨架首次写出正文及卡片；与后续 revise 修订分开计数。
     def compose(state):
-        result = ask(state, 'compose', Revision)
-        check_card(state, result['card'])
+        return generate_candidate(state, 'compose')
+
+    def accept_compose(state):
+        result = accept_candidate(state, 'compose')
         repo.version({**state, **result})
-        return result
+        return {**result, 'pending_generation': None}
 
     # 理解已有输入并生成卡片；来源引用不合格时最多纠正一次。
     def extract(state):
-        result = ask(state, 'extract', Extraction)
         try:
-            check_card(state, result['card'])
-        except ProviderError as exc:
+            result = ask(state, 'extract', Extraction, validate=lambda r: check_card(state, r['card']))
+        except QuoteValidationError as exc:
+            if exc.correction_used:
+                raise
             # 仅纠正一次引用格式，仍经持久化额度闸门计费；再次错误直接停止。
-            result = ask(state, 'extract', Extraction, validation_feedback=str(exc))
-            check_card(state, result['card'])
+            result = ask(state, 'extract', Extraction, validation_feedback=str(exc),
+                         validate=lambda r: check_card(state, r['card']))
         repo.version({**state, **result})
         return result
 
     # 审核当前稿、验证引用、补充问题编号并保留未处理旧问题。
     def review(state):
-        result = ask(state, 'review', Review)
         sources = {'original': state['original_story'], 'draft': state['draft'],
                    'constraints': state['constraints'], 'feedback': '\n'.join(state['feedback_history'])}
+        def validate(result):
+            for item in result['issues']:
+                for evidence in item['evidence']:
+                    if evidence['quote'] not in sources[evidence['source']]:
+                        raise QuoteValidationError(f"审核引用了不存在的原文（{evidence['source']}）：{evidence['quote']!r}。未将本次审核视为通过。请核对对应材料并重新输出完整审核结果，不要仅为通过校验而删除真实问题。")
+        try:
+            result = ask(state, 'review', Review, validate=validate)
+        except QuoteValidationError as exc:
+            if exc.correction_used:
+                raise
+            result = ask(state, 'review', Review, validation_feedback=str(exc), validate=validate)
         issues = []
         for item in result['issues']:
-            for evidence in item['evidence']:
-                if evidence['quote'] not in sources[evidence['source']]:
-                    raise ProviderError('审核引用了不存在的原文，未将本次审核视为通过。')
             # 同类型、同一组证据维持相同编号。换说法的语义匹配暂不宣称已解决。
             signature = json.dumps([item['category'], sorted((e['source'], e['quote']) for e in item['evidence'])], ensure_ascii=False)
             item['id'] = 'issue_' + hashlib.sha256(signature.encode()).hexdigest()[:16]
@@ -131,9 +241,13 @@ def build_graph(provider, repo, checkpointer):
         # 再次保护边界，避免未来改图时绕过路由上限。
         if state['revision_count'] >= 3:
             raise ProviderError('已达到累计修订上限。')
-        result = ask(state, 'revise', Revision)
-        check_card(state, result['card'])
+        return generate_candidate(state, 'revise')
+
+    def accept_revision(state):
+        result = accept_candidate(state, 'revise')
         updates = {**result, 'version': state['version'] + 1,
+                   'previous_draft': state['draft'],
+                   'pending_generation': None,
                    'revision_count': state['revision_count'] + 1, 'status': 'running',
                    'accepted_issue_ids': [], 'stop_reason': ''}
         repo.version({**state, **updates})
@@ -157,18 +271,20 @@ def build_graph(provider, repo, checkpointer):
                 'next_step': 'review' if answer['action'] == 'clarify' else 'revise'}
 
     graph = StateGraph(StoryState)
-    for name, function in [('brainstorm', brainstorm), ('direction_choice', direction_choice), ('plan', plan), ('compose', compose), ('extract', extract), ('review', review), ('decide', decide),
-                           ('revise', revise), ('human', human)]:
+    for name, function in [('brainstorm', brainstorm), ('direction_choice', direction_choice), ('plan', plan), ('compose', compose), ('accept_compose', accept_compose), ('extract', extract), ('review', review), ('decide', decide),
+                           ('revise', revise), ('accept_revision', accept_revision), ('human', human)]:
         graph.add_node(name, function)
     graph.add_conditional_edges(START, lambda s: 'plan' if s['mode'] == 'free' else 'extract', {'plan':'plan', 'extract':'extract'})
     graph.add_edge('plan', 'compose')
-    graph.add_edge('compose', 'review')
+    graph.add_edge('compose', 'accept_compose')
+    graph.add_edge('accept_compose', 'review')
     graph.add_conditional_edges('extract', lambda s: 'brainstorm' if s['mode'] == 'collaborative' and s.get('input_kind') in ('idea','fragment') else 'review', {'brainstorm':'brainstorm','review':'review'})
     graph.add_edge('brainstorm','direction_choice')
     graph.add_edge('direction_choice','compose')
     graph.add_edge('review', 'decide')
     graph.add_conditional_edges('decide', lambda s: s['next_step'], {'human': 'human', 'revise': 'revise'})
-    graph.add_edge('revise', 'review')
+    graph.add_edge('revise', 'accept_revision')
+    graph.add_edge('accept_revision', 'review')
     graph.add_conditional_edges('human', lambda s: s['next_step'], {'end': END, 'revise': 'revise', 'review': 'review'})
     return graph.compile(checkpointer=checkpointer)
 

@@ -46,3 +46,5 @@ button{border-radius:8px;transition:background .15s,box-shadow .15s}button:hover
 .direction{padding:15px;border:1px solid #dce3d9;border-radius:10px;background:#fafcf7}.direction input{width:auto;margin-right:10px}.direction p{font-size:14px;margin:8px 0}.issue select{font-size:13px}.issue textarea{margin-top:8px}#directions-panel{padding-bottom:20px}
 
 #error-panel{margin:18px 0;padding:18px;border:1px solid #d6a798;border-left:4px solid #a54e36;background:#fff6f1;border-radius:10px;scroll-margin-top:16px;overflow-wrap:anywhere}#error-panel h3{margin:0;padding:0;border:0;color:#8e3c2c}#error-next{font-size:13px;color:#77574d}#error-detail{background:#f9ebe4}
+
+#action-message{margin:14px 0 0;padding:12px 14px;background:#fff7e8;border-left:3px solid #b99450;border-radius:6px;color:#70551f;overflow-wrap:anywhere;scroll-margin:16px}

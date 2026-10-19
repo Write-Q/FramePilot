@@ -128,10 +128,15 @@ class Extraction(StrictModel):
     input_kind: Literal['idea', 'fragment', 'complete'] = 'complete' 
 
 
-# 继承 Extraction 的 card/input_kind，增加正文；首次写稿也复用此结构。
-class Revision(Extraction):
+# 可单独验证候选正文，不依赖尚未纠正的理解卡。
+class DraftBody(StrictModel):
     # 当前工作的剧本正文；修改它不会覆盖 original_story。
     draft: str = Field(min_length=1, max_length=20000)
+
+
+# 首次写稿与后续修订共用正文、卡片及输入类型约定。
+class Revision(Extraction, DraftBody):
+    pass
 
 
 # 一条审核证据；引用是否真实存在还需 workflow.py 校验。
@@ -188,6 +193,10 @@ class StoryState(TypedDict, total=False):
     original_story: str
     # 当前工作的剧本正文；修改它不会覆盖 original_story。
     draft: str
+    # 最近一次已采用修订之前的正文，供复审及仅澄清核对改动范围。
+    previous_draft: str
+    # 尚未通过卡片校验的候选；只在采用节点成功后推进正文和版本。
+    pending_generation: dict | None
     # 创作模式：direct 原稿交接；faithful 兼容旧模式；collaborative 协作；free 自由编剧。
     mode: str
     # 用户明确要求，例如时长、风格和不可更改的设定。

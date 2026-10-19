@@ -78,6 +78,10 @@ class StoryService:
         state = dict(snapshot.values) or current
         pending = None
         if error:
+            if any(node in snapshot.next for node in ('compose', 'revise', 'accept_compose', 'accept_revision')):
+                error += ' 新稿未采用，当前显示的仍是此前保存的正文；可在剩余额度内重试。'
+            elif 'review' in snapshot.next:
+                error += ' 当前正文已保存，但本轮审核未完成；请重试审核后再确认。'
             state.update(status=status, error=error)
         else:
             for task in snapshot.tasks:
@@ -172,8 +176,18 @@ class StoryService:
                 raise Conflict('仅失败的流程可以手动重试。')
             if current['calls_used'] >= current['max_calls']:
                 raise Conflict('调用额度已耗尽，重试不会重置额度。')
-            if not self.graph.get_state(self.config(project_id)).next:
+            snapshot = self.graph.get_state(self.config(project_id))
+            if not snapshot.next:
                 raise Conflict('没有可恢复的检查点。')
+            candidate = snapshot.values.get('pending_generation')
+            if candidate and candidate.get('retry_required'):
+                task = candidate.get('task')
+                target = {'compose': 'accept_compose', 'revise': 'accept_revision'}.get(task)
+                if target not in snapshot.next:
+                    raise Conflict('候选正文恢复节点不匹配，请重新载入项目。')
+                # 只由这次显式手动重试解除暂停，不重置模型调用预算。
+                self.graph.update_state(self.config(project_id),
+                                        {'pending_generation': {**candidate, 'retry_required': False}}, as_node=task)
             return self._run(project_id, None)
         finally:
             self.operation_lock.release()

@@ -1,0 +1,45 @@
+{
+  "id": "5480c3edf1f141608c226ff7759c4b51",
+  "state": {
+    "card": {},
+    "mode": "collaborative",
+    "draft": "雨后的小支架",
+    "error": "理解卡片的 pacing 来源引用不是对应材料中的连续原文：'30秒写实短片；剧本按4个编号镜头段落输出，每段含大致秒数和可见动作，合计30秒。'。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。",
+    "issues": [],
+    "status": "failed",
+    "version": 1,
+    "project_id": "5480c3edf1f141608c226ff7759c4b51",
+    "constraints": "30秒写实短片；唯一人物小禾，唯一地点自家院子；主线是扶正幼苗；无对白、无画外音、无魔法，不增加新人物或第二地点；结尾温暖。剧本按4个编号镜头段落输出，每段含大致秒数和可见动作，合计30秒。不要另列片名、创作说明或备选结尾。",
+    "stop_reason": "",
+    "original_story": "雨后的小支架",
+    "review_history": [],
+    "revision_count": 0,
+    "feedback_history": [],
+    "reviewed_version": 0,
+    "accepted_issue_ids": []
+  },
+  "interrupt": null,
+  "created_at": "2026-10-19T01:53:56.681614+00:00",
+  "max_calls": 10,
+  "calls_used": 2,
+  "calls": [
+    {
+      "task": "extract",
+      "status": "invalid_evidence",
+      "usage": {
+        "total_tokens": 1477,
+        "prompt_tokens": 1060,
+        "completion_tokens": 417
+      }
+    },
+    {
+      "task": "extract",
+      "status": "invalid_evidence",
+      "usage": {
+        "total_tokens": 1716,
+        "prompt_tokens": 1132,
+        "completion_tokens": 584
+      }
+    }
+  ]
+}

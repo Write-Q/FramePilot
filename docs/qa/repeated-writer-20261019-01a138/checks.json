@@ -1,0 +1,144 @@
+{
+  "trials": [
+    {
+      "id": "seedling-1",
+      "create_first_pass": true,
+      "compose_first_pass": false,
+      "first_draft_available": null,
+      "revise_first_pass": null,
+      "exact_local_edit": null,
+      "review_blocks_exact_edit": null,
+      "final_status": "failed",
+      "export_ok": null,
+      "new_app_read_ok": null,
+      "model_calls": 4,
+      "raw_revision_exact": null,
+      "errors": [
+        {
+          "step": "02-compose",
+          "error": "理解卡片的 theme 来源引用不是对应材料中的连续原文。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。"
+        },
+        {
+          "step": "02b-retry",
+          "error": "理解卡片的 theme 来源引用不是对应材料中的连续原文。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。"
+        }
+      ],
+      "tokens": 7864
+    },
+    {
+      "id": "book-1",
+      "create_first_pass": true,
+      "compose_first_pass": false,
+      "first_draft_available": null,
+      "revise_first_pass": null,
+      "exact_local_edit": null,
+      "review_blocks_exact_edit": null,
+      "final_status": "failed",
+      "export_ok": null,
+      "new_app_read_ok": null,
+      "model_calls": 5,
+      "raw_revision_exact": null,
+      "errors": [
+        {
+          "step": "02-compose",
+          "error": "理解卡片的 theme 来源引用不是对应材料中的连续原文。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。"
+        },
+        {
+          "step": "02b-retry",
+          "error": "审核引用了不存在的原文，未将本次审核视为通过。"
+        }
+      ],
+      "tokens": 10732
+    },
+    {
+      "id": "seedling-2",
+      "create_first_pass": true,
+      "compose_first_pass": true,
+      "first_draft_available": true,
+      "revise_first_pass": false,
+      "exact_local_edit": false,
+      "review_blocks_exact_edit": false,
+      "final_status": "failed",
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "model_calls": 5,
+      "raw_revision_exact": true,
+      "errors": [
+        {
+          "step": "03-revise",
+          "error": "理解卡片的 actions 来源引用不是对应材料中的连续原文。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。"
+        }
+      ],
+      "tokens": 11200
+    },
+    {
+      "id": "book-2",
+      "create_first_pass": true,
+      "compose_first_pass": true,
+      "first_draft_available": true,
+      "revise_first_pass": true,
+      "exact_local_edit": true,
+      "review_blocks_exact_edit": true,
+      "final_status": "confirmed",
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "model_calls": 7,
+      "raw_revision_exact": true,
+      "errors": [],
+      "tokens": 15402,
+      "false_positive_proof": {
+        "折角被压平，旧痕重新可见。": true,
+        "画面停在书与手指上，温暖收束。": true
+      }
+    },
+    {
+      "id": "seedling-3",
+      "create_first_pass": true,
+      "compose_first_pass": true,
+      "first_draft_available": true,
+      "revise_first_pass": true,
+      "exact_local_edit": true,
+      "review_blocks_exact_edit": false,
+      "final_status": "confirmed",
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "model_calls": 6,
+      "raw_revision_exact": true,
+      "errors": [],
+      "tokens": 12801
+    },
+    {
+      "id": "book-3",
+      "create_first_pass": true,
+      "compose_first_pass": true,
+      "first_draft_available": true,
+      "revise_first_pass": false,
+      "exact_local_edit": false,
+      "review_blocks_exact_edit": false,
+      "final_status": "failed",
+      "export_ok": true,
+      "new_app_read_ok": true,
+      "model_calls": 5,
+      "raw_revision_exact": true,
+      "errors": [
+        {
+          "step": "03-revise",
+          "error": "理解卡片的 actions 来源引用不是对应材料中的连续原文。请逐字引用，不拼接、不省略、不改写 evidence；text 仍应概括总结。"
+        }
+      ],
+      "tokens": 10738
+    }
+  ],
+  "call_count": 32,
+  "tokens": 68737,
+  "provider_returned_json": 32,
+  "model_seconds": 97.8,
+  "create_first_pass": 6,
+  "compose_first_pass": 4,
+  "revision_attempted": 4,
+  "raw_revision_exact": 4,
+  "persisted_revision_exact": 2,
+  "confirmed": 2,
+  "quote_validation_failures": 6,
+  "database_cleaned": true
+}

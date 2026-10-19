@@ -10,7 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_deepseek import ChatDeepSeek
 from openai import APIConnectionError, APIStatusError, LengthFinishReasonError, ContentFilterFinishReasonError
 
-from app.prompts import COMMON, TASKS
+from app.prompts import COMMON, TASKS, REFERENCE_PROTOCOL
 from app.events import emit, progress_sink
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -18,7 +18,16 @@ load_dotenv(ROOT / '.env', override=False)
 
 
 class ProviderError(RuntimeError):
-    pass
+    correction_used = False
+
+
+class StructuredOutputError(ProviderError):
+    """可有限纠正的输出错误；不携带HTTP响应或密钥等运行配置。"""
+    def __init__(self, message, *, output=None, usage=None, card_only=False):
+        super().__init__(message)
+        self.output = output
+        self.usage = usage or {}
+        self.card_only = card_only
 
 
 class ModelProvider(Protocol):
@@ -27,6 +36,7 @@ class ModelProvider(Protocol):
 
 
 class DeepSeekProvider:
+    evidence_references = True
     def __init__(self, *, client=None):
         self.key = os.getenv('DEEPSEEK_API_KEY', '')
         self.base_url = os.getenv('DEEPSEEK_BASE_URL', 'https://api.deepseek.com').rstrip('/')
@@ -47,12 +57,14 @@ class DeepSeekProvider:
     def generate(self, task, payload, schema):
         if not self.key:
             raise ProviderError('未找到 DEEPSEEK_API_KEY，请设置环境变量或本地 .env。')
-        instructions = COMMON + TASKS[task] + '\nJSON Schema:\n' + json.dumps(schema, ensure_ascii=False)
+        protocol = REFERENCE_PROTOCOL if 'evidence_catalog' in payload else ''
+        instructions = COMMON + TASKS[task] + protocol + '\nJSON Schema:\n' + json.dumps(schema, ensure_ascii=False)
         # JSON mode 的 schema 通过提示词传递；业务层仍负责 Pydantic 和证据校验。
         structured_model = self.chat_model.with_structured_output(
             schema, method='json_mode', include_raw=True,
         )
         chain = self.prompt | structured_model
+        usage = {}
         try:
             inputs = {'instructions': instructions, 'payload_json': json.dumps(payload, ensure_ascii=False)}
             if progress_sink.get() is not None:
@@ -71,17 +83,19 @@ class DeepSeekProvider:
                 raw = result['raw']
             if raw.response_metadata.get('finish_reason') != 'stop':
                 raise ProviderError('模型输出未正常结束，未采用截断结果。')
-            if result.get('parsing_error'):
-                raise ProviderError('DeepSeek 返回的内容不是有效结构化结果。')
-            # LangChain 的 JSON parser 可修复部分 JSON；这里不接受截断或围栏结果。
-            content = json.loads(raw.content)
-            if not isinstance(content, dict):
-                raise ProviderError('模型未返回 JSON 对象。')
             tokens = raw.usage_metadata or {}
             usage = {target: tokens[source] for source, target in (
                 ('input_tokens', 'prompt_tokens'), ('output_tokens', 'completion_tokens'),
                 ('total_tokens', 'total_tokens')) if isinstance(tokens.get(source), int)}
+            if result.get('parsing_error'):
+                raise StructuredOutputError('模型输出不是有效JSON，请输出完整且符合Schema的JSON对象。', usage=usage)
+            # LangChain 的 JSON parser 可修复部分 JSON；这里不接受截断或围栏结果。
+            content = json.loads(raw.content)
+            if not isinstance(content, dict):
+                raise StructuredOutputError('模型未返回JSON对象，请按Schema输出对象。', output=content, usage=usage)
             return content, usage
+        except json.JSONDecodeError:
+            raise StructuredOutputError('模型输出不是有效JSON，请输出完整且符合Schema的JSON对象。', usage=usage) from None
         except (LengthFinishReasonError, ContentFilterFinishReasonError):
             raise ProviderError('模型输出未正常结束，未采用该结果。') from None
         except APIStatusError as exc:

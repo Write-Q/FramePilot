@@ -86,6 +86,17 @@ docker compose up -d --wait db
 每个数据库用例独立创建 `fp_test_<随机编号>`，结束只删除自己创建的库。模型使用替身，不产生 API 费用。
 直接运行 pytest 而未配置 `TEST_DATABASE_URL` 时数据库测试会跳过，不代表数据库迁移验收通过。
 
+可选的真实浏览器回归使用独立测试数据库和模型替身，覆盖意见隔离、刷新/重新载入、提交后草稿失效、桌面及手机操作提示。需要 Node.js、Playwright 和 Chromium；未安装时会明确跳过这一项。可将测试依赖装在忽略目录中：
+
+```powershell
+npm install --prefix .runtime/browser-tests playwright
+node .runtime/browser-tests/node_modules/playwright/cli.js install chromium
+$env:NODE_PATH = (Resolve-Path .runtime/browser-tests/node_modules).Path
+.\.venv\Scripts\python.exe -m scripts.test_local
+```
+
+如需使用已有 Chromium，可设置 `FRAMEPILOT_CHROME` 为可执行文件路径；`FRAMEPILOT_UI_ARTIFACTS` 可指定浏览器截图输出目录。
+
 阅读顺序：`domain.py → workflow.py → service.py → models.py/storage.py → provider.py → main.py`。
 字段与关键函数已补充中文注释。[架构记录](docs/architecture.md)保留历史阶段，数据库部分以本页和迁移说明为准。
 

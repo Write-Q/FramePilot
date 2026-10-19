@@ -1,0 +1,138 @@
+{
+  "id": "cf1eeaf330144a80962c0ea05162a28f",
+  "state": {
+    "card": {
+      "plot": {
+        "text": "起因：雨后幼苗倒伏。\n发展：小禾在自家院子扶正幼苗。\n转折：未说明。\n结尾：温暖收束。",
+        "source": "original",
+        "evidence": "雨后的小支架"
+      },
+      "props": {
+        "text": "小支架：用于扶正幼苗，持有与转移情况未说明。",
+        "source": "original",
+        "evidence": "雨后的小支架"
+      },
+      "sound": {
+        "text": "无对白、无画外音。",
+        "source": "user",
+        "evidence": "无对白、无画外音、无魔法"
+      },
+      "theme": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      },
+      "camera": {
+        "text": "未说明",
+        "source": "unknown",
+        "evidence": ""
+      },
+      "pacing": {
+        "text": "总时长30秒，按4个编号镜头段落输出，每段含大致秒数。",
+        "source": "user",
+        "evidence": "剧本按4个编号镜头段落输出，每段含大致秒数和可见动作，合计30秒。"
+      },
+      "scenes": {
+        "text": "自家院子：唯一地点，雨后；年代与室内外未说明。",
+        "source": "original",
+        "evidence": "雨后的小支架"
+      },
+      "actions": {
+        "text": "扶正幼苗。",
+        "source": "original",
+        "evidence": "雨后的小支架"
+      },
+      "characters": {
+        "text": "小禾：唯一人物，身份与年龄未说明；在自家院子扶正幼苗。",
+        "source": "original",
+        "evidence": "雨后的小支架"
+      },
+      "visual_style": {
+        "text": "写实短片风格；其余未说明。",
+        "source": "user",
+        "evidence": "30秒写实短片"
+      }
+    },
+    "mode": "collaborative",
+    "draft": "雨后的小支架",
+    "error": "",
+    "issues": [],
+    "status": "awaiting_direction",
+    "version": 1,
+    "directions": [
+      {
+        "id": "direction_0",
+        "title": "小支架的接力",
+        "outline": "小禾在雨后院子里发现幼苗倒伏，先用手扶起，但松软泥土让幼苗再次歪倒。小禾转身找到小支架，小心插入泥土固定幼苗。结尾小禾退后一步，看着幼苗在湿润空气里挺直，露出安心的微笑。全片约30秒，四个镜头：发现倒伏、徒手扶苗失败、取支架固定、退后微笑。"
+      },
+      {
+        "id": "direction_1",
+        "title": "雨珠与嫩芽",
+        "outline": "小禾蹲在院子里，看见幼苗叶片上挂着雨珠、茎秆弯折。小禾轻轻抖落积水，用指尖拨开湿土，再把小支架稳稳插在幼苗旁。结尾雨珠从叶尖滑落，幼苗微微回弹，小禾伸手护住叶片，画面温暖安静。全片约30秒，四个镜头：观察雨珠、抖水拨土、插支架、护叶收束。"
+      },
+      {
+        "id": "direction_2",
+        "title": "等一等再扶",
+        "outline": "小禾发现幼苗倒伏后没有立刻动手，而是先蹲下观察泥土和茎秆的弯向。小禾用手掌轻压根部周围湿土，让幼苗有支撑，再调整小支架的位置。结尾小禾慢慢起身，幼苗在院子里安静立住，小禾脸上浮现克制的笑意。全片约30秒，四个镜头：蹲下观察、压土试探、调整支架、起身微笑。"
+      }
+    ],
+    "input_kind": "idea",
+    "project_id": "cf1eeaf330144a80962c0ea05162a28f",
+    "constraints": "30秒写实短片；唯一人物小禾，唯一地点自家院子；主线是扶正幼苗；无对白、无画外音、无魔法，不增加新人物或第二地点；结尾温暖。剧本按4个编号镜头段落输出，每段含大致秒数和可见动作，合计30秒。不要另列片名、创作说明或备选结尾。",
+    "stop_reason": "请选择或调整一个故事方向，再开始编写。",
+    "original_story": "雨后的小支架",
+    "review_history": [],
+    "revision_count": 0,
+    "feedback_history": [],
+    "reviewed_version": 0,
+    "accepted_issue_ids": []
+  },
+  "interrupt": {
+    "id": "bf94acf6a68199676a2919c8a2d8ca30",
+    "status": "awaiting_direction",
+    "actions": [
+      "choose"
+    ],
+    "version": 1,
+    "directions": [
+      {
+        "id": "direction_0",
+        "title": "小支架的接力",
+        "outline": "小禾在雨后院子里发现幼苗倒伏，先用手扶起，但松软泥土让幼苗再次歪倒。小禾转身找到小支架，小心插入泥土固定幼苗。结尾小禾退后一步，看着幼苗在湿润空气里挺直，露出安心的微笑。全片约30秒，四个镜头：发现倒伏、徒手扶苗失败、取支架固定、退后微笑。"
+      },
+      {
+        "id": "direction_1",
+        "title": "雨珠与嫩芽",
+        "outline": "小禾蹲在院子里，看见幼苗叶片上挂着雨珠、茎秆弯折。小禾轻轻抖落积水，用指尖拨开湿土，再把小支架稳稳插在幼苗旁。结尾雨珠从叶尖滑落，幼苗微微回弹，小禾伸手护住叶片，画面温暖安静。全片约30秒，四个镜头：观察雨珠、抖水拨土、插支架、护叶收束。"
+      },
+      {
+        "id": "direction_2",
+        "title": "等一等再扶",
+        "outline": "小禾发现幼苗倒伏后没有立刻动手，而是先蹲下观察泥土和茎秆的弯向。小禾用手掌轻压根部周围湿土，让幼苗有支撑，再调整小支架的位置。结尾小禾慢慢起身，幼苗在院子里安静立住，小禾脸上浮现克制的笑意。全片约30秒，四个镜头：蹲下观察、压土试探、调整支架、起身微笑。"
+      }
+    ]
+  },
+  "created_at": "2026-10-19T01:56:39.029940+00:00",
+  "max_calls": 10,
+  "calls_used": 2,
+  "calls": [
+    {
+      "task": "extract",
+      "status": "succeeded",
+      "usage": {
+        "total_tokens": 1390,
+        "prompt_tokens": 1060,
+        "completion_tokens": 330
+      }
+    },
+    {
+      "task": "brainstorm",
+      "status": "succeeded",
+      "usage": {
+        "total_tokens": 1245,
+        "prompt_tokens": 936,
+        "completion_tokens": 309
+      }
+    }
+  ]
+}
