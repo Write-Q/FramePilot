@@ -1,0 +1,416 @@
+{
+  "id": "8e8cebf31c4b417d811473af5584590b",
+  "project_id": "4d55978ec55d47cfa3c4b28a821842bc",
+  "idempotency_key": "f0d39b4a20c34d93b6013374cc05bc9f",
+  "manifest": {
+    "skills": [
+      {
+        "id": "K001",
+        "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+        "sources": [
+          "S001",
+          "S002",
+          "S007",
+          "S008",
+          "S010"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/storyboardTable.md",
+            "sections": [
+              "拆分方法",
+              "输出格式",
+              "写入后审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "分场与表演依据",
+              "镜头语法",
+              "台词与时长"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K002",
+        "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+        "sources": [
+          "S002",
+          "S003",
+          "S004",
+          "S008"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "空间与连续性",
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+            "sections": [
+              "连续性核对"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K003",
+        "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+        "sources": [
+          "S009",
+          "S011",
+          "S012"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+            "sections": [
+              "从分镜到单帧",
+              "字段映射",
+              "质量与忠实性检查"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+            "sections": [
+              "_FRAME_FOCUS",
+              "_SHOT_FRAME_INPUT_VARS",
+              "_SHOT_FRAME_TEMPLATE"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+      },
+      "aspect_ratio": "16:9",
+      "instructions": "",
+      "target_shots": 1,
+      "visual_style": "",
+      "source_version": 1,
+      "idempotency_key": "f0d39b4a20c34d93b6013374cc05bc9f",
+      "reasoning_effort": "low"
+    },
+    "prompt_sha256": "7525209a021164544389e9266252244de804bd9b778153e8af6254592cbe6b2d",
+    "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+    "source_sha256": "a0d7d3cc40d6c34be438302156cc8959e432417993f026cf3fd659707057e2fa",
+    "context_sha256": "6477edef58f7c93d5ea14b1bcf190150154a5884b40c9a5e8d89431d9223d7d8",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-planner-1.1.0",
+    "source_version_id": "eb7b7a063a2a5050a5dc8f531fa300c4",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "low"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 7608,
+    "prompt_tokens": 4516,
+    "completion_tokens": 3092
+  },
+  "created_at": "2026-10-20T03:30:10.093341+00:00",
+  "finished_at": "2026-10-20T03:30:27.345699+00:00",
+  "error": "",
+  "board": {
+    "id": "86e0f33fc4724444827c4b7719dea69f",
+    "version_id": "da9db40b67214dec975104aa6ee4cbc3",
+    "version": 1,
+    "current_version": 1,
+    "project_id": "4d55978ec55d47cfa3c4b28a821842bc",
+    "source_version": 1,
+    "source_version_id": "eb7b7a063a2a5050a5dc8f531fa300c4",
+    "source_current": true,
+    "source_confirmed": true,
+    "confirmed": false,
+    "confirmation_effective": false,
+    "confirmed_at": null,
+    "content": {
+      "schema_version": 1,
+      "title": "林合上书·单镜规划（存在未分配场次）",
+      "aspect_ratio": "16:9",
+      "visual_style": "",
+      "scenes": [
+        {
+          "key": "S1",
+          "title": "屋内，林合上书",
+          "source_quote": "场一，屋内。林合上书。"
+        },
+        {
+          "key": "S2",
+          "title": "次日车站，禾登上列车",
+          "source_quote": "场二，次日车站。禾登上列车。"
+        },
+        {
+          "key": "S3",
+          "title": "夜晚海边，林望着海",
+          "source_quote": "场三，夜晚海边。林望着海。"
+        }
+      ],
+      "shots": [
+        {
+          "key": "S1_01",
+          "scene_key": "S1",
+          "source_quote": "林合上书。",
+          "purpose": "呈现场一唯一已确认动作：林在屋内把书合上；本镜不承担场二、场三的不同时空内容。",
+          "action": "林在屋内将翻开的书合拢，直至书本完全合上。",
+          "duration_ms": 4000,
+          "shot_size": "中近景",
+          "camera_angle": "平视",
+          "camera_motion": "固定",
+          "composition": "林单人居中，书本位于其身前并处于叙事焦点；屋内陈设保持简洁，不添加未确认的环境叙事物；持书手、人物左右站位与屋内布局均待确认。",
+          "screen_direction": "林视线朝向书本；具体画面朝向和世界方位剧本未指定，待确认，本镜不建立跨场轴线。",
+          "lighting": "剧本未指定；不虚构可辨识光源，室内照明方案待确认。",
+          "continuity_notes": "单镜无同场相邻镜头可核对。场二、场三未分配镜头，不能与本镜合并为连续时空；跨场连续性尚未建立。",
+          "action_beats": [
+            {
+              "description": "林将翻开的书合拢，书页相向收合。",
+              "duration_ms": 2000
+            },
+            {
+              "description": "书本完全合上，合书动作结束。",
+              "duration_ms": 1000
+            }
+          ],
+          "frame_prompts": {
+            "first": "16:9中近景，平视固定机位。林在屋内，位于画面中部，书本在其身前处于翻开状态，合书动作尚未开始；屋内陈设不添加未确认信息，持书手与具体站位待确认。",
+            "key": "书页相向收合、书本接近闭合的瞬间；林仍保持在屋内原位，画面焦点落在书本与合书动作上。",
+            "last": "书本已经完全合上，林处于合书后的静态姿态；不提前出现场二车站或场三海边的内容。"
+          },
+          "dialogue": "",
+          "sound": "",
+          "state_start": "林在屋内，书本处于翻开状态，合书动作尚未开始。",
+          "state_end": "林在屋内，书本已完全合上，合书动作结束。",
+          "image_prompt": "与first一致：16:9中近景，平视固定机位；林在屋内画面中部，书本翻开置于身前，合书尚未开始；不添加未确认的屋内陈设、光源或人物。",
+          "video_prompt": "从书本翻开的状态开始，林将书页合拢，直至书本完全合上；机位固定，中近景不变，动作完成后保持合书状态。不增加台词、人物、环境事件或不同时空内容。",
+          "characters": [
+            "林"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "target_shots=1无法容纳三个场次：本镜仅覆盖场一；场二“次日车站，禾登上列车”与场三“夜晚海边，林望着海”未分配镜头，仍未完成全文覆盖。建议至少3镜（每场1镜）并回填target_shots，等待人工调整；不得把不同时空拼入同一连续镜。屋内陈设、林的外貌服装、持书手和照明均无剧本依据，待确认。"
+        }
+      ],
+      "bindings": {
+        "text": {
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225",
+          "version": 1
+        }
+      }
+    },
+    "total_duration_ms": 4000,
+    "created_at": "2026-10-20T03:30:27.345699+00:00",
+    "creation_method": "ai",
+    "provenance": {
+      "run_id": "8e8cebf31c4b417d811473af5584590b",
+      "skills": [
+        {
+          "id": "K001",
+          "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+          "sources": [
+            "S001",
+            "S002",
+            "S007",
+            "S008",
+            "S010"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/storyboardTable.md",
+              "sections": [
+                "拆分方法",
+                "输出格式",
+                "写入后审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "分场与表演依据",
+                "镜头语法",
+                "台词与时长"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K002",
+          "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+          "sources": [
+            "S002",
+            "S003",
+            "S004",
+            "S008"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "空间与连续性",
+                "审阅方法与本集落点"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+              "sections": [
+                "连续性核对"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/members/reviewer.md",
+              "sections": [
+                "分镜审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K003",
+          "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+          "sources": [
+            "S009",
+            "S011",
+            "S012"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+              "sections": [
+                "从分镜到单帧",
+                "字段映射",
+                "质量与忠实性检查"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+              "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+              "sections": [
+                "_FRAME_FOCUS",
+                "_SHOT_FRAME_INPUT_VARS",
+                "_SHOT_FRAME_TEMPLATE"
+              ],
+              "repository": "Forget-C/Jellyfish"
+            }
+          ]
+        }
+      ],
+      "request": {
+        "profile": {
+          "version": 1,
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+        },
+        "aspect_ratio": "16:9",
+        "instructions": "",
+        "target_shots": 1,
+        "visual_style": "",
+        "source_version": 1,
+        "idempotency_key": "f0d39b4a20c34d93b6013374cc05bc9f",
+        "reasoning_effort": "low"
+      },
+      "prompt_sha256": "7525209a021164544389e9266252244de804bd9b778153e8af6254592cbe6b2d",
+      "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+      "source_sha256": "a0d7d3cc40d6c34be438302156cc8959e432417993f026cf3fd659707057e2fa",
+      "context_sha256": "6477edef58f7c93d5ea14b1bcf190150154a5884b40c9a5e8d89431d9223d7d8",
+      "parameter_rules": "chat-parameters-1.0.0",
+      "workflow_version": "storyboard-planner-1.1.0",
+      "source_version_id": "eb7b7a063a2a5050a5dc8f531fa300c4",
+      "reasoning_protocol": "deepseek",
+      "request_parameters": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "max_tokens": 16000,
+        "response_format": {
+          "type": "json_object"
+        },
+        "reasoning_effort": "low"
+      },
+      "capabilities_verified": false
+    }
+  },
+  "review": {
+    "rules_version": "storyboard-checks-1.0.0",
+    "semantic_verified": false,
+    "issues": [
+      {
+        "code": "unused_scene",
+        "severity": "warning",
+        "message": "该场次尚未安排镜头，请确认是否遗漏。",
+        "shot_key": null,
+        "scene_key": "S2"
+      },
+      {
+        "code": "unused_scene",
+        "severity": "warning",
+        "message": "该场次尚未安排镜头，请确认是否遗漏。",
+        "shot_key": null,
+        "scene_key": "S3"
+      },
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "S1_01",
+        "scene_key": null
+      }
+    ],
+    "notice": "程序只检查结构与有限启发式；请人工核对剧情、空间、动作和静态帧。"
+  },
+  "max_runs": 10
+}

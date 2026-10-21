@@ -1,0 +1,525 @@
+{
+  "id": "0e1dde3586314a98922e850fe364776c",
+  "project_id": "850a7d1da8244a8a9e8a7a77bd4f68c9",
+  "idempotency_key": "c064ed7c1a3d4d91a404170a8d958a50",
+  "manifest": {
+    "skills": [
+      {
+        "id": "K001",
+        "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+        "sources": [
+          "S001",
+          "S002",
+          "S007",
+          "S008",
+          "S010"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/storyboardTable.md",
+            "sections": [
+              "拆分方法",
+              "输出格式",
+              "写入后审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "分场与表演依据",
+              "镜头语法",
+              "台词与时长"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K002",
+        "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+        "sources": [
+          "S002",
+          "S003",
+          "S004",
+          "S008"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "空间与连续性",
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+            "sections": [
+              "连续性核对"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K003",
+        "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+        "sources": [
+          "S009",
+          "S011",
+          "S012"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+            "sections": [
+              "从分镜到单帧",
+              "字段映射",
+              "质量与忠实性检查"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+            "sections": [
+              "_FRAME_FOCUS",
+              "_SHOT_FRAME_INPUT_VARS",
+              "_SHOT_FRAME_TEMPLATE"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+      },
+      "aspect_ratio": "16:9",
+      "instructions": "",
+      "target_shots": 3,
+      "visual_style": "",
+      "source_version": 1,
+      "idempotency_key": "c064ed7c1a3d4d91a404170a8d958a50",
+      "reasoning_effort": "low"
+    },
+    "prompt_sha256": "f2648da27b9b052fd7515b8ca821ec48ac8a4804a4e20164c99d1735a199af68",
+    "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+    "source_sha256": "e1e03466d60483ac59abc522046b6bc899cbb96c0876ebdbe4a17c737714967f",
+    "context_sha256": "49e0f5e30f0ffc83713e38d495c08ee046ef08ffd91ef3f7332742e8976b293c",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-planner-1.1.0",
+    "source_version_id": "dae0772817225dc5860016ce6ac939f7",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "low"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 10038,
+    "prompt_tokens": 4512,
+    "completion_tokens": 5526
+  },
+  "created_at": "2026-10-20T03:25:51.002489+00:00",
+  "finished_at": "2026-10-20T03:26:18.598449+00:00",
+  "error": "",
+  "board": {
+    "id": "65ae58dc8ac64e5fa189bd114ccfb907",
+    "version_id": "2976d619527c4a8e8e59d61121fb8e36",
+    "version": 1,
+    "current_version": 1,
+    "project_id": "850a7d1da8244a8a9e8a7a77bd4f68c9",
+    "source_version": 1,
+    "source_version_id": "dae0772817225dc5860016ce6ac939f7",
+    "source_current": true,
+    "source_confirmed": true,
+    "confirmed": false,
+    "confirmation_effective": false,
+    "confirmed_at": null,
+    "content": {
+      "schema_version": 1,
+      "title": "林提醒禾取资料",
+      "aspect_ratio": "16:9",
+      "visual_style": "",
+      "scenes": [
+        {
+          "key": "SC001",
+          "title": "林提醒禾去旧办公室取资料",
+          "source_quote": "林说：“我把所有资料都留在旧办公室了，你今天下班之后记得去拿。”禾听完点头，没有说话。"
+        }
+      ],
+      "shots": [
+        {
+          "key": "S001_01",
+          "scene_key": "SC001",
+          "source_quote": "林说：“我把所有资料都留在旧办公室了，",
+          "purpose": "建立林与禾的相对位置和互动轴线，并说出提醒的前半句。",
+          "action": "林与禾在未指定的室内空间相对而立。林开口，对禾说出关于旧办公室资料的前半句；禾安静听完，不打断。",
+          "duration_ms": 4500,
+          "shot_size": "中景双人",
+          "camera_angle": "平视",
+          "camera_motion": "固定",
+          "composition": "林在画面左三分之一，禾在画面右三分之一，二人相对而立，中间留出对话空间；背景为未指定室内空间，采用中性可辨识环境（建议，待确认）。",
+          "screen_direction": "林面向画面右，禾面向画面左，建立互动轴线。",
+          "lighting": "未指定；建议均匀柔和的室内光，保证面部可读（待确认）。",
+          "continuity_notes": "建立左右轴线：林在画面左、禾在画面右；后续单人镜沿用林朝右、禾朝左。剧本未指定场景、服装和照明，待确认。",
+          "action_beats": [
+            {
+              "description": "林与禾相对而立，禾闭嘴注视林。",
+              "duration_ms": 1000
+            },
+            {
+              "description": "林开口说出前半句，视线朝向禾。",
+              "duration_ms": 2500
+            },
+            {
+              "description": "林说完前半句后口部停住，禾仍安静注视。",
+              "duration_ms": 1000
+            }
+          ],
+          "frame_prompts": {
+            "first": "平视中景双人镜头，林在画面左、禾在画面右，两人相对而立，林正开口说话，禾闭嘴注视；室内背景与照明未指定，以中性可辨识环境呈现（建议，待确认）。",
+            "key": "林说到“旧办公室”时，禾保持原位安静注视，二人朝向不变；无可见字幕。",
+            "last": "林说完前半句后口部停住，禾仍闭嘴注视，位置与朝向不变。"
+          },
+          "dialogue": "林：我把所有资料都留在旧办公室了，",
+          "sound": "环境声未指定；保留林说话声，不添加配乐或额外音效。",
+          "state_start": "林与禾在未指定的室内空间相对而立；林在画面左、禾在画面右；林朝向禾，禾朝向林；双方未见持物。",
+          "state_end": "林已说出前半句，口部停住；禾保持原位、闭嘴注视林。",
+          "image_prompt": "平视中景双人镜头，林在画面左、禾在画面右，两人相对而立，林正开口说话，禾闭嘴注视；未指定室内空间，以中性背景处理；无字幕。",
+          "video_prompt": "固定机位。林与禾在画面左右相对而立；林开口说出前半句，禾保持沉默注视；林说完前半句后短暂停顿。镜头不移动。",
+          "characters": [
+            "林",
+            "禾"
+          ],
+          "dialogue_lines": [
+            {
+              "speaker": "林",
+              "text": "我把所有资料都留在旧办公室了，"
+            }
+          ],
+          "creative_notes": "剧本未指定当前地点、服装和照明；建议以中性室内空间处理，待人工确认，不能据此认定当前就在旧办公室内。"
+        },
+        {
+          "key": "S001_02",
+          "scene_key": "SC001",
+          "source_quote": "你今天下班之后记得去拿。”",
+          "purpose": "接续同一句台词的提醒重点，明确林要求禾下班后去取资料。",
+          "action": "林保持原位与朝向，视线落向画外禾，继续说出后半句，提醒禾下班后去拿资料；禾在画外沉默。",
+          "duration_ms": 4000,
+          "shot_size": "中近景",
+          "camera_angle": "平视",
+          "camera_motion": "固定",
+          "composition": "林位于画面左中，面向画面右侧画外的禾，面部和口型完整可见；背景简洁，保留单人反应空间。",
+          "screen_direction": "林视线朝画面右，承接前一镜建立的轴线。",
+          "lighting": "未指定；建议与前镜一致的柔和室内光（待确认）。",
+          "continuity_notes": "承接S001_01：林仍在原位，面向画面右侧画外禾；台词从前半句连续接续，不重复。",
+          "action_beats": [
+            {
+              "description": "林保持原位，视线落向画外禾。",
+              "duration_ms": 700
+            },
+            {
+              "description": "林续说后半句，强调“下班之后记得去拿”。",
+              "duration_ms": 2600
+            },
+            {
+              "description": "林说完后半句，嘴唇闭合，仍面向画外禾。",
+              "duration_ms": 700
+            }
+          ],
+          "frame_prompts": {
+            "first": "中近景，林在画面左中，面向画面右侧画外禾，嘴唇处于续说状态；背景简洁，无可见字幕。",
+            "key": "林说到“记得去拿”时，视线保持落向画外禾，面部朝向不变。",
+            "last": "林说完后半句，嘴唇闭合，仍面向画外禾。"
+          },
+          "dialogue": "林：你今天下班之后记得去拿。",
+          "sound": "环境声未指定；保留林说话声，不添加配乐或额外音效。",
+          "state_start": "林仍在原位，面向画面右侧画外禾，准备续说后半句；禾在画外原位。",
+          "state_end": "林说完后半句，嘴唇闭合，仍面向画外禾；禾仍在画外原位。",
+          "image_prompt": "中近景，林在画面左中，面向画面右侧画外禾，嘴唇处于续说状态；背景简洁；无字幕。",
+          "video_prompt": "固定机位。林保持原位与朝向，继续说完后半句；视线落在画外禾方向，说完后嘴唇闭合。镜头不移动。",
+          "characters": [
+            "林"
+          ],
+          "dialogue_lines": [
+            {
+              "speaker": "林",
+              "text": "你今天下班之后记得去拿。"
+            }
+          ],
+          "creative_notes": "台词按语义逗号分置两镜，顺序拼回须保留原句；本镜不重复前半句。"
+        },
+        {
+          "key": "S001_03",
+          "scene_key": "SC001",
+          "source_quote": "禾听完点头，没有说话。",
+          "purpose": "以禾的点头沉默回应林的提醒，完成本场反应落点。",
+          "action": "禾面向画外林，先短暂停顿，随后完成一次点头；全程不说话。",
+          "duration_ms": 3000,
+          "shot_size": "中近景",
+          "camera_angle": "平视",
+          "camera_motion": "固定",
+          "composition": "禾位于画面右中，面向画面左侧画外的林，面部完整可见；背景简洁，与前一镜保持同一空间感。",
+          "screen_direction": "禾视线朝画面左，承接林朝画面右的轴线。",
+          "lighting": "未指定；建议与前镜一致的柔和室内光（待确认）。",
+          "continuity_notes": "承接S001_01/S001_02：禾在画面右侧原位，面向画面左侧画外林；只点头不开口。",
+          "action_beats": [
+            {
+              "description": "禾保持面向画外林，嘴唇闭合，短暂停顿。",
+              "duration_ms": 800
+            },
+            {
+              "description": "禾完成一次点头，视线仍朝林。",
+              "duration_ms": 1200
+            },
+            {
+              "description": "点头结束，禾恢复稳定姿态，仍沉默。",
+              "duration_ms": 1000
+            }
+          ],
+          "frame_prompts": {
+            "first": "中近景，禾在画面右中，面向画面左侧画外林，嘴唇闭合，面部平静；背景简洁，无可见字幕。",
+            "key": "禾开始点头的瞬间，视线仍朝画外林，嘴唇保持闭合。",
+            "last": "禾完成点头，面部回到稳定状态，仍沉默并面向画外林。"
+          },
+          "dialogue": "",
+          "sound": "环境声未指定；禾无台词，不添加额外音效或配乐。",
+          "state_start": "禾在原位，面向画面左侧画外林，嘴唇闭合；林在画外原位。",
+          "state_end": "禾完成一次点头，仍沉默，视线保持朝画外林。",
+          "image_prompt": "中近景，禾在画面右中，面向画面左侧画外林，嘴唇闭合，面部平静；背景简洁；无字幕。",
+          "video_prompt": "固定机位。禾保持面向画面左，先短暂停顿，随后完成一次点头，点头后恢复稳定；全程不说话。镜头不移动。",
+          "characters": [
+            "禾"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "禾点头的幅度与节奏剧本未指定，建议小幅、克制，待人工确认。"
+        }
+      ],
+      "bindings": {
+        "text": {
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225",
+          "version": 1
+        }
+      }
+    },
+    "total_duration_ms": 11500,
+    "created_at": "2026-10-20T03:26:18.598449+00:00",
+    "creation_method": "ai",
+    "provenance": {
+      "run_id": "0e1dde3586314a98922e850fe364776c",
+      "skills": [
+        {
+          "id": "K001",
+          "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+          "sources": [
+            "S001",
+            "S002",
+            "S007",
+            "S008",
+            "S010"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/storyboardTable.md",
+              "sections": [
+                "拆分方法",
+                "输出格式",
+                "写入后审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "分场与表演依据",
+                "镜头语法",
+                "台词与时长"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K002",
+          "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+          "sources": [
+            "S002",
+            "S003",
+            "S004",
+            "S008"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "空间与连续性",
+                "审阅方法与本集落点"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+              "sections": [
+                "连续性核对"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/members/reviewer.md",
+              "sections": [
+                "分镜审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K003",
+          "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+          "sources": [
+            "S009",
+            "S011",
+            "S012"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+              "sections": [
+                "从分镜到单帧",
+                "字段映射",
+                "质量与忠实性检查"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+              "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+              "sections": [
+                "_FRAME_FOCUS",
+                "_SHOT_FRAME_INPUT_VARS",
+                "_SHOT_FRAME_TEMPLATE"
+              ],
+              "repository": "Forget-C/Jellyfish"
+            }
+          ]
+        }
+      ],
+      "request": {
+        "profile": {
+          "version": 1,
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+        },
+        "aspect_ratio": "16:9",
+        "instructions": "",
+        "target_shots": 3,
+        "visual_style": "",
+        "source_version": 1,
+        "idempotency_key": "c064ed7c1a3d4d91a404170a8d958a50",
+        "reasoning_effort": "low"
+      },
+      "prompt_sha256": "f2648da27b9b052fd7515b8ca821ec48ac8a4804a4e20164c99d1735a199af68",
+      "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+      "source_sha256": "e1e03466d60483ac59abc522046b6bc899cbb96c0876ebdbe4a17c737714967f",
+      "context_sha256": "49e0f5e30f0ffc83713e38d495c08ee046ef08ffd91ef3f7332742e8976b293c",
+      "parameter_rules": "chat-parameters-1.0.0",
+      "workflow_version": "storyboard-planner-1.1.0",
+      "source_version_id": "dae0772817225dc5860016ce6ac939f7",
+      "reasoning_protocol": "deepseek",
+      "request_parameters": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "max_tokens": 16000,
+        "response_format": {
+          "type": "json_object"
+        },
+        "reasoning_effort": "low"
+      },
+      "capabilities_verified": false
+    }
+  },
+  "review": {
+    "rules_version": "storyboard-checks-1.0.0",
+    "semantic_verified": false,
+    "issues": [
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "S001_01",
+        "scene_key": null
+      },
+      {
+        "code": "state_transition",
+        "severity": "warning",
+        "message": "相邻镜头起止状态描述不同，请核对持有物、位置及关注对象；文字不同不代表剧情错误。",
+        "shot_key": "S001_02",
+        "scene_key": null
+      },
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "S001_02",
+        "scene_key": null
+      },
+      {
+        "code": "state_transition",
+        "severity": "warning",
+        "message": "相邻镜头起止状态描述不同，请核对持有物、位置及关注对象；文字不同不代表剧情错误。",
+        "shot_key": "S001_03",
+        "scene_key": null
+      },
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "S001_03",
+        "scene_key": null
+      }
+    ],
+    "notice": "程序只检查结构与有限启发式；请人工核对剧情、空间、动作和静态帧。"
+  },
+  "max_runs": 10
+}

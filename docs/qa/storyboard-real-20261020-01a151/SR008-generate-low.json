@@ -1,0 +1,501 @@
+{
+  "id": "a2d92cfcc4404924be1acf8e34df3b2a",
+  "project_id": "86d4326d105d45288c6e1be24b405fb4",
+  "idempotency_key": "cc9202b228f14b17939ed948a252da9e",
+  "manifest": {
+    "skills": [
+      {
+        "id": "K001",
+        "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+        "sources": [
+          "S001",
+          "S002",
+          "S007",
+          "S008",
+          "S010"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/storyboardTable.md",
+            "sections": [
+              "拆分方法",
+              "输出格式",
+              "写入后审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "分场与表演依据",
+              "镜头语法",
+              "台词与时长"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K002",
+        "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+        "sources": [
+          "S002",
+          "S003",
+          "S004",
+          "S008"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "空间与连续性",
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+            "sections": [
+              "连续性核对"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K003",
+        "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+        "sources": [
+          "S009",
+          "S011",
+          "S012"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+            "sections": [
+              "从分镜到单帧",
+              "字段映射",
+              "质量与忠实性检查"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+            "sections": [
+              "_FRAME_FOCUS",
+              "_SHOT_FRAME_INPUT_VARS",
+              "_SHOT_FRAME_TEMPLATE"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+      },
+      "aspect_ratio": "16:9",
+      "instructions": "",
+      "target_shots": 3,
+      "visual_style": "",
+      "source_version": 1,
+      "idempotency_key": "cc9202b228f14b17939ed948a252da9e",
+      "reasoning_effort": "low"
+    },
+    "prompt_sha256": "c4f045e852df7deb223b825c443265f02176379f71937ee03fe135ff8cc9ad2c",
+    "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+    "source_sha256": "0d5442b7942d409a167c96ef6442b362c5e4f4c2bff57677ea90aa7820c61405",
+    "context_sha256": "4f71b568631420f2a4811b420e73965a3408e538360797546c9a18e1dd10237c",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-planner-1.1.0",
+    "source_version_id": "a7f729ab405858568d8c29442a110001",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "low"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 11185,
+    "prompt_tokens": 4514,
+    "completion_tokens": 6671
+  },
+  "created_at": "2026-10-20T03:31:45.463726+00:00",
+  "finished_at": "2026-10-20T03:32:18.537435+00:00",
+  "error": "",
+  "board": {
+    "id": "a89cad8d806948b7aba641165b7a7ba3",
+    "version_id": "af16258252314b5393dcf1fe4d8db9e8",
+    "version": 1,
+    "current_version": 1,
+    "project_id": "86d4326d105d45288c6e1be24b405fb4",
+    "source_version": 1,
+    "source_version_id": "a7f729ab405858568d8c29442a110001",
+    "source_current": true,
+    "source_confirmed": true,
+    "confirmed": false,
+    "confirmation_effective": false,
+    "confirmed_at": null,
+    "content": {
+      "schema_version": 1,
+      "title": "隔桌对坐 · 反向观察",
+      "aspect_ratio": "16:9",
+      "visual_style": "",
+      "scenes": [
+        {
+          "key": "scene_01",
+          "title": "隔桌对坐与反向观察",
+          "source_quote": "林与禾隔桌对坐。摄影机绕过桌边，交代两人和门的位置后，反向观察林。"
+        }
+      ],
+      "shots": [
+        {
+          "key": "shot_01",
+          "scene_key": "scene_01",
+          "source_quote": "林与禾隔桌对坐。",
+          "purpose": "建立两人隔桌对坐的空间关系，并同时交代门的位置。",
+          "action": "林与禾隔桌对坐，保持坐姿并隔桌对视；画面同时带入桌面、两人相对位置和背景中的门。",
+          "duration_ms": 3000,
+          "shot_size": "中全景",
+          "camera_angle": "平视，略高于桌面",
+          "camera_motion": "固定",
+          "composition": "桌面横贯前景，林在画面左、面朝画面右，禾在画面右、面朝画面左，二人隔桌相对；背景墙面中央偏右可见门。两人身体朝向彼此，视线相交。",
+          "screen_direction": "林面向画面右，禾面向画面左；二人视线沿水平轴相交。",
+          "lighting": "室内柔和均匀照明；具体光源方向剧本未指定，待确认。",
+          "continuity_notes": "门的具体位置、桌椅布局与室内光源未在剧本确认；此处按“门在背景墙、二人分坐桌子左右”作建议方案。",
+          "action_beats": [
+            {
+              "description": "林与禾隔桌对坐，二人保持静止并隔桌对视；画面同时交代桌面、两人相对位置与背景的门。",
+              "duration_ms": 2500
+            }
+          ],
+          "frame_prompts": {
+            "first": "16:9中全景，平视略高于桌面。室内桌侧机位：桌面横贯前景，林坐画面左侧、面朝右，禾坐画面右侧、面朝左，二人隔桌对视。背景墙面中央偏右可见一扇门。两人保持自然坐姿，视线相交。室内柔和均匀照明。写实分镜风格。",
+            "key": "",
+            "last": ""
+          },
+          "dialogue": "无对白",
+          "sound": "室内环境底噪；无对白；未指定音乐或特殊音效。",
+          "state_start": "林坐于桌左，禾坐于桌右，二人隔桌相对；摄影机位于桌侧，门在背景可见。",
+          "state_end": "林与禾仍隔桌对坐，相对位置与视线不变；门的位置已在画面中交代。",
+          "image_prompt": "",
+          "video_prompt": "固定机位。林与禾隔桌对坐，二人保持静止并隔桌对视；画面同时交代桌面、两人相对位置和背景的门。无对白，环境声持续。",
+          "characters": [
+            "林",
+            "禾"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "人物外观、服装与坐姿细节剧本未指定，按中性自然处理。"
+        },
+        {
+          "key": "shot_02",
+          "scene_key": "scene_01",
+          "source_quote": "摄影机绕过桌边，交代两人和门的位置后",
+          "purpose": "通过摄影机绕过桌边，把观察位置从桌侧带到禾的右后方，为反向观察林建立过渡。",
+          "action": "摄影机从桌侧起幅，缓慢向右沿桌边弧形移动，绕过桌角；禾的右肩逐渐进入前景右侧，林保持在画面中左，背景的门从画面中央偏右移向左侧并出画。",
+          "duration_ms": 4500,
+          "shot_size": "中景",
+          "camera_angle": "平视，随绕桌移动逐渐转为禾右后方视角",
+          "camera_motion": "从桌侧机位向右沿桌边弧形移动，速度缓慢均匀，绕过桌角，落幅至禾右后方；门从背景移出画面。",
+          "composition": "起幅沿用桌侧视角，林在画面左、禾在画面右，二人隔桌相对，门在背景中央偏右；随摄影机右移，禾的右肩逐渐进入前景右侧，林保留在画面中左，门向背景左缘移动并出画。",
+          "screen_direction": "起幅林面向画面右、禾面向画面左；绕桌后观察方向转向禾右后方，为下一镜反向观察林做准备。",
+          "lighting": "室内柔和均匀照明；具体光源方向剧本未指定，待确认。",
+          "continuity_notes": "关联shot_01：延续林左禾右的桌侧基准；摄影机绕桌路径为规划建议，人物保持坐姿，不新增动作。",
+          "action_beats": [
+            {
+              "description": "摄影机从桌侧起幅，缓慢向右沿桌边弧形移动，绕过桌角。",
+              "duration_ms": 2500
+            },
+            {
+              "description": "落幅至禾右后方，禾右肩进入前景右侧，林位于中景偏左，背景的门移出画面。",
+              "duration_ms": 1800
+            }
+          ],
+          "frame_prompts": {
+            "first": "16:9中景，平视。起幅延续桌侧机位：林在画面左、禾在画面右，隔桌相对；背景门仍可见于中央偏右。人物保持坐姿，视线相交。室内柔和均匀照明。",
+            "key": "摄影机行至桌角附近，禾的右肩开始进入前景右侧，林仍在画面中左，背景门向画面左缘移动。",
+            "last": "摄影机落幅至禾右后方：禾的右肩与后脑占前景右缘，林位于中景偏左、面朝镜头方向；门已出画或仅余边缘。"
+          },
+          "dialogue": "无对白",
+          "sound": "室内环境底噪持续；摄影机移动无额外机械声设计；无对白。",
+          "state_start": "承接shot_01：林在桌左、禾在桌右，隔桌对视；摄影机在桌侧，门在背景。",
+          "state_end": "摄影机位于禾右后方；禾右肩入前景，林在中景偏左、面朝镜头方向；门出画。",
+          "image_prompt": "",
+          "video_prompt": "摄影机从桌侧机位起幅，缓慢、匀速向右沿桌边弧形移动，绕过桌角；随着机位变化，禾的右肩逐渐进入前景右侧，林保持在画面中左，背景的门从画面中央偏右移向左侧并出画。人物全程保持坐姿与对视，不新增动作。落幅在禾右后方。",
+          "characters": [
+            "林",
+            "禾"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "绕桌路径的弧度与速度可按实际空间调整；剧本未指定具体室内布局。"
+        },
+        {
+          "key": "shot_03",
+          "scene_key": "scene_01",
+          "source_quote": "反向观察林。",
+          "purpose": "从禾右后方反向观察林，呈现林的坐姿与视线方向，完成剧本指定的反向视角。",
+          "action": "反向机位观察林：林保持坐姿，视线朝向前景右侧禾的方向；禾的右肩作为虚化前景在画面右缘，不遮挡林的面部。",
+          "duration_ms": 3000,
+          "shot_size": "中近景",
+          "camera_angle": "反向机位，平视，位于禾右后方",
+          "camera_motion": "固定",
+          "composition": "林位于画面中央偏左，面朝镜头方向，视线略偏画面右前；禾的右肩与后脑作为虚化前景在画面右缘，不遮挡林的面部。背景为室内墙面，门不在画面内。",
+          "screen_direction": "林由shot_01的面朝画面右改为面朝画面前方偏右；禾在前景右缘建立视线落点，形成有意跨轴的反向观察。",
+          "lighting": "室内柔和均匀照明；具体光源方向剧本未指定，待确认。",
+          "continuity_notes": "关联shot_01、shot_02：本镜从禾右后方反向观察林，属有意跨轴；以禾右肩作前景锚点，林视线仍落在禾的方向，避免无依据跳轴。",
+          "action_beats": [
+            {
+              "description": "林保持坐姿，视线朝向画面前景右侧禾的方向。",
+              "duration_ms": 1200
+            },
+            {
+              "description": "反向机位保持稳定，林面部与视线方向清晰可见，禾右肩在前景右缘虚化。",
+              "duration_ms": 1400
+            }
+          ],
+          "frame_prompts": {
+            "first": "16:9中近景，反向机位，平视。林位于画面中央偏左，面朝镜头方向，视线略偏画面右前；禾的右肩与后脑作为虚化前景在画面右缘，不遮挡林的面部。背景为室内墙面，门不在画面内。室内柔和均匀照明。",
+            "key": "林保持坐姿，视线稳定落在前景右侧禾的方向，面部无额外夸张表情动作。",
+            "last": "林仍保持坐姿与视线方向，反向机位稳定，禾右肩仍在画面右缘前景。"
+          },
+          "dialogue": "无对白",
+          "sound": "室内环境底噪持续；无对白；未指定音乐或特殊音效。",
+          "state_start": "承接shot_02：摄影机在禾右后方；林位于画面中央偏左，面朝镜头方向，视线朝前景右侧禾的方向；禾右肩为前景。",
+          "state_end": "林保持坐姿与视线方向；反向机位稳定，禾右肩仍在画面右缘前景。",
+          "image_prompt": "",
+          "video_prompt": "固定机位。反向观察林：林保持坐姿，视线朝向前景右侧禾的方向；禾的右肩作为前景在画面右缘轻微虚化。人物无台词，画面稳定，环境声持续。",
+          "characters": [
+            "林",
+            "禾"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "林的面部表情与手部姿势剧本未指定，按中性自然表演处理；跨轴为剧本指定反向观察，已在continuity_notes说明。"
+        }
+      ],
+      "bindings": {
+        "text": {
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225",
+          "version": 1
+        }
+      }
+    },
+    "total_duration_ms": 10500,
+    "created_at": "2026-10-20T03:32:18.537435+00:00",
+    "creation_method": "ai",
+    "provenance": {
+      "run_id": "a2d92cfcc4404924be1acf8e34df3b2a",
+      "skills": [
+        {
+          "id": "K001",
+          "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+          "sources": [
+            "S001",
+            "S002",
+            "S007",
+            "S008",
+            "S010"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/storyboardTable.md",
+              "sections": [
+                "拆分方法",
+                "输出格式",
+                "写入后审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "分场与表演依据",
+                "镜头语法",
+                "台词与时长"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K002",
+          "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+          "sources": [
+            "S002",
+            "S003",
+            "S004",
+            "S008"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "空间与连续性",
+                "审阅方法与本集落点"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+              "sections": [
+                "连续性核对"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/members/reviewer.md",
+              "sections": [
+                "分镜审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K003",
+          "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+          "sources": [
+            "S009",
+            "S011",
+            "S012"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+              "sections": [
+                "从分镜到单帧",
+                "字段映射",
+                "质量与忠实性检查"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+              "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+              "sections": [
+                "_FRAME_FOCUS",
+                "_SHOT_FRAME_INPUT_VARS",
+                "_SHOT_FRAME_TEMPLATE"
+              ],
+              "repository": "Forget-C/Jellyfish"
+            }
+          ]
+        }
+      ],
+      "request": {
+        "profile": {
+          "version": 1,
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+        },
+        "aspect_ratio": "16:9",
+        "instructions": "",
+        "target_shots": 3,
+        "visual_style": "",
+        "source_version": 1,
+        "idempotency_key": "cc9202b228f14b17939ed948a252da9e",
+        "reasoning_effort": "low"
+      },
+      "prompt_sha256": "c4f045e852df7deb223b825c443265f02176379f71937ee03fe135ff8cc9ad2c",
+      "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+      "source_sha256": "0d5442b7942d409a167c96ef6442b362c5e4f4c2bff57677ea90aa7820c61405",
+      "context_sha256": "4f71b568631420f2a4811b420e73965a3408e538360797546c9a18e1dd10237c",
+      "parameter_rules": "chat-parameters-1.0.0",
+      "workflow_version": "storyboard-planner-1.1.0",
+      "source_version_id": "a7f729ab405858568d8c29442a110001",
+      "reasoning_protocol": "deepseek",
+      "request_parameters": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "max_tokens": 16000,
+        "response_format": {
+          "type": "json_object"
+        },
+        "reasoning_effort": "low"
+      },
+      "capabilities_verified": false
+    }
+  },
+  "review": {
+    "rules_version": "storyboard-checks-1.0.0",
+    "semantic_verified": false,
+    "issues": [
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "shot_01",
+        "scene_key": null
+      },
+      {
+        "code": "state_transition",
+        "severity": "warning",
+        "message": "相邻镜头起止状态描述不同，请核对持有物、位置及关注对象；文字不同不代表剧情错误。",
+        "shot_key": "shot_02",
+        "scene_key": null
+      },
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "shot_02",
+        "scene_key": null
+      },
+      {
+        "code": "state_transition",
+        "severity": "warning",
+        "message": "相邻镜头起止状态描述不同，请核对持有物、位置及关注对象；文字不同不代表剧情错误。",
+        "shot_key": "shot_03",
+        "scene_key": null
+      },
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "shot_03",
+        "scene_key": null
+      }
+    ],
+    "notice": "程序只检查结构与有限启发式；请人工核对剧情、空间、动作和静态帧。"
+  },
+  "max_runs": 10
+}

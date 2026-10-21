@@ -1,0 +1,456 @@
+{
+  "id": "ce52726d4ad94bed89f6b5020de3f4f9",
+  "project_id": "1d1dfee5f1f84c82b31832034398e6bb",
+  "idempotency_key": "9b3bfc35a1ea4c37b82e99a389fb5e91",
+  "manifest": {
+    "skills": [
+      {
+        "id": "K001",
+        "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+        "sources": [
+          "S001",
+          "S002",
+          "S007",
+          "S008",
+          "S010"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/storyboardTable.md",
+            "sections": [
+              "拆分方法",
+              "输出格式",
+              "写入后审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "分场与表演依据",
+              "镜头语法",
+              "台词与时长"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K002",
+        "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+        "sources": [
+          "S002",
+          "S003",
+          "S004",
+          "S008"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "空间与连续性",
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+            "sections": [
+              "连续性核对"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K003",
+        "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+        "sources": [
+          "S009",
+          "S011",
+          "S012"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+            "sections": [
+              "从分镜到单帧",
+              "字段映射",
+              "质量与忠实性检查"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+            "sections": [
+              "_FRAME_FOCUS",
+              "_SHOT_FRAME_INPUT_VARS",
+              "_SHOT_FRAME_TEMPLATE"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+      },
+      "aspect_ratio": "16:9",
+      "instructions": "",
+      "target_shots": 2,
+      "visual_style": "",
+      "source_version": 1,
+      "idempotency_key": "9b3bfc35a1ea4c37b82e99a389fb5e91",
+      "reasoning_effort": "low"
+    },
+    "prompt_sha256": "1d05097a018f3b9998fd0e61660b92294bbe26da36656cd0891f87142f53ea50",
+    "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+    "source_sha256": "a01240d1e1a5b2597f2127886ccc64aab60015ce32ef187f3f9165bac3d429a9",
+    "context_sha256": "16aed9fe01ad011ad70691c900f13b0c2951552a9b692b07a243e22a5d137459",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-planner-1.1.0",
+    "source_version_id": "e06b13ec16cb55a9bba7d20953dc5d55",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "low"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 7776,
+    "prompt_tokens": 4505,
+    "completion_tokens": 3271
+  },
+  "created_at": "2026-10-20T03:30:48.093280+00:00",
+  "finished_at": "2026-10-20T03:31:05.800304+00:00",
+  "error": "",
+  "board": {
+    "id": "87751651d46245dda5ef4997a7a1a86e",
+    "version_id": "f4879434282842bc933ceb85afba5763",
+    "version": 1,
+    "current_version": 1,
+    "project_id": "1d1dfee5f1f84c82b31832034398e6bb",
+    "source_version": 1,
+    "source_version_id": "e06b13ec16cb55a9bba7d20953dc5d55",
+    "source_current": true,
+    "source_confirmed": true,
+    "confirmed": false,
+    "confirmation_effective": false,
+    "confirmed_at": null,
+    "content": {
+      "schema_version": 1,
+      "title": "钥匙交接与开门",
+      "aspect_ratio": "16:9",
+      "visual_style": "",
+      "scenes": [
+        {
+          "key": "scene_01",
+          "title": "钥匙",
+          "source_quote": "林把唯一的钥匙交给禾。没有取回钥匙，林随后用这把钥匙开门。"
+        }
+      ],
+      "shots": [
+        {
+          "key": "shot_01",
+          "scene_key": "scene_01",
+          "source_quote": "林把唯一的钥匙交给禾。",
+          "purpose": "建立唯一钥匙从林转交到禾手中的事实。",
+          "action": "林将唯一钥匙递向禾，禾伸手接住；林松手，钥匙归禾持有。",
+          "duration_ms": 5000,
+          "shot_size": "中近景",
+          "camera_angle": "平视",
+          "camera_motion": "固定",
+          "composition": "林在画面左侧，禾在右侧，两人相对；钥匙位于两人之间的交接点。林右手持钥匙递出，禾右手伸向钥匙承接。背景地点未指定，不添加可识别地标。",
+          "screen_direction": "林向画面右侧递出钥匙，禾从画面右侧向左侧承接；保持两人相对的互动轴线。",
+          "lighting": "未指定；采用均匀基础照明，具体光源待确认。",
+          "continuity_notes": "钥匙为唯一一把，交接完成后由禾持有；林松手后不得再于本镜持有钥匙。地点、服装与照明未指定，需人工确认。",
+          "action_beats": [
+            {
+              "description": "林右手把唯一钥匙递向禾",
+              "duration_ms": 2000
+            },
+            {
+              "description": "禾右手接住钥匙",
+              "duration_ms": 1800
+            },
+            {
+              "description": "林松手，钥匙留在禾手中",
+              "duration_ms": 1200
+            }
+          ],
+          "frame_prompts": {
+            "first": "中近景平视，林在画面左侧，右手持唯一钥匙递向右侧的禾；禾在画面右侧伸出右手，尚未接触钥匙；两人相对，背景地点不明确。",
+            "key": "中近景平视，交接接触瞬间：林的右手与禾的右手同时接触同一把钥匙，钥匙位于两人之间。",
+            "last": "中近景平视，禾在画面右侧右手持有唯一钥匙；林在左侧已松手并收回手；两人相对站位不变。"
+          },
+          "dialogue": "",
+          "sound": "未指定；不添加配乐或额外音效。",
+          "state_start": "林右手持唯一钥匙，禾在对面伸手准备接；钥匙尚未交接。",
+          "state_end": "禾右手持有唯一钥匙，林已松手；两人相对站位不变。",
+          "image_prompt": "与first相同：中近景平视，林在左、禾在右相对，林右手持唯一钥匙递出，禾右手伸向钥匙但尚未接触。",
+          "video_prompt": "从林右手持钥匙递出开始，禾伸手接近；两人手指接触钥匙后，林松手，禾右手接住并持有唯一钥匙，林收回手；镜头固定，保持两人相对轴线。",
+          "characters": [
+            "林",
+            "禾"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "钥匙外观、人物服装和具体地点未指定，需人工确认；本镜只表现已确认的交接动作。"
+        },
+        {
+          "key": "shot_02",
+          "scene_key": "scene_01",
+          "source_quote": "没有取回钥匙，林随后用这把钥匙开门。",
+          "purpose": "呈现林随后用钥匙开门的结果，并保留与上一镜钥匙归属之间的矛盾供人工确认。",
+          "action": "林站在门前，将同一把钥匙插入门锁并转动，门开启。",
+          "duration_ms": 6000,
+          "shot_size": "中景",
+          "camera_angle": "平视",
+          "camera_motion": "固定",
+          "composition": "林位于画面中央偏右，面向门；门在画面左侧前景至中景，门锁位于画面左下方。林右手持同一把钥匙对准锁孔，钥匙与锁孔同框。",
+          "screen_direction": "林面向门，右手从画面右下方将钥匙向左下方锁孔插入；开门方向依门轴待确认。",
+          "lighting": "未指定；门前采用基础照明，具体光源待确认。",
+          "continuity_notes": "关联镜shot_01：上一镜林已把唯一的钥匙交给禾并松手，未表现取回；本镜按原文让林持同一把钥匙开门，钥匙来源与数量关系存在剧本内冲突。未新增取回、复制或第二把钥匙；建议人工确认增加取回动作、改为禾开门，或明确时间省略中的交接。门的位置、开向及服装未指定。",
+          "action_beats": [
+            {
+              "description": "林右手将钥匙对准锁孔",
+              "duration_ms": 1800
+            },
+            {
+              "description": "钥匙插入锁孔并被转动",
+              "duration_ms": 2200
+            },
+            {
+              "description": "林推开门，门缝开启",
+              "duration_ms": 2000
+            }
+          ],
+          "frame_prompts": {
+            "first": "中景平视，林站在关闭的门前，面向门；右手持同一把钥匙，钥匙尖端对准锁孔但尚未插入；钥匙与锁孔同框。",
+            "key": "中景平视，钥匙已插入锁孔，林右手正在转动钥匙；门仍关闭。",
+            "last": "中景平视，门已开启一条缝，钥匙仍插在锁孔中，林右手保持接触；林位于门前。"
+          },
+          "dialogue": "",
+          "sound": "未指定；不添加配乐或额外音效。",
+          "state_start": "林位于关闭的门前，右手持同一把钥匙并对准锁孔；钥匙来源未交代，与shot_01存在冲突，待确认。",
+          "state_end": "门已开启，钥匙插在锁孔中，林右手仍接触钥匙。",
+          "image_prompt": "与first相同：中景平视，林站在关闭的门前，右手持同一把钥匙对准锁孔但尚未插入，钥匙与锁孔同框。",
+          "video_prompt": "林右手持钥匙对准锁孔，将钥匙插入并转动，随后推开门；镜头固定，动作从关门状态推进到门开启一条缝，钥匙留在锁孔中。",
+          "characters": [
+            "林"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "本镜遵循原文“林随后用这把钥匙开门”，但与上一镜“钥匙已交给禾且未取回”无法在物理上直接承接；需人工决定补取回动作、改由禾开门或明确省略的交接，不宜静默修补。"
+        }
+      ],
+      "bindings": {
+        "text": {
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225",
+          "version": 1
+        }
+      }
+    },
+    "total_duration_ms": 11000,
+    "created_at": "2026-10-20T03:31:05.800304+00:00",
+    "creation_method": "ai",
+    "provenance": {
+      "run_id": "ce52726d4ad94bed89f6b5020de3f4f9",
+      "skills": [
+        {
+          "id": "K001",
+          "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+          "sources": [
+            "S001",
+            "S002",
+            "S007",
+            "S008",
+            "S010"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/storyboardTable.md",
+              "sections": [
+                "拆分方法",
+                "输出格式",
+                "写入后审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "分场与表演依据",
+                "镜头语法",
+                "台词与时长"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K002",
+          "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+          "sources": [
+            "S002",
+            "S003",
+            "S004",
+            "S008"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "空间与连续性",
+                "审阅方法与本集落点"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+              "sections": [
+                "连续性核对"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/members/reviewer.md",
+              "sections": [
+                "分镜审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K003",
+          "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+          "sources": [
+            "S009",
+            "S011",
+            "S012"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+              "sections": [
+                "从分镜到单帧",
+                "字段映射",
+                "质量与忠实性检查"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+              "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+              "sections": [
+                "_FRAME_FOCUS",
+                "_SHOT_FRAME_INPUT_VARS",
+                "_SHOT_FRAME_TEMPLATE"
+              ],
+              "repository": "Forget-C/Jellyfish"
+            }
+          ]
+        }
+      ],
+      "request": {
+        "profile": {
+          "version": 1,
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+        },
+        "aspect_ratio": "16:9",
+        "instructions": "",
+        "target_shots": 2,
+        "visual_style": "",
+        "source_version": 1,
+        "idempotency_key": "9b3bfc35a1ea4c37b82e99a389fb5e91",
+        "reasoning_effort": "low"
+      },
+      "prompt_sha256": "1d05097a018f3b9998fd0e61660b92294bbe26da36656cd0891f87142f53ea50",
+      "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+      "source_sha256": "a01240d1e1a5b2597f2127886ccc64aab60015ce32ef187f3f9165bac3d429a9",
+      "context_sha256": "16aed9fe01ad011ad70691c900f13b0c2951552a9b692b07a243e22a5d137459",
+      "parameter_rules": "chat-parameters-1.0.0",
+      "workflow_version": "storyboard-planner-1.1.0",
+      "source_version_id": "e06b13ec16cb55a9bba7d20953dc5d55",
+      "reasoning_protocol": "deepseek",
+      "request_parameters": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "max_tokens": 16000,
+        "response_format": {
+          "type": "json_object"
+        },
+        "reasoning_effort": "low"
+      },
+      "capabilities_verified": false
+    }
+  },
+  "review": {
+    "rules_version": "storyboard-checks-1.0.0",
+    "semantic_verified": false,
+    "issues": [
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "shot_01",
+        "scene_key": null
+      },
+      {
+        "code": "state_transition",
+        "severity": "warning",
+        "message": "相邻镜头起止状态描述不同，请核对持有物、位置及关注对象；文字不同不代表剧情错误。",
+        "shot_key": "shot_02",
+        "scene_key": null
+      },
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "shot_02",
+        "scene_key": null
+      }
+    ],
+    "notice": "程序只检查结构与有限启发式；请人工核对剧情、空间、动作和静态帧。"
+  },
+  "max_runs": 10
+}

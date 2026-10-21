@@ -1,0 +1,83 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+const fs=require('node:fs');
+const base=process.env.FRAMEPILOT_UI_URL;
+
+test('独立文字审核、报告过期、重审和网络恢复',async()=>{
+  const browser=await chromium.launch({headless:true,...(process.env.FRAMEPILOT_CHROME?{executablePath:process.env.FRAMEPILOT_CHROME}:{})});
+  const page=await browser.newPage({viewport:{width:1440,height:1000}});
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  const post=async(url,body)=>{const response=await page.request.post(base+url,{data:body});assert.ok(response.ok(),await response.text());return response.json();};
+  try {
+    const project=await post('/api/projects',{story:'小禾把唯一的钥匙交给阿林。小禾随后用这把钥匙打开门。'});
+    await post(`/api/projects/${project.id}/resume`,{action:'confirm',version:1,interrupt_id:project.interrupt.id});
+    const config={name:'测试规划',purpose:'text',adapter:'openai_chat',base_url:'https://example.test/v1',model:'test-model',api_key_env:''};
+    const profile=await post('/api/production/model-profiles',config);
+    const generated=await post(`/api/production/projects/${project.id}/storyboard-runs`,{source_version:1,profile:{profile_id:profile.id,version:1},target_shots:1,idempotency_key:'browser-review-plan-key'});
+    await page.goto(base+'/storyboard?project='+project.id);
+    await page.locator('#model-review-panel').waitFor();
+    await page.waitForLoadState('networkidle');
+    assert.equal(await page.locator('#effort').count(),1,'规划输入区需要思考等级选择器');
+    assert.equal(await page.locator('#review-effort').count(),1,'审核输入区需要思考等级选择器');
+    assert.equal(await page.locator('#effort').isDisabled(),true,'未知能力不显示虚假的思考档位');
+    assert.equal(await page.locator('#start-review').isDisabled(),true);
+    await page.locator('#config-details').evaluate(el=>el.open=true);
+    await page.locator('#config-purpose').selectOption('review');
+    await page.locator('#config-protocol').selectOption('deepseek');
+    await page.locator('#config-name').fill('独立审核模型');
+    await page.locator('#config-url').fill('https://example.test/v1');
+    await page.locator('#config-model').fill('test-reviewer');
+    await page.locator('#config-save').click();
+    await page.waitForFunction(()=>!document.getElementById('start-review').disabled);
+    await page.locator('#review-effort').selectOption('high');
+    await page.locator('#start-review').click();
+    await page.locator('#model-review-status').filter({hasText:'对应当前已保存版本'}).waitFor();
+    assert.match(await page.locator('#model-review-result').textContent(),/待确认/);
+    assert.match(await page.locator('#model-review-result').textContent(),/钥匙在阿林手中/);
+    const initialRuns=await (await page.request.get(base+`/api/production/projects/${project.id}/storyboards/${generated.board.id}/review-runs`)).json();
+    assert.equal(initialRuns[0].manifest.request_parameters.reasoning_effort,'high');
+    assert.equal(await page.locator('#review-effort option[value="medium"]').count(),0);
+    assert.match(await page.locator('#board-state').textContent(),/待确认/);
+    await page.locator('#model-review-result button').first().click();
+    assert.match(await page.locator('#editor-heading').textContent(),/shot-1/);
+    await page.locator('#edit-title').fill('更新方案');
+    assert.equal(await page.locator('#start-review').isDisabled(),true);
+    assert.match(await page.locator('#model-review-status').textContent(),/未保存修改/);
+    await page.locator('#save-board').click();
+    await page.locator('#board-version').filter({hasText:'V2'}).waitFor();
+    await page.locator('#model-review-status').filter({hasText:'已过期'}).waitFor();
+    assert.equal(await page.locator('#model-review-result button').first().isDisabled(),true);
+    // Response lost after server completion: recover by refresh, never submit a second call.
+    let intercepted=false;
+    await page.route('**/review-runs',async route=>{
+      if(route.request().method()==='POST'&&!intercepted){intercepted=true;await route.fetch();await route.abort('failed');}
+      else await route.continue();
+    });
+    await page.locator('#start-review').click();
+    await page.locator('#error').waitFor();
+    assert.equal(await page.locator('#review-effort').inputValue(),'high');
+    assert.equal(await page.locator('#review-effort').isDisabled(),true);
+    await page.locator('#refresh-reviews').click();
+    await page.locator('#model-review-status').filter({hasText:'对应当前已保存版本'}).waitFor();
+    const url=`/api/production/projects/${project.id}/storyboards/${generated.board.id}/review-runs`;
+    let runs=await (await page.request.get(base+url)).json();
+    assert.equal(runs.length,2);
+    assert.equal(runs[0].version,2);
+    assert.equal(runs[0].manifest.request_parameters.reasoning_effort,'high');
+    assert.equal(await page.evaluate(()=>Object.keys(sessionStorage).filter(k=>k.startsWith('framepilot:review-pending:')).length),0);
+    await page.locator('#history-version').selectOption('1');
+    await page.locator('#model-review-status').filter({hasText:'V1'}).waitFor();
+    assert.equal(await page.locator('#start-review').isDisabled(),true);
+    await page.locator('#history-version').selectOption('2');
+    await page.locator('#model-review-status').filter({hasText:'对应当前已保存版本'}).waitFor();
+    await page.waitForFunction(()=>!document.body.classList.contains('busy'));
+    fs.mkdirSync('.runtime/storyboard-review-qa',{recursive:true});
+    await page.locator('#model-review-panel').screenshot({path:'.runtime/storyboard-review-qa/model-picker-desktop.png'});
+    await page.screenshot({path:'.runtime/storyboard-review-qa/desktop.png',fullPage:true});
+    await page.setViewportSize({width:390,height:844});
+    await page.screenshot({path:'.runtime/storyboard-review-qa/mobile.png',fullPage:true});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    assert.deepEqual(errors,[]);
+  } finally {await browser.close();}
+});

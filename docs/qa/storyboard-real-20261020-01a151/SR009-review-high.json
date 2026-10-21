@@ -1,0 +1,168 @@
+{
+  "id": "50684facbf2247a395b861be7279a6cc",
+  "project_id": "07aa685ab9c64f0da37c47a00c503a8b",
+  "idempotency_key": "1422ff61593c45de9773f6a14e28bf8e",
+  "source_version_id": "f2bf8726f62e533bb79b9c9b486c41bb",
+  "storyboard_version_id": "277b544e382f4b9faeb7d4a97435c274",
+  "profile_id": "88f547d370b24c6cb90c8e974f779519",
+  "profile_version": 1,
+  "manifest": {
+    "skills": [
+      {
+        "id": "storyboard_review",
+        "sha256": "7fa8a5d33cccccdb3b6531f5e9dd8d42c1ba35c1d954f76cc4380d19f8a382d2",
+        "sources": [
+          "S008",
+          "S010"
+        ],
+        "version": "1.0.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/consistency_checker_agent.py",
+            "sections": [
+              "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "88f547d370b24c6cb90c8e974f779519"
+      },
+      "idempotency_key": "1422ff61593c45de9773f6a14e28bf8e",
+      "expected_version": 1,
+      "reasoning_effort": "high"
+    },
+    "board_sha256": "a239bc3584282f01ea46c22a310c3fa6d73b1d06d0b64c05ba35153f519a17bf",
+    "prompt_sha256": "b623858fdd3ed9e4e82c4ae6dca462d08307d51a7612b4cbd78965724eb9c0f3",
+    "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150",
+    "source_sha256": "f4ae8709683202b337fdab4cf67d0b80be18dfdc87dd2041c4779f9a842eb1ee",
+    "storyboard_id": "bfb7623f4aa74ac6a4badbac6c7c7b1b",
+    "context_sha256": "f05f96b2500c6a9c458a2b0074c1cfd837fd0fafb60bc1551062cf297e1825e0",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-reviewer-1.0.0",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "high"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 8949,
+    "prompt_tokens": 3412,
+    "completion_tokens": 5537
+  },
+  "report": {
+    "issues": [
+      {
+        "key": "space_and_character_setup_unspecified",
+        "category": "missing_information",
+        "evidence": [
+          {
+            "key": null,
+            "field": "body",
+            "quote": "林看着镜中的自己。禾在门外问：“可以走了吗？”林没有转身。",
+            "source": "script"
+          },
+          {
+            "key": "SH01",
+            "field": "creative_notes",
+            "quote": "剧本未说明房间类型、林的外观服装、镜子与门的相对位置及光源；本镜以“室内镜前”为建议空间方案，需人工确认或按已确认美术设定替换。",
+            "source": "shot"
+          },
+          {
+            "key": "SH02",
+            "field": "creative_notes",
+            "quote": "禾仅以门外画外声出现，不安排其入画；不新增脚步声、开门动作或林的对白。",
+            "source": "shot"
+          }
+        ],
+        "severity": "medium",
+        "certainty": "needs_confirmation",
+        "shot_keys": [
+          "SH01",
+          "SH02"
+        ],
+        "scene_keys": [
+          "S1"
+        ],
+        "suggestion": "向用户确认房间类型、镜子与门的相对位置、林的外观服装，以及光源和色温；没有确认前，保留当前作为“建议方案”的标记，不将其视为定稿。",
+        "description": "原剧本只有三句，未说明房间类型、镜子与门的相对位置、林的外观与服装、光源色温。分镜把空间定为“室内镜前”，把门定为画面右后景关闭房门，并说林外观沿用已确认设定，但现有材料没有这些确认，SH01 与 SH02 的构图、服装、光线都依赖它。制作前需要美术或资产确认，否则过肩构图、镜面反光和门位无法稳定复现。"
+      },
+      {
+        "key": "mirror_screen_axis_unconfirmed",
+        "category": "spatial",
+        "evidence": [
+          {
+            "key": "SH01",
+            "field": "composition",
+            "quote": "建议过肩构图：前景为林的后脑与左肩，位于画面左下；镜面占据中右区域，镜中林的脸居中偏右，双眼看向镜中自己的眼睛。房门不入画。",
+            "source": "shot"
+          },
+          {
+            "key": "SH02",
+            "field": "composition",
+            "quote": "林位于画面左侧偏前，背向或侧背向摄影机，面向左侧镜面；房门位于画面右后景并保持关闭。",
+            "source": "shot"
+          },
+          {
+            "key": "SH02",
+            "field": "continuity_notes",
+            "quote": "承接SH01：林仍面向镜子，肩背与头部方向不变，未新增转身或走位。禾仅在门外画外发声，未入画；门位和机位为本计划建议，需与SH01空间基准统一。",
+            "source": "shot"
+          }
+        ],
+        "severity": "low",
+        "certainty": "needs_confirmation",
+        "shot_keys": [
+          "SH01",
+          "SH02"
+        ],
+        "scene_keys": [
+          "S1"
+        ],
+        "suggestion": "确认房间平面：镜面与门的相对方位、两镜机位移动路径；在分镜里写明两镜共用的空间基准，或统一镜面在画面中的方位表述。",
+        "description": "SH01 把镜面描述为林“正前方”，镜中脸“居中偏右”，门“不入画”；SH02 改成林“面向左侧镜面”，门出现在“画面右后景”。这可能只是机位从林身后偏左移到侧方，并让门入画，但两镜同时没有共同的空间基准。若机位和门位未统一，容易造成越轴或镜门方位漂移，需要先确认平面图再定稿。"
+      }
+    ],
+    "schema_version": 1
+  },
+  "storyboard_id": "bfb7623f4aa74ac6a4badbac6c7c7b1b",
+  "version": 1,
+  "applicable": true,
+  "stale_reasons": [],
+  "error": "",
+  "created_at": "2026-10-20T03:32:43.149378+00:00",
+  "finished_at": "2026-10-20T03:33:10.200600+00:00",
+  "max_runs": 10
+}

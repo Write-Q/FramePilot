@@ -34,3 +34,15 @@ Docker Compose 是本机学习配置，数据库只监听回环地址。部署�
 ## 验收
 
 真实 PostgreSQL 用例覆盖并发调用预算、重启恢复、协作选择/修改/澄清、自由循环、流式接口、导出/差异及旧 SQLite 暂停迁移。模型全部使用替身，未向 DeepSeek 发送旧故事。每个测试创建独立随机数据库；没有测试配置时跳过集成用例，不能将跳过解释为通过。
+
+## Codex 中启动 Docker 的本机约定
+
+本机 Docker Desktop 4.89.0 从 Codex 直接启动曾因 AppData 下 `sailor-ingest.sock` 重命名返回 Windows 1920 而崩溃。2026-10-20保持版本和文件不变，改从 Explorer 启动后引擎、数据库容器恢复；见[排障证据](devlog/2026-10-20-docker-startup-01a151.md)及[对应上游问题](https://github.com/openai/codex/issues/52698)。这是启动方式的规避，不代表上游缺陷永久修复。
+
+后续先用 `docker version` 检查服务；需要启动时使用开始菜单，或由 Codex 调用以下桌面入口，避免直接派生 Docker 可执行进程：
+
+```powershell
+Start-Process -FilePath "$env:WINDIR\explorer.exe" -ArgumentList '"C:\Users\blank\AppData\Local\Programs\DockerDesktop\Docker Desktop.exe"' -WindowStyle Hidden
+```
+
+再检查 `docker version` 和 `docker ps`。若仍失败，先核对日志，不循环重启、删除 runtime/socket 或重置数据。

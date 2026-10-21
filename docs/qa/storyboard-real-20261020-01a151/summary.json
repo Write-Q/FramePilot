@@ -1,0 +1,109 @@
+{
+  "real_model_calls": 16,
+  "generation": [
+    {
+      "label": "SR001-generate-low",
+      "status": "succeeded",
+      "shots": 3
+    },
+    {
+      "label": "SR002-generate-low",
+      "status": "succeeded",
+      "shots": 3
+    },
+    {
+      "label": "SR003-generate-low",
+      "status": "succeeded",
+      "shots": 1
+    },
+    {
+      "label": "SR004-generate-low",
+      "status": "succeeded",
+      "shots": 1
+    },
+    {
+      "label": "SR005-generate-low",
+      "status": "succeeded",
+      "shots": 2
+    },
+    {
+      "label": "SR006-generate-low",
+      "status": "succeeded",
+      "shots": 1
+    },
+    {
+      "label": "SR007-generate-low",
+      "status": "succeeded",
+      "shots": 2
+    },
+    {
+      "label": "SR008-generate-low",
+      "status": "succeeded",
+      "shots": 3
+    },
+    {
+      "label": "SR009-generate-low",
+      "status": "succeeded",
+      "shots": 2
+    }
+  ],
+  "review": [
+    {
+      "label": "SR001-review-high",
+      "status": "failed",
+      "issues": null,
+      "error_code": "invalid_output"
+    },
+    {
+      "label": "SR002-review-high",
+      "status": "succeeded",
+      "issues": 2,
+      "error_code": null
+    },
+    {
+      "label": "SR004-review-high",
+      "status": "succeeded",
+      "issues": 4,
+      "error_code": null
+    },
+    {
+      "label": "SR005-review-high",
+      "status": "failed",
+      "issues": null,
+      "error_code": "invalid_output"
+    },
+    {
+      "label": "SR006-review-high",
+      "status": "succeeded",
+      "issues": 2,
+      "error_code": null
+    },
+    {
+      "label": "SR007-review-high",
+      "status": "succeeded",
+      "issues": 1,
+      "error_code": null
+    },
+    {
+      "label": "SR009-review-high",
+      "status": "succeeded",
+      "issues": 2,
+      "error_code": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 63416,
+    "completion_tokens": 105125,
+    "total_tokens": 168541
+  },
+  "model_elapsed_seconds": 525.299,
+  "generation_median_seconds": 23.781,
+  "review_median_seconds": 39.422,
+  "not_run": [
+    "CONTROL-first-frame-review-high",
+    "CONTROL-vo-review-high",
+    "SR004-generate-high"
+  ],
+  "business_database_modified": false,
+  "test_database_cleaned": true
+}

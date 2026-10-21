@@ -1,0 +1,392 @@
+{
+  "id": "f09b58c9e41e4f23883446e23ccf2ba2",
+  "project_id": "ffdf32fb194243a2a99caabf81dc1230",
+  "idempotency_key": "7364461bd00c4e30af24fc1ae6fd0c85",
+  "manifest": {
+    "skills": [
+      {
+        "id": "K001",
+        "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+        "sources": [
+          "S001",
+          "S002",
+          "S007",
+          "S008",
+          "S010"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/storyboardTable.md",
+            "sections": [
+              "拆分方法",
+              "输出格式",
+              "写入后审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "分场与表演依据",
+              "镜头语法",
+              "台词与时长"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K002",
+        "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+        "sources": [
+          "S002",
+          "S003",
+          "S004",
+          "S008"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "空间与连续性",
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+            "sections": [
+              "连续性核对"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K003",
+        "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+        "sources": [
+          "S009",
+          "S011",
+          "S012"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+            "sections": [
+              "从分镜到单帧",
+              "字段映射",
+              "质量与忠实性检查"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+            "sections": [
+              "_FRAME_FOCUS",
+              "_SHOT_FRAME_INPUT_VARS",
+              "_SHOT_FRAME_TEMPLATE"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+      },
+      "aspect_ratio": "16:9",
+      "instructions": "",
+      "target_shots": 1,
+      "visual_style": "",
+      "source_version": 1,
+      "idempotency_key": "7364461bd00c4e30af24fc1ae6fd0c85",
+      "reasoning_effort": "low"
+    },
+    "prompt_sha256": "4b9cb788c047809d7120f68e1bd5e0a94b50b9dc263ca404a5ea29d0e9673ac5",
+    "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+    "source_sha256": "e0d598f34a374834a36c5d65df06da9fc64b85291fa54cb403e86d65aa574151",
+    "context_sha256": "fd92ec5fa8e4a7c66fb92eb12e92183b3b613bf7833efbd887b0d728871155ec",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-planner-1.1.0",
+    "source_version_id": "3326a2ef2f7e5920937701f86859938a",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "low"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 7579,
+    "prompt_tokens": 4501,
+    "completion_tokens": 3078
+  },
+  "created_at": "2026-10-20T03:27:30.212356+00:00",
+  "finished_at": "2026-10-20T03:27:46.532629+00:00",
+  "error": "",
+  "board": {
+    "id": "63ce0306ff844a2ca2d28272a057c40f",
+    "version_id": "dcda11b2e6c54e1ebf1857a54a95595d",
+    "version": 1,
+    "current_version": 1,
+    "project_id": "ffdf32fb194243a2a99caabf81dc1230",
+    "source_version": 1,
+    "source_version_id": "3326a2ef2f7e5920937701f86859938a",
+    "source_current": true,
+    "source_confirmed": true,
+    "confirmed": false,
+    "confirmation_effective": false,
+    "confirmed_at": null,
+    "content": {
+      "schema_version": 1,
+      "title": "站内停步仰望",
+      "aspect_ratio": "16:9",
+      "visual_style": "",
+      "scenes": [
+        {
+          "key": "S001",
+          "title": "指示牌前",
+          "source_quote": "禾停步仰望右侧指示牌，手里攥着车票。"
+        }
+      ],
+      "shots": [
+        {
+          "key": "SH001",
+          "scene_key": "S001",
+          "source_quote": "禾停步仰望右侧指示牌，手里攥着车票。",
+          "purpose": "以单镜建立禾停步仰望右侧指示牌的动作，并保留手中车票这一已确认物件。",
+          "action": "禾停步仰望右侧指示牌，手里攥着车票；人物保持仰望与持票状态，无新增对白或事件。",
+          "duration_ms": 4000,
+          "shot_size": "中景",
+          "camera_angle": "平视略仰，以同时容纳人物与右上方指示牌",
+          "camera_motion": "固定",
+          "composition": "16:9中景；禾位于画面左下方，身体略朝画面右侧，视线指向右上方指示牌；车票在其手中处于中景可辨位置；指示牌占右上方，牌面文字未确认，不生成具体可读字样。",
+          "screen_direction": "禾身体与视线朝向画面右上方，指示牌位于画面右侧；单镜机位保持不跨轴。",
+          "lighting": "剧本未指定；建议采用中性站厅环境光，保持面部与车票可辨，待确认。",
+          "continuity_notes": "单镜无跨镜动作衔接；持票手未确认，建议全片统一，避免后续镜头换手。",
+          "action_beats": [
+            {
+              "description": "禾保持停步仰望，视线落在右上方指示牌",
+              "duration_ms": 2400
+            },
+            {
+              "description": "手中车票保持在画面中可见，人物自然呼吸，姿态不散",
+              "duration_ms": 1600
+            }
+          ],
+          "frame_prompts": {
+            "first": "16:9中景，固定机位，平视略仰。禾位于画面左下方，身体略朝画面右侧，头微仰，视线锁定右上方指示牌；其手中攥着车票，车票在中景中清晰可见。右侧指示牌入画，牌面文字未确认，不生成具体可读字样。光线按中性站厅环境光建议，面部与车票可辨。",
+            "key": "",
+            "last": ""
+          },
+          "dialogue": "",
+          "sound": "剧本未指定环境声；不添加配乐、旁白或额外音效。",
+          "state_start": "禾在画面左下方停步，头仰向右上方指示牌，手中攥着车票，车票可见。",
+          "state_end": "禾保持停步仰望右侧指示牌，手中仍攥着车票，车票在画面中可见。",
+          "image_prompt": "16:9中景，固定机位，平视略仰。禾位于画面左下方，身体略朝画面右侧，头微仰，视线锁定右上方指示牌；其手中攥着车票，车票在中景中清晰可见。右侧指示牌入画，牌面文字未确认，不生成具体可读字样。光线按中性站厅环境光建议，面部与车票可辨。",
+          "video_prompt": "固定机位中景。禾已在画面左下方停步并仰望右上方指示牌，手中攥着车票；4秒内人物保持姿态，仅有自然呼吸和衣料轻微起伏，视线不离开指示牌，车票始终在手中可见。不添加台词、旁白或镜头运动。",
+          "characters": [
+            "禾"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "持票手（左/右）与指示牌具体样式、文字未在剧本中确认；建议制作前确认持票手，牌面不生成具体可读文字。照明为建议方案，待确认。"
+        }
+      ],
+      "bindings": {
+        "text": {
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225",
+          "version": 1
+        }
+      }
+    },
+    "total_duration_ms": 4000,
+    "created_at": "2026-10-20T03:27:46.532629+00:00",
+    "creation_method": "ai",
+    "provenance": {
+      "run_id": "f09b58c9e41e4f23883446e23ccf2ba2",
+      "skills": [
+        {
+          "id": "K001",
+          "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+          "sources": [
+            "S001",
+            "S002",
+            "S007",
+            "S008",
+            "S010"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/storyboardTable.md",
+              "sections": [
+                "拆分方法",
+                "输出格式",
+                "写入后审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "分场与表演依据",
+                "镜头语法",
+                "台词与时长"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K002",
+          "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+          "sources": [
+            "S002",
+            "S003",
+            "S004",
+            "S008"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "空间与连续性",
+                "审阅方法与本集落点"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+              "sections": [
+                "连续性核对"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/members/reviewer.md",
+              "sections": [
+                "分镜审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K003",
+          "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+          "sources": [
+            "S009",
+            "S011",
+            "S012"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+              "sections": [
+                "从分镜到单帧",
+                "字段映射",
+                "质量与忠实性检查"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+              "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+              "sections": [
+                "_FRAME_FOCUS",
+                "_SHOT_FRAME_INPUT_VARS",
+                "_SHOT_FRAME_TEMPLATE"
+              ],
+              "repository": "Forget-C/Jellyfish"
+            }
+          ]
+        }
+      ],
+      "request": {
+        "profile": {
+          "version": 1,
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+        },
+        "aspect_ratio": "16:9",
+        "instructions": "",
+        "target_shots": 1,
+        "visual_style": "",
+        "source_version": 1,
+        "idempotency_key": "7364461bd00c4e30af24fc1ae6fd0c85",
+        "reasoning_effort": "low"
+      },
+      "prompt_sha256": "4b9cb788c047809d7120f68e1bd5e0a94b50b9dc263ca404a5ea29d0e9673ac5",
+      "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+      "source_sha256": "e0d598f34a374834a36c5d65df06da9fc64b85291fa54cb403e86d65aa574151",
+      "context_sha256": "fd92ec5fa8e4a7c66fb92eb12e92183b3b613bf7833efbd887b0d728871155ec",
+      "parameter_rules": "chat-parameters-1.0.0",
+      "workflow_version": "storyboard-planner-1.1.0",
+      "source_version_id": "3326a2ef2f7e5920937701f86859938a",
+      "reasoning_protocol": "deepseek",
+      "request_parameters": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "max_tokens": 16000,
+        "response_format": {
+          "type": "json_object"
+        },
+        "reasoning_effort": "low"
+      },
+      "capabilities_verified": false
+    }
+  },
+  "review": {
+    "rules_version": "storyboard-checks-1.0.0",
+    "semantic_verified": false,
+    "issues": [
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "SH001",
+        "scene_key": null
+      }
+    ],
+    "notice": "程序只检查结构与有限启发式；请人工核对剧情、空间、动作和静态帧。"
+  },
+  "max_runs": 10
+}

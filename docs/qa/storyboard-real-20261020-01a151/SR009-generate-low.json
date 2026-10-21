@@ -1,0 +1,456 @@
+{
+  "id": "907fc1a2eb274a3f8ea88d5e7adaac27",
+  "project_id": "07aa685ab9c64f0da37c47a00c503a8b",
+  "idempotency_key": "51e96771f2cd42758c12e3bf0fad79ea",
+  "manifest": {
+    "skills": [
+      {
+        "id": "K001",
+        "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+        "sources": [
+          "S001",
+          "S002",
+          "S007",
+          "S008",
+          "S010"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/storyboardTable.md",
+            "sections": [
+              "拆分方法",
+              "输出格式",
+              "写入后审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "分场与表演依据",
+              "镜头语法",
+              "台词与时长"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K002",
+        "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+        "sources": [
+          "S002",
+          "S003",
+          "S004",
+          "S008"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "空间与连续性",
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+            "sections": [
+              "连续性核对"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K003",
+        "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+        "sources": [
+          "S009",
+          "S011",
+          "S012"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+            "sections": [
+              "从分镜到单帧",
+              "字段映射",
+              "质量与忠实性检查"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+            "sections": [
+              "_FRAME_FOCUS",
+              "_SHOT_FRAME_INPUT_VARS",
+              "_SHOT_FRAME_TEMPLATE"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+      },
+      "aspect_ratio": "16:9",
+      "instructions": "",
+      "target_shots": 2,
+      "visual_style": "",
+      "source_version": 1,
+      "idempotency_key": "51e96771f2cd42758c12e3bf0fad79ea",
+      "reasoning_effort": "low"
+    },
+    "prompt_sha256": "a1e0cc9b33efe0d2bda7d3d6e3f4a0314611d3ee76eb6c793d45722e8e56fc53",
+    "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+    "source_sha256": "f4ae8709683202b337fdab4cf67d0b80be18dfdc87dd2041c4779f9a842eb1ee",
+    "context_sha256": "f05f96b2500c6a9c458a2b0074c1cfd837fd0fafb60bc1551062cf297e1825e0",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-planner-1.1.0",
+    "source_version_id": "f2bf8726f62e533bb79b9c9b486c41bb",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "low"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 8808,
+    "prompt_tokens": 4510,
+    "completion_tokens": 4298
+  },
+  "created_at": "2026-10-20T03:32:19.278300+00:00",
+  "finished_at": "2026-10-20T03:32:43.102458+00:00",
+  "error": "",
+  "board": {
+    "id": "bfb7623f4aa74ac6a4badbac6c7c7b1b",
+    "version_id": "277b544e382f4b9faeb7d4a97435c274",
+    "version": 1,
+    "current_version": 1,
+    "project_id": "07aa685ab9c64f0da37c47a00c503a8b",
+    "source_version": 1,
+    "source_version_id": "f2bf8726f62e533bb79b9c9b486c41bb",
+    "source_current": true,
+    "source_confirmed": true,
+    "confirmed": false,
+    "confirmation_effective": false,
+    "confirmed_at": null,
+    "content": {
+      "schema_version": 1,
+      "title": "镜前未转身",
+      "aspect_ratio": "16:9",
+      "visual_style": "",
+      "scenes": [
+        {
+          "key": "S1",
+          "title": "镜前未转身",
+          "source_quote": "林看着镜中的自己。禾在门外问：“可以走了吗？”林没有转身。"
+        }
+      ],
+      "shots": [
+        {
+          "key": "SH01",
+          "scene_key": "S1",
+          "source_quote": "林看着镜中的自己。",
+          "purpose": "建立林在镜前注视自己的静态瞬间，并明确镜中影像只是林的反射。",
+          "action": "林站在镜前，看着镜中自己的脸，身体和视线保持不动。",
+          "duration_ms": 4000,
+          "shot_size": "中近景（过肩）",
+          "camera_angle": "平视，机位在林身后偏左",
+          "camera_motion": "固定",
+          "composition": "建议过肩构图：前景为林的后脑与左肩，位于画面左下；镜面占据中右区域，镜中林的脸居中偏右，双眼看向镜中自己的眼睛。房门不入画。",
+          "screen_direction": "林背向摄影机、面向镜面；镜中视线朝向自身眼睛，即朝向近摄影机方向。",
+          "lighting": "室内现有光，光源与色温剧本未说明；建议柔和侧光勾出面部与镜面轮廓。",
+          "continuity_notes": "镜中影像是林的反射，不另列为人物；禾未入画。室内具体布局、镜位与光源剧本未说明，当前构图为本计划建议，需与美术设定统一。",
+          "action_beats": [
+            {
+              "description": "林立于镜前，面朝镜子，目光落在镜中自己的双眼。",
+              "duration_ms": 2000
+            },
+            {
+              "description": "林保持站姿与视线，轻微呼吸，不转头。",
+              "duration_ms": 2000
+            }
+          ],
+          "frame_prompts": {
+            "first": "过肩中近景，固定平视机位。前景是林的后脑与左肩，位于画面左下；正前方镜面占据中右，镜中清楚映出林的脸，双眼正看向镜中自己的眼睛。林外观与服装沿用已确认设定，剧本未说明处待确认。室内现有光，柔和侧光建议。",
+            "key": "镜中林的脸与凝视自己双眼的视线为画面信息中心，前景肩背保持静止；不添加第二个人物。",
+            "last": "林仍站在镜前，肩背与头部方向不变，视线停留在镜中自己的眼睛。"
+          },
+          "dialogue": "",
+          "sound": "室内环境声；无对白。",
+          "state_start": "林站在镜前，面朝镜子，目光落在镜中自己的脸；身体静止。",
+          "state_end": "林仍站在镜前，面朝镜子，视线停留在镜中自己的眼睛；身体未转动。",
+          "image_prompt": "过肩中近景，固定平视机位。前景是林的后脑与左肩，位于画面左下；正前方镜面占据中右，镜中清楚映出林的脸，双眼正看向镜中自己的眼睛。林外观与服装沿用已确认设定，剧本未说明处待确认。室内现有光，柔和侧光建议。",
+          "video_prompt": "固定机位保持过肩中近景。林站在镜前，视线停留在镜中自己的双眼，肩背与头部保持不动，仅有轻微呼吸；镜头不移动，林不转身。",
+          "characters": [
+            "林"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "剧本未说明房间类型、林的外观服装、镜子与门的相对位置及光源；本镜以“室内镜前”为建议空间方案，需人工确认或按已确认美术设定替换。"
+        },
+        {
+          "key": "SH02",
+          "scene_key": "S1",
+          "source_quote": "禾在门外问：“可以走了吗？”林没有转身。",
+          "purpose": "表现禾在门外的画外发问，以及林听见后仍不转身、继续注视镜中自己的反应。",
+          "action": "林仍面向镜子，禾的声音从门外传来；林没有转身，视线留在镜中，房门保持关闭。",
+          "duration_ms": 5000,
+          "shot_size": "中景",
+          "camera_angle": "平视，机位在林身后侧方，带房门",
+          "camera_motion": "固定",
+          "composition": "林位于画面左侧偏前，背向或侧背向摄影机，面向左侧镜面；房门位于画面右后景并保持关闭。林与门之间留出空间，明确画外声源来自门后，禾不出现。",
+          "screen_direction": "林面向画面左侧的镜面；画外声源来自画面右侧门后，林不朝右侧转身。",
+          "lighting": "延续室内现有光；建议让镜面与门区保持可辨层次，具体光源待确认。",
+          "continuity_notes": "承接SH01：林仍面向镜子，肩背与头部方向不变，未新增转身或走位。禾仅在门外画外发声，未入画；门位和机位为本计划建议，需与SH01空间基准统一。",
+          "action_beats": [
+            {
+              "description": "禾的声音从关闭的房门后传来，问是否可以走。",
+              "duration_ms": 2000
+            },
+            {
+              "description": "林听见问话，肩背与头部仍朝镜面，视线保持在镜中，不转身。",
+              "duration_ms": 2000
+            },
+            {
+              "description": "短暂静默，房门未打开，林维持原姿态。",
+              "duration_ms": 1000
+            }
+          ],
+          "frame_prompts": {
+            "first": "中景，固定平视机位。林位于画面左侧偏前，背向或侧背向摄影机，面朝左侧镜面；画面右后景是一扇关闭的房门，禾不在画面中。林肩背姿态与SH01结束一致。",
+            "key": "林听见门外问话后仍保持朝镜方向，肩背不动，房门关闭；信息落点是“没有转身”。",
+            "last": "林仍面向左侧镜面，肩背与头部未转向房门，视线留在镜中；房门保持关闭。"
+          },
+          "dialogue": "",
+          "sound": "室内环境声；禾的画外问话从关闭的房门后传来。",
+          "state_start": "林仍站在镜前，面朝镜子，背向或侧背向房门，视线落在镜中；房门关闭。",
+          "state_end": "林保持原姿态，没有转身，视线仍在镜中；房门保持关闭。",
+          "image_prompt": "中景，固定平视机位。林位于画面左侧偏前，背向或侧背向摄影机，面朝左侧镜面；画面右后景是一扇关闭的房门，禾不在画面中。林肩背姿态与SH01结束一致。室内现有光。",
+          "video_prompt": "固定机位保持中景。禾的画外声音从关闭的房门后传来；林听见后肩背与头部仍朝镜面，不转身，视线留在镜中。房门保持关闭，镜头不移动。",
+          "characters": [
+            "林"
+          ],
+          "dialogue_lines": [
+            {
+              "speaker": "禾（画外）",
+              "text": "可以走了吗？"
+            }
+          ],
+          "creative_notes": "禾仅以门外画外声出现，不安排其入画；不新增脚步声、开门动作或林的对白。林的具体反应幅度可按演员表演细化，但不改为转身或回答。"
+        }
+      ],
+      "bindings": {
+        "text": {
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225",
+          "version": 1
+        }
+      }
+    },
+    "total_duration_ms": 9000,
+    "created_at": "2026-10-20T03:32:43.102458+00:00",
+    "creation_method": "ai",
+    "provenance": {
+      "run_id": "907fc1a2eb274a3f8ea88d5e7adaac27",
+      "skills": [
+        {
+          "id": "K001",
+          "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+          "sources": [
+            "S001",
+            "S002",
+            "S007",
+            "S008",
+            "S010"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/storyboardTable.md",
+              "sections": [
+                "拆分方法",
+                "输出格式",
+                "写入后审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "分场与表演依据",
+                "镜头语法",
+                "台词与时长"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K002",
+          "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+          "sources": [
+            "S002",
+            "S003",
+            "S004",
+            "S008"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "空间与连续性",
+                "审阅方法与本集落点"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+              "sections": [
+                "连续性核对"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/members/reviewer.md",
+              "sections": [
+                "分镜审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K003",
+          "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+          "sources": [
+            "S009",
+            "S011",
+            "S012"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+              "sections": [
+                "从分镜到单帧",
+                "字段映射",
+                "质量与忠实性检查"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+              "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+              "sections": [
+                "_FRAME_FOCUS",
+                "_SHOT_FRAME_INPUT_VARS",
+                "_SHOT_FRAME_TEMPLATE"
+              ],
+              "repository": "Forget-C/Jellyfish"
+            }
+          ]
+        }
+      ],
+      "request": {
+        "profile": {
+          "version": 1,
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+        },
+        "aspect_ratio": "16:9",
+        "instructions": "",
+        "target_shots": 2,
+        "visual_style": "",
+        "source_version": 1,
+        "idempotency_key": "51e96771f2cd42758c12e3bf0fad79ea",
+        "reasoning_effort": "low"
+      },
+      "prompt_sha256": "a1e0cc9b33efe0d2bda7d3d6e3f4a0314611d3ee76eb6c793d45722e8e56fc53",
+      "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+      "source_sha256": "f4ae8709683202b337fdab4cf67d0b80be18dfdc87dd2041c4779f9a842eb1ee",
+      "context_sha256": "f05f96b2500c6a9c458a2b0074c1cfd837fd0fafb60bc1551062cf297e1825e0",
+      "parameter_rules": "chat-parameters-1.0.0",
+      "workflow_version": "storyboard-planner-1.1.0",
+      "source_version_id": "f2bf8726f62e533bb79b9c9b486c41bb",
+      "reasoning_protocol": "deepseek",
+      "request_parameters": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "max_tokens": 16000,
+        "response_format": {
+          "type": "json_object"
+        },
+        "reasoning_effort": "low"
+      },
+      "capabilities_verified": false
+    }
+  },
+  "review": {
+    "rules_version": "storyboard-checks-1.0.0",
+    "semantic_verified": false,
+    "issues": [
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "SH01",
+        "scene_key": null
+      },
+      {
+        "code": "state_transition",
+        "severity": "warning",
+        "message": "相邻镜头起止状态描述不同，请核对持有物、位置及关注对象；文字不同不代表剧情错误。",
+        "shot_key": "SH02",
+        "scene_key": null
+      },
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "SH02",
+        "scene_key": null
+      }
+    ],
+    "notice": "程序只检查结构与有限启发式；请人工核对剧情、空间、动作和静态帧。"
+  },
+  "max_runs": 10
+}

@@ -1,0 +1,246 @@
+{
+  "id": "d07f06406f754bc79f93bc093dc0a369",
+  "project_id": "a4df18b9d0644a61add2111ccc7f021b",
+  "idempotency_key": "154d775a714b44ed8134a637720b3316",
+  "source_version_id": "09bdd118263d58da8ac3abad9ed45348",
+  "storyboard_version_id": "1d49eccf72a04796af0244adab62d9e3",
+  "profile_id": "88f547d370b24c6cb90c8e974f779519",
+  "profile_version": 1,
+  "manifest": {
+    "skills": [
+      {
+        "id": "storyboard_review",
+        "sha256": "7fa8a5d33cccccdb3b6531f5e9dd8d42c1ba35c1d954f76cc4380d19f8a382d2",
+        "sources": [
+          "S008",
+          "S010"
+        ],
+        "version": "1.0.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/consistency_checker_agent.py",
+            "sections": [
+              "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "88f547d370b24c6cb90c8e974f779519"
+      },
+      "idempotency_key": "154d775a714b44ed8134a637720b3316",
+      "expected_version": 1,
+      "reasoning_effort": "high"
+    },
+    "board_sha256": "cc1059c720826eed04a4181805a83620b18e6ac7f51c3fe6700de6187d53c3a9",
+    "prompt_sha256": "aa4a7b0f78310c154ea74ac19e0fe98efaf3d81fc2a43b3713dbfc77d41f17b6",
+    "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150",
+    "source_sha256": "56ceebc7c50da18503dea8ee467b0edba7b030a09cb2ce9047d1da2c8d073f2d",
+    "storyboard_id": "67249e891e01489ca8156abfb28a81c7",
+    "context_sha256": "9150ef55b0c39c745000f8d37f979b301e0ce9ec9dfcd5965e3f9be87d31a05a",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-reviewer-1.0.0",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "high"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 7861,
+    "prompt_tokens": 2594,
+    "completion_tokens": 5267
+  },
+  "report": {
+    "issues": [
+      {
+        "key": "facing_dir_vs_face_closeup",
+        "category": "spatial",
+        "evidence": [
+          {
+            "key": "SH001",
+            "field": "composition",
+            "quote": "建议按面朝门的方向处理，待确认。",
+            "source": "shot"
+          },
+          {
+            "key": "SH001",
+            "field": "frame_prompts.first",
+            "quote": "门作为身后空间锚点",
+            "source": "shot"
+          },
+          {
+            "key": "SH001",
+            "field": "frame_prompts.last",
+            "quote": "面部近景落幅：林的面部占据主要画幅",
+            "source": "shot"
+          },
+          {
+            "key": null,
+            "field": "body",
+            "quote": "最终停在他的面部近景。",
+            "source": "script"
+          }
+        ],
+        "severity": "medium",
+        "certainty": "supported",
+        "shot_keys": [
+          "SH001"
+        ],
+        "scene_keys": [
+          "SC001"
+        ],
+        "suggestion": "请用户在两种方案中选择并统一表述：A) 林背对门、面向摄影机，保留门在身后作为空间锚点与面部近景落幅；B) 保留面朝门，则落幅改为过肩或侧后方近景，并相应修改“面部近景”的描述。选定后同步更新 composition、screen_direction 与 frame_prompts。",
+        "description": "分镜在构图中建议“林面朝门”处理，但首帧又把门固定为“身后空间锚点”，并以沿直线推近止于“面部近景”落幅。若林面朝门、门在其身后，从正面直线推近到面部近景只能拍到后背或后脑；除非摄影机位于门与林之间，而这与门在身后的设定冲突。剧本只写“站在门前”，未指定朝向，因此这是分镜内部两种舞台关系互斥的问题，需先确认林与摄影机相对门的位置。"
+      },
+      {
+        "key": "push_duration_vs_slow",
+        "category": "timing",
+        "evidence": [
+          {
+            "key": "SH001",
+            "field": "duration_ms",
+            "quote": "6000",
+            "source": "shot"
+          },
+          {
+            "key": "SH001",
+            "field": "action_beats.1.duration_ms",
+            "quote": "3000",
+            "source": "shot"
+          },
+          {
+            "key": "SH001",
+            "field": "action_beats.1.description",
+            "quote": "镜头沿直线缓慢推近，景别由全景逐渐收窄。",
+            "source": "shot"
+          },
+          {
+            "key": null,
+            "field": "body",
+            "quote": "镜头从全景缓慢推近",
+            "source": "script"
+          }
+        ],
+        "severity": "low",
+        "certainty": "needs_confirmation",
+        "shot_keys": [
+          "SH001"
+        ],
+        "scene_keys": [
+          "SC001"
+        ],
+        "suggestion": "可用预演或实际时长测试核对推近速度；若希望更“缓慢”，可延长总时长或调整推近节拍时长，并同步更新 duration_ms 与 action_beats。",
+        "description": "计划总时长6000ms，其中实际推近只有3000ms，却要从全景收窄到面部近景，其余时间为起始静止2000ms与落幅停留1000ms。没有实际预演或成片，无法断言观感，但3000ms跨越全景到面部近景的推近速度可能偏快，与“缓慢推近”“速度均匀”的描述存在张力，需要核实。"
+      },
+      {
+        "key": "initial_static_hold_added",
+        "category": "fidelity",
+        "evidence": [
+          {
+            "key": "SH001",
+            "field": "action_beats.0.description",
+            "quote": "起幅全景：林站在门前，镜头保持固定。",
+            "source": "shot"
+          },
+          {
+            "key": "SH001",
+            "field": "action_beats.0.duration_ms",
+            "quote": "2000",
+            "source": "shot"
+          },
+          {
+            "key": "SH001",
+            "field": "camera_motion",
+            "quote": "起幅为固定全景；随后沿直线向林缓慢推近，速度均匀",
+            "source": "shot"
+          },
+          {
+            "key": null,
+            "field": "body",
+            "quote": "镜头从全景缓慢推近",
+            "source": "script"
+          }
+        ],
+        "severity": "low",
+        "certainty": "needs_confirmation",
+        "shot_keys": [
+          "SH001"
+        ],
+        "scene_keys": [
+          "SC001"
+        ],
+        "suggestion": "若严格贴合剧本，可将起始静止并入推近（全景起幅后立即开始移动）；若保留静止作为起幅交代，请在镜头说明中明确这是对剧本节拍的补充并请用户确认。",
+        "description": "剧本只写“镜头从全景缓慢推近”，未描述起幅静止；分镜在推近前安排了2000ms固定全景停留。这是对起始节拍的增补，虽不改变剧情事件，但会影响“从全景起即推近”的连续性，需确认是否保留。"
+      },
+      {
+        "key": "eyelevel_fixed_in_first_frame",
+        "category": "frame",
+        "evidence": [
+          {
+            "key": "SH001",
+            "field": "camera_angle",
+            "quote": "平视（建议，待确认）",
+            "source": "shot"
+          },
+          {
+            "key": "SH001",
+            "field": "frame_prompts.first",
+            "quote": "全景起幅，平视机位。",
+            "source": "shot"
+          }
+        ],
+        "severity": "low",
+        "certainty": "supported",
+        "shot_keys": [
+          "SH001"
+        ],
+        "scene_keys": [
+          "SC001"
+        ],
+        "suggestion": "确认机位角度后统一两处表述；若仍需保留“待确认”，可在首帧提示中同样标注为待确认，或先完成角度确认再定稿首帧。",
+        "description": "镜头角度字段注明“平视”只是建议、待确认，但首帧提示词已把“平视机位”写成确定状态。若角度尚未确认，首帧生成会把未定的机位固定下来，与字段本身的待确认标注不一致。"
+      }
+    ],
+    "schema_version": 1
+  },
+  "storyboard_id": "67249e891e01489ca8156abfb28a81c7",
+  "version": 1,
+  "applicable": true,
+  "stale_reasons": [],
+  "error": "",
+  "created_at": "2026-10-20T03:27:57.859024+00:00",
+  "finished_at": "2026-10-20T03:28:22.545551+00:00",
+  "max_runs": 10
+}

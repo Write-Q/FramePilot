@@ -1,0 +1,277 @@
+{
+  "assessor": "Codex逐项判读，非用户或影视专家盲审",
+  "status": "completed_budget_limited",
+  "generation": [
+    {
+      "case": "SR001",
+      "verdict": "meets_test_expectations",
+      "checks": [
+        {
+          "criterion": "交接到离开顺序及信息任务",
+          "verdict": "met",
+          "evidence": "shot_01递向未接住，shot_02接住后松手，shot_03转身离开"
+        },
+        {
+          "criterion": "首帧未提前交接，尾帧保持阿林持有",
+          "verdict": "met",
+          "evidence": "shot_01.first小禾仍握钥匙；shot_02.last钥匙完全在阿林手中"
+        },
+        {
+          "criterion": "不复制/取回钥匙且特写不消灭角色",
+          "verdict": "met",
+          "evidence": "shot_02手部近景两人沿用身份；shot_03阿林仍持钥匙"
+        }
+      ],
+      "notes": "生成提出左右站位、光线、持物手等建议，均标记待确认；程序5条提醒不等于5个真实错误。"
+    },
+    {
+      "case": "SR002",
+      "verdict": "meets_primary_expectations_with_minor_alignment_question",
+      "checks": [
+        {
+          "criterion": "原话顺序与说话者",
+          "verdict": "met",
+          "evidence": "前两镜分别保留林的前半句/后半句；拼合原话一致；第三镜禾点头无台词"
+        },
+        {
+          "criterion": "听者沉默与台词不重复",
+          "verdict": "met",
+          "evidence": "禾只有反应无台词；每句片段仅出现一次（dialogue为兼容字段重复，不算多次表演）"
+        }
+      ],
+      "notes": "首帧正开口与节拍先站定的起点可再对齐；不构成换说话者或剧情缺失。室内站位明确标建议待确认。"
+    },
+    {
+      "case": "SR003",
+      "verdict": "meets_test_expectations",
+      "checks": [
+        {
+          "criterion": "已成立仰望不回退",
+          "verdict": "met",
+          "evidence": "first头微仰视线锁定，video明确已停步并仰望"
+        },
+        {
+          "criterion": "车票及指示牌空间关系",
+          "verdict": "met",
+          "evidence": "first/last状态均保留手持车票，指示牌位于画右；未编造牌面文字"
+        }
+      ],
+      "notes": "中性站厅光为建议；不是实测图像文字/车票可见性。"
+    },
+    {
+      "case": "SR004",
+      "verdict": "partial",
+      "checks": [
+        {
+          "criterion": "起始全景/落幅面部近景，静态瞬间与推近分离",
+          "verdict": "met",
+          "evidence": "first全景，key中近景，last面部近景；video含连续缓推"
+        },
+        {
+          "criterion": "空间/朝向内部一致",
+          "verdict": "needs_fix",
+          "evidence": "composition建议面朝门，first又将门作为身后锚点；正面直推面部的几何关系不明确"
+        }
+      ],
+      "notes": "增加2秒静止起幅属表达节拍，原文未禁止，不直接当剧情破坏；推近3秒是否缓慢需预演。"
+    },
+    {
+      "case": "SR005",
+      "verdict": "partial",
+      "checks": [
+        {
+          "criterion": "短信原文与屏幕载体",
+          "verdict": "met",
+          "evidence": "手机key/last帧与action保留今晚别等我"
+        },
+        {
+          "criterion": "不新增VO/配乐/台词",
+          "verdict": "met",
+          "evidence": "两镜dialogue_lines空，sound均明确无声"
+        },
+        {
+          "criterion": "人物身份解析",
+          "verdict": "needs_confirmation",
+          "evidence": "角色列表把“禾默默看着”中的禾写成禾默默（S02_he_momo），疑似把副词并入姓名"
+        }
+      ],
+      "notes": "测试创作卡为未知的夹具卡，未提供已确认人物实体；该歧义需要身份表/上下文核对。不可把像素文字可读性当实测。"
+    },
+    {
+      "case": "SR006",
+      "verdict": "meets_infeasible_request_handling_expectations",
+      "checks": [
+        {
+          "criterion": "不足1镜不跨越三场时空伪拼",
+          "verdict": "met",
+          "evidence": "三场均原文列出，只为屋内合书分配一镜"
+        },
+        {
+          "criterion": "显式保留缺口且建议调整数",
+          "verdict": "met",
+          "evidence": "creative_notes列出场二/场三未分配，建议至少3镜，未声称全覆盖"
+        }
+      ],
+      "notes": "本例按设计本就不可完整制作；评估通过的是暴露不可行请求/缺口的处理，不是整片分镜完整通过。"
+    },
+    {
+      "case": "SR007",
+      "verdict": "meets_source_conflict_handling_expectations",
+      "checks": [
+        {
+          "criterion": "不擅自修补原稿的钥匙矛盾",
+          "verdict": "met",
+          "evidence": "镜1禾持有，镜2按原文林开门，但state/notes明确指出来源冲突"
+        },
+        {
+          "criterion": "定位冲突且交还编剧/用户",
+          "verdict": "met",
+          "evidence": "关联shot_01/02，明确无取回或复制动作，等待人工决定"
+        }
+      ],
+      "notes": "不是可直接制作的完整方案，通过的是识别原稿矛盾并保留边界。"
+    },
+    {
+      "case": "SR008",
+      "verdict": "meets_textual_transition_expectations_pending_previsualization",
+      "checks": [
+        {
+          "criterion": "有意跨轴/过渡不机械禁止",
+          "verdict": "met",
+          "evidence": "shot01基准、shot02沿桌绕行、shot03禾右肩前景锚点+林新视线基准"
+        },
+        {
+          "criterion": "人物无新增事件或无故看镜头",
+          "verdict": "met",
+          "evidence": "两人坐姿保持，林视线落在禾的方向"
+        }
+      ],
+      "notes": "有意跨轴是否在真实三维场景成立仍需平面图/预演；文字说明不是运镜已验证。"
+    },
+    {
+      "case": "SR009",
+      "verdict": "meets_identity_and_offscreen_voice_expectations_pending_layout",
+      "checks": [
+        {
+          "criterion": "镜中反射不是新角色",
+          "verdict": "met",
+          "evidence": "SH01.characters仅林，notes明确影像是反射"
+        },
+        {
+          "criterion": "禾画外出声、不入画、不转身",
+          "verdict": "met",
+          "evidence": "SH02.characters仅林；对白禾（画外）原句；林持续面向镜子"
+        },
+        {
+          "criterion": "反射/空间待核对",
+          "verdict": "met",
+          "evidence": "notes声明镜位/门位/机位建议需统一，没有水平翻转所有反射"
+        }
+      ],
+      "notes": "门关闭是新增舞台假设，未被原文确认；从SH01镜面画右到SH02画左的机位变化需预演核对，不能据文字直接断言错误。"
+    }
+  ],
+  "review": [
+    {
+      "case": "SR001",
+      "service_status": "failed_before_validator_fix",
+      "semantic_findings": [
+        {
+          "issue": "missing_production_specs",
+          "judgment": "nonblocking_redundant_confirmation"
+        },
+        {
+          "issue": "beat_duration_gap",
+          "judgment": "false_positive_tendency"
+        }
+      ],
+      "note": "合法数值证据修复后离线通过；原失败保留。"
+    },
+    {
+      "case": "SR002",
+      "service_status": "succeeded",
+      "semantic_findings": [
+        {
+          "issue": "first_frames_preempt_speech",
+          "judgment": "plausible_minor_alignment_question_overstated_as_supported_medium"
+        },
+        {
+          "issue": "unconfirmed_current_location_and_blocking",
+          "judgment": "nonblocking_redundant_confirmation"
+        }
+      ],
+      "note": "没有错判说话者；建议首帧静态对齐可参考，不证明本镜不能开口起幅。"
+    },
+    {
+      "case": "SR004",
+      "service_status": "succeeded",
+      "semantic_findings": [
+        {
+          "issue": "facing_dir_vs_face_closeup",
+          "judgment": "useful_spatial_conflict_detected_but_suggestion_B_changes_required_face_closeup"
+        },
+        {
+          "issue": "push_duration_vs_slow",
+          "judgment": "reasonable_uncertain_previsualization_check"
+        },
+        {
+          "issue": "initial_static_hold_added",
+          "judgment": "overcautious_expression_choice_not_proven_fidelity_error"
+        },
+        {
+          "issue": "eyelevel_fixed_in_first_frame",
+          "judgment": "low_value_redundant_confirmation"
+        }
+      ],
+      "note": "审核能捕捉真实内部空间疑点，但建议仍需人工判断，不能自动采纳改变剧本指定面部近景的方案。"
+    },
+    {
+      "case": "SR005",
+      "service_status": "failed",
+      "semantic_findings": [],
+      "note": "finish_reason=length，16000 completion_tokens全为reasoning_tokens，content空；无法评估误报/漏报。不得算空报告通过。"
+    },
+    {
+      "case": "SR006",
+      "service_status": "succeeded",
+      "semantic_findings": [
+        {
+          "issue": "missing_scene_s2_s3_coverage",
+          "judgment": "true_coverage_gap_detected_but_description_should_recognize_request_infeasible_and_already_disclosed"
+        },
+        {
+          "issue": "duration_beats_mismatch",
+          "judgment": "nonblocking_optional_annotation_not_a_duration_violation"
+        }
+      ],
+      "note": "建议增加目标镜头数有用；分镜已主动披露不足，不宜归因为静默删剧情。"
+    },
+    {
+      "case": "SR007",
+      "service_status": "succeeded",
+      "semantic_findings": [
+        {
+          "issue": "key_custody_conflict",
+          "judgment": "useful_true_source_continuity_conflict"
+        }
+      ],
+      "note": "明确回编剧确认，不允许分镜静默增加取回/复制；与原稿冲突正例预期一致。"
+    },
+    {
+      "case": "SR009",
+      "service_status": "succeeded",
+      "semantic_findings": [
+        {
+          "issue": "space_and_character_setup_unspecified",
+          "judgment": "mostly_redundant_confirmation_with_useful_note_that_no_actual_approved_assets_were_provided"
+        },
+        {
+          "issue": "mirror_screen_axis_unconfirmed",
+          "judgment": "reasonable_uncertain_layout_check_not_a_proven_cross_axis_error"
+        }
+      ],
+      "note": "没有把反射当新角色，禾的画外对白未被误判为入画；空间检查按不确定性表达较好。"
+    }
+  ],
+  "notice": "逐项结论是本任务AI判读，不是影视专家盲审、长期稳定性或真实图像视频质量证明。"
+}

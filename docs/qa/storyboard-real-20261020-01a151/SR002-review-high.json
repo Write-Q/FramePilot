@@ -1,0 +1,185 @@
+{
+  "id": "4088b1f722c64cb99b509ddabfa65c92",
+  "project_id": "850a7d1da8244a8a9e8a7a77bd4f68c9",
+  "idempotency_key": "28f558da742d486b94586c744e9c0158",
+  "source_version_id": "dae0772817225dc5860016ce6ac939f7",
+  "storyboard_version_id": "2976d619527c4a8e8e59d61121fb8e36",
+  "profile_id": "88f547d370b24c6cb90c8e974f779519",
+  "profile_version": 1,
+  "manifest": {
+    "skills": [
+      {
+        "id": "storyboard_review",
+        "sha256": "7fa8a5d33cccccdb3b6531f5e9dd8d42c1ba35c1d954f76cc4380d19f8a382d2",
+        "sources": [
+          "S008",
+          "S010"
+        ],
+        "version": "1.0.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/consistency_checker_agent.py",
+            "sections": [
+              "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "88f547d370b24c6cb90c8e974f779519"
+      },
+      "idempotency_key": "28f558da742d486b94586c744e9c0158",
+      "expected_version": 1,
+      "reasoning_effort": "high"
+    },
+    "board_sha256": "7e01c0ee4ea9dc7ad5ae0edf4261eebe17296c8a4db00f7acaecc72c142c11a7",
+    "prompt_sha256": "96ac4ceb56409e9aa2ad06e745e820bbfef33a9f6009f42fcdb1306a613cd949",
+    "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150",
+    "source_sha256": "e1e03466d60483ac59abc522046b6bc899cbb96c0876ebdbe4a17c737714967f",
+    "storyboard_id": "65ae58dc8ac64e5fa189bd114ccfb907",
+    "context_sha256": "49e0f5e30f0ffc83713e38d495c08ee046ef08ffd91ef3f7332742e8976b293c",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-reviewer-1.0.0",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "high"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 19523,
+    "prompt_tokens": 3811,
+    "completion_tokens": 15712
+  },
+  "report": {
+    "issues": [
+      {
+        "key": "first_frames_preempt_speech",
+        "category": "frame",
+        "evidence": [
+          {
+            "key": "S001_01",
+            "field": "action_beats.0.description",
+            "quote": "林与禾相对而立，禾闭嘴注视林。",
+            "source": "shot"
+          },
+          {
+            "key": "S001_01",
+            "field": "frame_prompts.first",
+            "quote": "平视中景双人镜头，林在画面左、禾在画面右，两人相对而立，林正开口说话，禾闭嘴注视；室内背景与照明未指定，以中性可辨识环境呈现（建议，待确认）。",
+            "source": "shot"
+          },
+          {
+            "key": "S001_01",
+            "field": "frame_prompts.last",
+            "quote": "林说完前半句后口部停住，禾仍闭嘴注视，位置与朝向不变。",
+            "source": "shot"
+          },
+          {
+            "key": "S001_02",
+            "field": "state_start",
+            "quote": "林仍在原位，面向画面右侧画外禾，准备续说后半句；禾在画外原位。",
+            "source": "shot"
+          },
+          {
+            "key": "S001_02",
+            "field": "action_beats.0.description",
+            "quote": "林保持原位，视线落向画外禾。",
+            "source": "shot"
+          },
+          {
+            "key": "S001_02",
+            "field": "frame_prompts.first",
+            "quote": "中近景，林在画面左中，面向画面右侧画外禾，嘴唇处于续说状态；背景简洁，无可见字幕。",
+            "source": "shot"
+          }
+        ],
+        "severity": "medium",
+        "certainty": "supported",
+        "shot_keys": [
+          "S001_01",
+          "S001_02"
+        ],
+        "scene_keys": [
+          "SC001"
+        ],
+        "suggestion": "建议把 S001_01/S001_02 首帧改为口部闭合或仅作开口准备；若确实要从说话中切起，则把第1节拍改为已开口，并重新对齐 S001_01 落幅的“口部停住”与台词起点。",
+        "description": "S001_01 的首帧写林“正开口说话”，但该镜第1个动作节拍先是两人相对而立、禾闭嘴注视，直到第2节拍才“林开口说出前半句”。S001_02 同样在首帧写“嘴唇处于续说状态”，而其 state_start 是“准备续说后半句”，第1节拍也先是保持原位、视线落向画外禾，第2节拍才续说；同时 S001_01 落幅已是“口部停住”。按首帧应等于镜头开始瞬间，这两处都把说话状态提前，造成起幅与动作节拍、前镜落幅不一致。"
+      },
+      {
+        "key": "unconfirmed_current_location_and_blocking",
+        "category": "missing_information",
+        "evidence": [
+          {
+            "key": null,
+            "field": "body",
+            "quote": "林说：“我把所有资料都留在旧办公室了，你今天下班之后记得去拿。”禾听完点头，没有说话。",
+            "source": "script"
+          },
+          {
+            "key": "S001_01",
+            "field": "action",
+            "quote": "林与禾在未指定的室内空间相对而立。林开口，对禾说出关于旧办公室资料的前半句；禾安静听完，不打断。",
+            "source": "shot"
+          },
+          {
+            "key": "S001_01",
+            "field": "creative_notes",
+            "quote": "剧本未指定当前地点、服装和照明；建议以中性室内空间处理，待人工确认，不能据此认定当前就在旧办公室内。",
+            "source": "shot"
+          }
+        ],
+        "severity": "medium",
+        "certainty": "needs_confirmation",
+        "shot_keys": [
+          "S001_01"
+        ],
+        "scene_keys": [
+          "SC001"
+        ],
+        "suggestion": "向编剧/导演确认当前场景与人物姿态；若未定，将布景、服装、灯光和站/坐姿态明确标为 TBD，并保留中性方案，不要据此推断当前就在旧办公室。",
+        "description": "原剧本只给出提醒台词与禾点头，未说明当前所在地点、室内外，也未说明两人是否站立相对。分镜在 S001_01 的 action 中把当前空间具体化为“未指定的室内空间”并让人物“相对而立”；虽然 composition 与 creative_notes 标注为建议、待确认，但在场地、服装、灯光和人物姿态确认前，这仍是制作假设，不能当作已定状态。"
+      }
+    ],
+    "schema_version": 1
+  },
+  "storyboard_id": "65ae58dc8ac64e5fa189bd114ccfb907",
+  "version": 1,
+  "applicable": true,
+  "stale_reasons": [],
+  "error": "",
+  "created_at": "2026-10-20T03:26:18.691061+00:00",
+  "finished_at": "2026-10-20T03:27:30.060524+00:00",
+  "max_runs": 10
+}

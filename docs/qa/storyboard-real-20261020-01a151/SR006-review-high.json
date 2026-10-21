@@ -1,0 +1,179 @@
+{
+  "id": "13735b77f5f04bb8a268c07b46c2ab0c",
+  "project_id": "4d55978ec55d47cfa3c4b28a821842bc",
+  "idempotency_key": "1e6fe4d07d974921a1561554646d6e02",
+  "source_version_id": "eb7b7a063a2a5050a5dc8f531fa300c4",
+  "storyboard_version_id": "da9db40b67214dec975104aa6ee4cbc3",
+  "profile_id": "88f547d370b24c6cb90c8e974f779519",
+  "profile_version": 1,
+  "manifest": {
+    "skills": [
+      {
+        "id": "storyboard_review",
+        "sha256": "7fa8a5d33cccccdb3b6531f5e9dd8d42c1ba35c1d954f76cc4380d19f8a382d2",
+        "sources": [
+          "S008",
+          "S010"
+        ],
+        "version": "1.0.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/consistency_checker_agent.py",
+            "sections": [
+              "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "88f547d370b24c6cb90c8e974f779519"
+      },
+      "idempotency_key": "1e6fe4d07d974921a1561554646d6e02",
+      "expected_version": 1,
+      "reasoning_effort": "high"
+    },
+    "board_sha256": "94141e11dbcaa1d1c34f1f92fdf781232b81552488ede869dc7c0854383703de",
+    "prompt_sha256": "0ec065a0a8534bc5b3efa22a040a2cf2754879e530f9e632ef8cd521649f3597",
+    "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150",
+    "source_sha256": "a0d7d3cc40d6c34be438302156cc8959e432417993f026cf3fd659707057e2fa",
+    "storyboard_id": "86e0f33fc4724444827c4b7719dea69f",
+    "context_sha256": "6477edef58f7c93d5ea14b1bcf190150154a5884b40c9a5e8d89431d9223d7d8",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-reviewer-1.0.0",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "high"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 6830,
+    "prompt_tokens": 2652,
+    "completion_tokens": 4178
+  },
+  "report": {
+    "issues": [
+      {
+        "key": "missing_scene_s2_s3_coverage",
+        "category": "fidelity",
+        "evidence": [
+          {
+            "key": null,
+            "field": "body",
+            "quote": "场一，屋内。林合上书。场二，次日车站。禾登上列车。场三，夜晚海边。林望着海。",
+            "source": "script"
+          },
+          {
+            "key": "S2",
+            "field": "source_quote",
+            "quote": "场二，次日车站。禾登上列车。",
+            "source": "scene"
+          },
+          {
+            "key": "S3",
+            "field": "source_quote",
+            "quote": "场三，夜晚海边。林望着海。",
+            "source": "scene"
+          },
+          {
+            "key": "S1_01",
+            "field": "purpose",
+            "quote": "呈现场一唯一已确认动作：林在屋内把书合上；本镜不承担场二、场三的不同时空内容。",
+            "source": "shot"
+          }
+        ],
+        "severity": "high",
+        "certainty": "supported",
+        "shot_keys": [
+          "S1_01"
+        ],
+        "scene_keys": [
+          "S2",
+          "S3"
+        ],
+        "suggestion": "为 S2、S3 各补足可执行镜头（至少每场 1 镜），保持原顺序和不同时空的分隔。如果当前规划受 target_shots 限制，应回到规划阶段增加镜头数，而不是把场二、场三并入 S1。",
+        "description": "原剧本包含三场事件，但完整分镜只有 S1_01 一个镜头；S2、S3 虽列出场次，却没有任何对应镜头。因此“禾登上列车”和“林夜晚在海边望海”被整段遗漏，属于删改剧情，也违反“不得增加或删改剧情”的约束。"
+      },
+      {
+        "key": "duration_beats_mismatch",
+        "category": "timing",
+        "evidence": [
+          {
+            "key": "S1_01",
+            "field": "duration_ms",
+            "quote": "4000",
+            "source": "shot"
+          },
+          {
+            "key": "S1_01",
+            "field": "action_beats.0.duration_ms",
+            "quote": "2000",
+            "source": "shot"
+          },
+          {
+            "key": "S1_01",
+            "field": "action_beats.1.duration_ms",
+            "quote": "1000",
+            "source": "shot"
+          },
+          {
+            "key": "S1_01",
+            "field": "video_prompt",
+            "quote": "动作完成后保持合书状态",
+            "source": "shot"
+          }
+        ],
+        "severity": "low",
+        "certainty": "needs_confirmation",
+        "shot_keys": [
+          "S1_01"
+        ],
+        "scene_keys": [
+          "S1"
+        ],
+        "suggestion": "确认这 1000ms 是否为动作完成后的保持：若是，请新增一条 1000ms 的尾停顿 beat，或明确写出余量；若不是，将 duration_ms 调整为 3000ms，并核对动作节奏。",
+        "description": "S1_01 的计划时长为 4000ms，但 action_beats 两条合计 2000+1000=3000ms，相差约 1000ms。video_prompt 提到“动作完成后保持合书状态”，这 1000ms 可能是未写入节拍表的尾部停顿；但仅凭现有节拍，无法确认全镜 4000ms 的时间分配。"
+      }
+    ],
+    "schema_version": 1
+  },
+  "storyboard_id": "86e0f33fc4724444827c4b7719dea69f",
+  "version": 1,
+  "applicable": true,
+  "stale_reasons": [],
+  "error": "",
+  "created_at": "2026-10-20T03:30:27.398053+00:00",
+  "finished_at": "2026-10-20T03:30:47.925437+00:00",
+  "max_runs": 10
+}

@@ -44,3 +44,6 @@ ModelCall.__table__.append_constraint(_UniqueConstraint('project_id', 'id', name
 domain_tables = _register_domain(Base.metadata)
 from app.game.schema import register_game as _register_game
 game_session_table = _register_game(Base.metadata)
+
+from app.production.schema import register_production as _register_production
+production_tables = _register_production(Base.metadata)

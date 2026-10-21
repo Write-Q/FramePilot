@@ -1,0 +1,94 @@
+{
+  "id": "2cf7c0eb7c0d45439b684ceb5dfad871",
+  "project_id": "b886732d16f0464f9f5cafa82fca932e",
+  "idempotency_key": "fd56bf1fc8dd4e3db62d75c613a0de6e",
+  "source_version_id": "a7d83c8238dd5cc2a148186c214fd474",
+  "storyboard_version_id": "504bbd7d40a045319b87d2d8bf721c5c",
+  "profile_id": "88f547d370b24c6cb90c8e974f779519",
+  "profile_version": 1,
+  "manifest": {
+    "skills": [
+      {
+        "id": "storyboard_review",
+        "sha256": "7fa8a5d33cccccdb3b6531f5e9dd8d42c1ba35c1d954f76cc4380d19f8a382d2",
+        "sources": [
+          "S008",
+          "S010"
+        ],
+        "version": "1.0.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/consistency_checker_agent.py",
+            "sections": [
+              "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "88f547d370b24c6cb90c8e974f779519"
+      },
+      "idempotency_key": "fd56bf1fc8dd4e3db62d75c613a0de6e",
+      "expected_version": 1,
+      "reasoning_effort": "high"
+    },
+    "board_sha256": "b28edefcc9d9bcc10f490339d56fef7b83c33d06fac351eb9a3c7011866d293c",
+    "prompt_sha256": "8f70e4135af554b8958c6d4dffb64d2ab1c202b00219ce939585d092cadd124a",
+    "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150",
+    "source_sha256": "6d7db07c52c56bf683e64399ed6395376a87d5d4f072d83bf5c5c15dd1bf06ad",
+    "storyboard_id": "2e70cb2b6d714631b9b5b1c775623378",
+    "context_sha256": "0d24cb3aa404d9c457ad65028589334b5cba3882a534795d97424d4a18f570c3",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-reviewer-1.0.0",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "high"
+    },
+    "capabilities_verified": false
+  },
+  "status": "failed",
+  "error_code": "invalid_output",
+  "usage": {
+    "total_tokens": 16681,
+    "prompt_tokens": 4029,
+    "completion_tokens": 12652
+  },
+  "report": null,
+  "storyboard_id": "2e70cb2b6d714631b9b5b1c775623378",
+  "version": 1,
+  "applicable": false,
+  "stale_reasons": [],
+  "error": "审核输出未通过结构或原文证据校验，未采用报告。",
+  "created_at": "2026-10-20T03:23:36.569895+00:00",
+  "finished_at": "2026-10-20T03:24:37.709896+00:00",
+  "max_runs": 10
+}

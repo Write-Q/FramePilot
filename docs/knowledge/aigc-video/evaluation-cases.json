@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "E001",
+      "title": "完整剧情覆盖",
+      "input": "一个含发现、交接、开门的短剧本",
+      "expected": "分镜覆盖关键事件，不能只出现情绪反应而遗漏开门",
+      "validation": "语义/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E002",
+      "title": "创作补充边界",
+      "input": "只允许细化表演、不允许新增对白",
+      "expected": "新增对白或动机标为待确认，不能写成原文事实",
+      "validation": "来源/语义",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E003",
+      "title": "对话反打",
+      "input": "人物A在左向右看，B在右向左看",
+      "expected": "相邻镜可理解其对话对象，不能无故翻转左右",
+      "validation": "视觉/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E004",
+      "title": "合理跨轴",
+      "input": "一个连续移动镜头明确跨越互动轴线",
+      "expected": "不机械报告跳轴错误，说明新空间基准",
+      "validation": "视觉/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E005",
+      "title": "首帧提前完成",
+      "input": "镜头动作是递钥匙，首帧却已由对方持有",
+      "expected": "指出起始/完成态冲突，或保留用户明确指定的例外",
+      "validation": "语义/视觉",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E006",
+      "title": "动作与对白过密",
+      "input": "短镜头同时含多步接触动作及长对白",
+      "expected": "提出拆分或延长建议；不得靠删原台词假装满足时长",
+      "validation": "计时/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E007",
+      "title": "道具与身份状态",
+      "input": "同一人物换装/受伤发生在明确剧情节点",
+      "expected": "绑定相应状态版本，不将两种状态当两个人物",
+      "validation": "版本/视觉",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E008",
+      "title": "提示词规则不兼容",
+      "input": "把要求正向表达的模型切换到支持负面字段的模型",
+      "expected": "按确切模式编译，不复制前一模型的HTTP字段",
+      "validation": "契约/真实接口",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E009",
+      "title": "退役与不可读文档",
+      "input": "用户指定历史Sora方案，另一个模型官方页不可读",
+      "expected": "分别报告退役和未知，不视作可直接执行能力",
+      "validation": "文档/确定性",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E010",
+      "title": "本地资源不足",
+      "input": "目标权重/精度超过实测资源容量",
+      "expected": "明确失败和所用环境，不能宣称仓库存在即可运行",
+      "validation": "真实硬件",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E011",
+      "title": "工作流结果归属",
+      "input": "两个ComfyUI任务同时返回不同素材",
+      "expected": "用prompt ID和结果清单正确关联，不能串项目",
+      "validation": "工具/集成",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E012",
+      "title": "提交结果未知",
+      "input": "请求已发出但未收到外部ID后超时",
+      "expected": "保留UNKNOWN和请求指纹，按供应商证据核对而非盲重提",
+      "validation": "故障注入",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E013",
+      "title": "重启与重复结果",
+      "input": "已知外部ID、重启、重复回调或查询成功",
+      "expected": "恢复同一任务并去重，不能再次扣费或追加重复采用",
+      "validation": "故障注入",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E014",
+      "title": "短暂视觉缺陷",
+      "input": "缺陷发生在均匀采样帧之间的短区间",
+      "expected": "报告采样覆盖不足；加密采样或人工检查，不能伪称全程通过",
+      "validation": "真实/合成媒体",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E015",
+      "title": "审核误报",
+      "input": "有意时空跳切、道具从画外被拿起",
+      "expected": "要求证据和上下文，允许驳回，不能自动重生成",
+      "validation": "语义/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E016",
+      "title": "旁白与口型",
+      "input": "画外音持续，画内人物应保持闭口",
+      "expected": "检查说话归属与实际视频，不只验证对白文本一致",
+      "validation": "音画/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E017",
+      "title": "字幕对齐误差",
+      "input": "中英混合语句、停顿、两人重叠发言",
+      "expected": "保留转录/对齐不确定区间，字幕可修订且不截词",
+      "validation": "音频/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E018",
+      "title": "局部剪辑修改",
+      "input": "第三片段裁短，其他素材保持采用版本",
+      "expected": "只修改相应时间线并重新渲染，不重新生成全部镜头",
+      "validation": "确定性/集成",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E019",
+      "title": "精确裁切与时间基",
+      "input": "非关键帧切点、可变帧率或不同帧率素材",
+      "expected": "选择合适处理方式并测量输出，不能只比名义秒数",
+      "validation": "真实媒体",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E020",
+      "title": "混合素材拼接",
+      "input": "不同分辨率、编码、音轨存在/缺失的片段",
+      "expected": "统一必要属性，保证输出可解码、声音与画面对齐",
+      "validation": "真实媒体",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E021",
+      "title": "数字推近与新视角",
+      "input": "用户要环绕看到人物背面，原视频只有正面",
+      "expected": "说明缺失视角，提出生成/三维方案，不能用缩放冒充",
+      "validation": "能力/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E022",
+      "title": "分数与叙事分离",
+      "input": "画质高但关键线索遗漏的生成片段",
+      "expected": "分项报告技术好、叙事不合格，不能仅用总分宣布完成",
+      "validation": "评测/人工",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E023",
+      "title": "交付目标差异",
+      "input": "广播与网络平台要求不同的同一份音画素材",
+      "expected": "为每种交付记录目标及测量，不套全局固定响度/色彩",
+      "validation": "标准/工具",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    },
+    {
+      "id": "E024",
+      "title": "链接过期与追溯",
+      "input": "供应商下载链接过期或签名参考链接变化",
+      "expected": "用稳定素材身份和checksum追溯，按能力重新取链而非重新生成",
+      "validation": "存储/集成",
+      "status": "designed_not_run",
+      "sample_type": "scenario_specification",
+      "media_available": false
+    }
+  ]
+}

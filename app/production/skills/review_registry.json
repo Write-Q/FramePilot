@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "skills": [
+    {
+      "id": "storyboard_review",
+      "version": "1.0.0",
+      "file": "storyboard-review-1.0.0.md",
+      "sha256": "7fa8a5d33cccccdb3b6531f5e9dd8d42c1ba35c1d954f76cc4380d19f8a382d2",
+      "sources": [
+        "S008",
+        "S010"
+      ],
+      "source_locators": [
+        {
+          "repository": "HBAI-Ltd/Toonflow-app",
+          "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+          "path": "packages/teams/storyboardTeam/members/reviewer.md",
+          "sections": [
+            "分镜审阅"
+          ]
+        },
+        {
+          "repository": "HBAI-Ltd/Toonflow-app",
+          "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+          "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+          "sections": [
+            "审阅方法与本集落点"
+          ]
+        },
+        {
+          "repository": "Forget-C/Jellyfish",
+          "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+          "path": "backend/app/chains/agents/consistency_checker_agent.py",
+          "sections": [
+            "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+          ]
+        }
+      ]
+    }
+  ]
+}

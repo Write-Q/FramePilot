@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "routes": [
+    {
+      "id": "R001",
+      "question": "从故事到分镜应该怎么拆？",
+      "topic": "story",
+      "source_ids": [
+        "S001",
+        "S007",
+        "S008",
+        "S010"
+      ],
+      "local_answer": "先区分故事梗概与正文，再按场次/信息推进设计镜头；不能按固定字数机械切。",
+      "skill_id": "K001",
+      "evaluation_ids": [
+        "E001",
+        "E002"
+      ]
+    },
+    {
+      "id": "R002",
+      "question": "正反打、视线和跳轴如何检查？",
+      "topic": "cinematography",
+      "source_ids": [
+        "S002",
+        "S003",
+        "S004",
+        "S008"
+      ],
+      "local_answer": "先确定人物位置、视线、观察方向及是否重新定场；记录合理例外。",
+      "skill_id": "K002",
+      "evaluation_ids": [
+        "E003",
+        "E004"
+      ]
+    },
+    {
+      "id": "R003",
+      "question": "首帧、关键帧和尾帧写什么？",
+      "topic": "prompting",
+      "source_ids": [
+        "S011",
+        "S009",
+        "S013"
+      ],
+      "local_answer": "静态帧表达各自阶段，视频提示词表达过程；参考图角色须与实际输入一致。",
+      "skill_id": "K003",
+      "evaluation_ids": [
+        "E005"
+      ]
+    },
+    {
+      "id": "R004",
+      "question": "动作、台词与镜头时长如何协调？",
+      "topic": "cinematography",
+      "source_ids": [
+        "S008",
+        "S011",
+        "S034"
+      ],
+      "local_answer": "先做规划提醒，再测真实配音与动作；不把字速启发式写成绝对失败。",
+      "skill_id": "K001",
+      "evaluation_ids": [
+        "E006"
+      ]
+    },
+    {
+      "id": "R005",
+      "question": "如何保持人物、服装、道具一致？",
+      "topic": "assets",
+      "source_ids": [
+        "S012",
+        "S028",
+        "S030",
+        "S054"
+      ],
+      "local_answer": "固定资产身份/状态版本，区分角色图和构图图；检验实际输入和生成效果。",
+      "skill_id": "K004",
+      "evaluation_ids": [
+        "E007"
+      ]
+    },
+    {
+      "id": "R006",
+      "question": "为什么换模型后提示词失效？",
+      "topic": "prompting",
+      "source_ids": [
+        "S009",
+        "S013",
+        "S014",
+        "S015"
+      ],
+      "local_answer": "用模型/模式专用规则；不把负面提示词和参考格式统一硬套。",
+      "skill_id": "K005",
+      "evaluation_ids": [
+        "E008"
+      ]
+    },
+    {
+      "id": "R007",
+      "question": "选哪家视频API，怎样预留通用接口？",
+      "topic": "models",
+      "source_ids": [
+        "S016",
+        "S017",
+        "S018",
+        "S019",
+        "S020",
+        "S021",
+        "S059"
+      ],
+      "local_answer": "先排除退役，再核对账户/区域/路由/模式。此库无实测排名，不直接推荐默认。",
+      "skill_id": "K005",
+      "evaluation_ids": [
+        "E009"
+      ]
+    },
+    {
+      "id": "R008",
+      "question": "能否本地运行，显存够不够？",
+      "topic": "local",
+      "source_ids": [
+        "S022",
+        "S023",
+        "S024",
+        "S025",
+        "S026"
+      ],
+      "local_answer": "从选定变体和精度读取资源需求，做本机探针；不能用仓库名称估算显存。",
+      "skill_id": "K005",
+      "evaluation_ids": [
+        "E010"
+      ]
+    },
+    {
+      "id": "R009",
+      "question": "ComfyUI怎样作为工具接入？",
+      "topic": "engineering",
+      "source_ids": [
+        "S026",
+        "S027",
+        "S049"
+      ],
+      "local_answer": "固定workflow及节点能力，记录prompt ID、历史和文件来源。",
+      "skill_id": "K006",
+      "evaluation_ids": [
+        "E011"
+      ]
+    },
+    {
+      "id": "R010",
+      "question": "视频提交超时，能不能重试？",
+      "topic": "engineering",
+      "source_ids": [
+        "S016",
+        "S018",
+        "S049",
+        "S050",
+        "S059"
+      ],
+      "local_answer": "先区分是否拿到外部ID及供应商幂等/查询能力，UNKNOWN时不盲目重提。",
+      "skill_id": "K006",
+      "evaluation_ids": [
+        "E012",
+        "E013"
+      ]
+    },
+    {
+      "id": "R011",
+      "question": "如何做视频审核、找出瞬间变形？",
+      "topic": "review",
+      "source_ids": [
+        "S031",
+        "S032",
+        "S039",
+        "S047",
+        "S060"
+      ],
+      "local_answer": "技术检查与语义检查分开；保存采样和区间，疑点加密采样并人工检查。",
+      "skill_id": "K007",
+      "evaluation_ids": [
+        "E014",
+        "E015"
+      ]
+    },
+    {
+      "id": "R012",
+      "question": "配音、字幕和嘴型如何配合？",
+      "topic": "audio",
+      "source_ids": [
+        "S033",
+        "S034",
+        "S035",
+        "S055",
+        "S056"
+      ],
+      "local_answer": "转录、强制对齐、说话人、TTS和口型分别记录；不能用ASR替代试听。",
+      "skill_id": "K008",
+      "evaluation_ids": [
+        "E016",
+        "E017"
+      ]
+    },
+    {
+      "id": "R013",
+      "question": "剪辑Agent究竟负责什么？",
+      "topic": "editing",
+      "source_ids": [
+        "S036",
+        "S040",
+        "S043",
+        "S044",
+        "S045"
+      ],
+      "local_answer": "Agent提计划，运行时校验，工具渲染；时间线与原素材独立。",
+      "skill_id": "K009",
+      "evaluation_ids": [
+        "E018"
+      ]
+    },
+    {
+      "id": "R014",
+      "question": "精确裁切、拼接和音画同步怎么做？",
+      "topic": "editing",
+      "source_ids": [
+        "S037",
+        "S038",
+        "S039",
+        "S040"
+      ],
+      "local_answer": "核对时间基、帧率、编码、流与裁切方式；输出须解码/试听/预览。",
+      "skill_id": "K009",
+      "evaluation_ids": [
+        "E019",
+        "E020"
+      ]
+    },
+    {
+      "id": "R015",
+      "question": "后期推拉能代替生成运镜吗？",
+      "topic": "cinematography",
+      "source_ids": [
+        "S014",
+        "S015",
+        "S038",
+        "S058"
+      ],
+      "local_answer": "区分二维画面重构、真实透视变化与三维预演；Blender入口当前待复核。",
+      "skill_id": "K009",
+      "evaluation_ids": [
+        "E021"
+      ]
+    },
+    {
+      "id": "R016",
+      "question": "怎样评估生成质量，而非只看一个分数？",
+      "topic": "evaluation",
+      "source_ids": [
+        "S047",
+        "S048",
+        "S060",
+        "S002"
+      ],
+      "local_answer": "按技术、内容、时间、一致性和叙事维度记录；同时报告人工与模型判断。",
+      "skill_id": "K010",
+      "evaluation_ids": [
+        "E022"
+      ]
+    },
+    {
+      "id": "R017",
+      "question": "色彩和响度应该统一成什么？",
+      "topic": "editing",
+      "source_ids": [
+        "S036",
+        "S038",
+        "S041",
+        "S042"
+      ],
+      "local_answer": "先确定交付目标和输入空间，分别测量响度与颜色；没有全平台万能值。",
+      "skill_id": "K009",
+      "evaluation_ids": [
+        "E023"
+      ]
+    },
+    {
+      "id": "R018",
+      "question": "链接过期、原素材或生成版本如何追溯？",
+      "topic": "engineering",
+      "source_ids": [
+        "S051",
+        "S052",
+        "S012"
+      ],
+      "local_answer": "存稳定对象身份及checksum、生成来源和编辑链；签名URL按需生成。",
+      "skill_id": "K006",
+      "evaluation_ids": [
+        "E024"
+      ]
+    },
+    {
+      "id": "R019",
+      "question": "资料冲突或失效时怎么办？",
+      "topic": "prompting",
+      "source_ids": [
+        "S009",
+        "S013",
+        "S020",
+        "S021"
+      ],
+      "local_answer": "使用规则适用条件和维护流程；保留历史，不把旧样例当当前接口。",
+      "skill_id": "K005",
+      "evaluation_ids": [
+        "E008",
+        "E009"
+      ]
+    }
+  ]
+}

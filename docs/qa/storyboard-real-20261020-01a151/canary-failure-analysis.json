@@ -1,0 +1,18 @@
+{
+  "original_service_status": "failed",
+  "original_error_code": "invalid_output",
+  "root_cause": "校验器遗漏action_beats.N.duration_ms真实字段",
+  "offline_validation_after_fix": "passed_without_model_recall",
+  "historical_run_unchanged": true,
+  "prompt_version_unchanged": true,
+  "issue_judgments": [
+    {
+      "key": "missing_production_specs",
+      "judgment": "合理的低优先待确认项，但大部分已在分镜说明中声明，属于重复提醒"
+    },
+    {
+      "key": "beat_duration_gap",
+      "judgment": "误报倾向：节拍总时长允许小于镜头时长，700/500ms余量可用于表演和停顿，无须强制精确相等；本例模型提出的缩短/凑齐建议不应自动采用"
+    }
+  ]
+}

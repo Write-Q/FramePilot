@@ -1,0 +1,287 @@
+{
+  "status": "completed_budget_limited",
+  "test_database": "fp_test_fc49d1bad26041d38b60dd311cca99c6",
+  "test_database_cleaned": true,
+  "calls": [
+    {
+      "label": "SR001-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4507,
+        "completion_tokens": 5549,
+        "total_tokens": 10056
+      },
+      "elapsed_seconds": 27.531
+    },
+    {
+      "label": "SR001-review-high",
+      "model": "deepseek-flash",
+      "effort": "high",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4029,
+        "completion_tokens": 12652,
+        "total_tokens": 16681
+      },
+      "elapsed_seconds": 61.11
+    },
+    {
+      "label": "SR002-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4512,
+        "completion_tokens": 5526,
+        "total_tokens": 10038
+      },
+      "elapsed_seconds": 27.547
+    },
+    {
+      "label": "SR002-review-high",
+      "model": "deepseek-flash",
+      "effort": "high",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 3811,
+        "completion_tokens": 15712,
+        "total_tokens": 19523
+      },
+      "elapsed_seconds": 71.329
+    },
+    {
+      "label": "SR003-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4501,
+        "completion_tokens": 3078,
+        "total_tokens": 7579
+      },
+      "elapsed_seconds": 16.297
+    },
+    {
+      "label": "SR004-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4502,
+        "completion_tokens": 1844,
+        "total_tokens": 6346
+      },
+      "elapsed_seconds": 11.063
+    },
+    {
+      "label": "SR004-review-high",
+      "model": "deepseek-flash",
+      "effort": "high",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 2594,
+        "completion_tokens": 5267,
+        "total_tokens": 7861
+      },
+      "elapsed_seconds": 24.656
+    },
+    {
+      "label": "SR005-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4509,
+        "completion_tokens": 4766,
+        "total_tokens": 9275
+      },
+      "elapsed_seconds": 26.0
+    },
+    {
+      "label": "SR005-review-high",
+      "model": "deepseek-flash",
+      "effort": "high",
+      "status": "provider_failed",
+      "error_code": "invalid_output",
+      "usage": {
+        "prompt_tokens": 3128,
+        "completion_tokens": 16000,
+        "total_tokens": 19128
+      },
+      "elapsed_seconds": 81.094
+    },
+    {
+      "label": "SR006-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4516,
+        "completion_tokens": 3092,
+        "total_tokens": 7608
+      },
+      "elapsed_seconds": 17.219
+    },
+    {
+      "label": "SR006-review-high",
+      "model": "deepseek-flash",
+      "effort": "high",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 2652,
+        "completion_tokens": 4178,
+        "total_tokens": 6830
+      },
+      "elapsed_seconds": 20.5
+    },
+    {
+      "label": "SR007-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4505,
+        "completion_tokens": 3271,
+        "total_tokens": 7776
+      },
+      "elapsed_seconds": 17.672
+    },
+    {
+      "label": "SR007-review-high",
+      "model": "deepseek-flash",
+      "effort": "high",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 3214,
+        "completion_tokens": 7684,
+        "total_tokens": 10898
+      },
+      "elapsed_seconds": 39.422
+    },
+    {
+      "label": "SR008-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4514,
+        "completion_tokens": 6671,
+        "total_tokens": 11185
+      },
+      "elapsed_seconds": 33.047
+    },
+    {
+      "label": "SR009-generate-low",
+      "model": "deepseek-flash",
+      "effort": "low",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 4510,
+        "completion_tokens": 4298,
+        "total_tokens": 8808
+      },
+      "elapsed_seconds": 23.781
+    },
+    {
+      "label": "SR009-review-high",
+      "model": "deepseek-flash",
+      "effort": "high",
+      "status": "returned_json",
+      "usage": {
+        "prompt_tokens": 3412,
+        "completion_tokens": 5537,
+        "total_tokens": 8949
+      },
+      "elapsed_seconds": 27.031
+    }
+  ],
+  "cases": {
+    "SR001": {
+      "project_id": "b886732d16f0464f9f5cafa82fca932e",
+      "script": "小禾把唯一的钥匙交给阿林，阿林接住。两人转身离开。",
+      "constraints": "不增加取回或复制钥匙事件。",
+      "target_shots": 3,
+      "generated": "SR001-generate-low"
+    },
+    "SR002": {
+      "project_id": "850a7d1da8244a8a9e8a7a77bd4f68c9",
+      "script": "林说：“我把所有资料都留在旧办公室了，你今天下班之后记得去拿。”禾听完点头，没有说话。",
+      "constraints": "保留原话和说话者。",
+      "target_shots": 3,
+      "generated": "SR002-generate-low"
+    },
+    "SR003": {
+      "project_id": "ffdf32fb194243a2a99caabf81dc1230",
+      "script": "禾停步仰望右侧指示牌，手里攥着车票。",
+      "constraints": "保留车票及仰望状态。",
+      "target_shots": 1,
+      "generated": "SR003-generate-low"
+    },
+    "SR004": {
+      "project_id": "a4df18b9d0644a61add2111ccc7f021b",
+      "script": "林站在门前。镜头从全景缓慢推近，最终停在他的面部近景。",
+      "constraints": "沿用起始全景。",
+      "target_shots": 1,
+      "generated": "SR004-generate-low"
+    },
+    "SR005": {
+      "project_id": "ff988f77a096412faf02b69769f4233b",
+      "script": "手机亮起，屏幕显示短信“今晚别等我”。禾默默看着，没有说话。",
+      "constraints": "保持无声，不新增旁白或配乐。",
+      "target_shots": 2,
+      "generated": "SR005-generate-low"
+    },
+    "SR006": {
+      "project_id": "4d55978ec55d47cfa3c4b28a821842bc",
+      "script": "场一，屋内。林合上书。场二，次日车站。禾登上列车。场三，夜晚海边。林望着海。",
+      "constraints": "不得增加或删改剧情。",
+      "target_shots": 1,
+      "generated": "SR006-generate-low"
+    },
+    "SR007": {
+      "project_id": "1d1dfee5f1f84c82b31832034398e6bb",
+      "script": "林把唯一的钥匙交给禾。没有取回钥匙，林随后用这把钥匙开门。",
+      "constraints": "不修补已确认剧本。",
+      "target_shots": 2,
+      "generated": "SR007-generate-low"
+    },
+    "SR008": {
+      "project_id": "86d4326d105d45288c6e1be24b405fb4",
+      "script": "林与禾隔桌对坐。摄影机绕过桌边，交代两人和门的位置后，反向观察林。",
+      "constraints": "保留有意跨轴和可理解过渡。",
+      "target_shots": 3,
+      "generated": "SR008-generate-low"
+    },
+    "SR009": {
+      "project_id": "07aa685ab9c64f0da37c47a00c503a8b",
+      "script": "林看着镜中的自己。禾在门外问：“可以走了吗？”林没有转身。",
+      "constraints": "镜像不是新增人物，禾仅画外出声。",
+      "target_shots": 2,
+      "generated": "SR009-generate-low"
+    }
+  },
+  "writer_provider": "deterministic_fixture_not_evaluated",
+  "business_database_modified": false,
+  "text_profile": "0a6e6cf244df4525bdc9800d85f61225",
+  "review_profile": "88f547d370b24c6cb90c8e974f779519",
+  "last_completed_stage": "suite",
+  "stopped_reason": "After the last suite review returned, reported total tokens exceeded the predefined 160000 stop threshold. No further model requests issued.",
+  "not_run": [
+    "CONTROL-first-frame-review-high",
+    "CONTROL-vo-review-high",
+    "SR004-generate-high"
+  ],
+  "budget": {
+    "max_calls": 20,
+    "stop_after_reported_tokens": 160000,
+    "actual_calls": 16,
+    "actual_reported_tokens": 168541
+  },
+  "final_database_counts": {
+    "fp_projects": 9,
+    "fp_storyboard_runs": 9,
+    "fp_storyboard_review_runs": 7
+  }
+}

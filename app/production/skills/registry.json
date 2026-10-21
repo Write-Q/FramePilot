@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "skills": [
+    {
+      "id": "K001",
+      "sources": [
+        "S001",
+        "S002",
+        "S007",
+        "S008",
+        "S010"
+      ],
+      "source_locators": [
+        {
+          "repository": "HBAI-Ltd/Toonflow-app",
+          "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+          "path": "packages/skills/v118workflow/references/storyboardTable.md",
+          "sections": [
+            "拆分方法",
+            "输出格式",
+            "写入后审阅"
+          ]
+        },
+        {
+          "repository": "HBAI-Ltd/Toonflow-app",
+          "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+          "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+          "sections": [
+            "分场与表演依据",
+            "镜头语法",
+            "台词与时长"
+          ]
+        }
+      ],
+      "version": "1.1.0",
+      "file": "K001-shot-planning.md",
+      "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823"
+    },
+    {
+      "id": "K002",
+      "sources": [
+        "S002",
+        "S003",
+        "S004",
+        "S008"
+      ],
+      "source_locators": [
+        {
+          "repository": "HBAI-Ltd/Toonflow-app",
+          "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+          "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+          "sections": [
+            "空间与连续性",
+            "审阅方法与本集落点"
+          ]
+        },
+        {
+          "repository": "HBAI-Ltd/Toonflow-app",
+          "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+          "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+          "sections": [
+            "连续性核对"
+          ]
+        },
+        {
+          "repository": "HBAI-Ltd/Toonflow-app",
+          "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+          "path": "packages/teams/storyboardTeam/members/reviewer.md",
+          "sections": [
+            "分镜审阅"
+          ]
+        }
+      ],
+      "version": "1.1.0",
+      "file": "K002-spatial-review.md",
+      "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37"
+    },
+    {
+      "id": "K003",
+      "sources": [
+        "S009",
+        "S011",
+        "S012"
+      ],
+      "source_locators": [
+        {
+          "repository": "HBAI-Ltd/Toonflow-app",
+          "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+          "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+          "sections": [
+            "从分镜到单帧",
+            "字段映射",
+            "质量与忠实性检查"
+          ]
+        },
+        {
+          "repository": "Forget-C/Jellyfish",
+          "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+          "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+          "sections": [
+            "_FRAME_FOCUS",
+            "_SHOT_FRAME_INPUT_VARS",
+            "_SHOT_FRAME_TEMPLATE"
+          ]
+        }
+      ],
+      "version": "1.1.0",
+      "file": "K003-frame-design.md",
+      "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b"
+    }
+  ]
+}

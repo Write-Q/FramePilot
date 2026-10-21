@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "captured_before_edit": true,
+  "skills": [
+    {
+      "file": "K001-shot-planning.md",
+      "sha256": "cdcaae34085c0dbcd6493eb19777050d2f97f6c2774b686b63921edfc261b02a"
+    },
+    {
+      "file": "K002-spatial-review.md",
+      "sha256": "69d2c60b3777acf96c345b61c67c591abfc39be611c0c3a2c38d01e4877b8a11"
+    },
+    {
+      "file": "K003-frame-design.md",
+      "sha256": "b31a8ae0a278d559d4d2841d67394108cd8302ed1d602d704f6c0650ffe75494"
+    }
+  ]
+}

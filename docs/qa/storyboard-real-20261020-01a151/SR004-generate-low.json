@@ -1,0 +1,396 @@
+{
+  "id": "adb7bf95ce25427a9affedaf7f096086",
+  "project_id": "a4df18b9d0644a61add2111ccc7f021b",
+  "idempotency_key": "423a325d05af4aefa53be7d5790a359b",
+  "manifest": {
+    "skills": [
+      {
+        "id": "K001",
+        "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+        "sources": [
+          "S001",
+          "S002",
+          "S007",
+          "S008",
+          "S010"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/storyboardTable.md",
+            "sections": [
+              "拆分方法",
+              "输出格式",
+              "写入后审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "分场与表演依据",
+              "镜头语法",
+              "台词与时长"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K002",
+        "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+        "sources": [
+          "S002",
+          "S003",
+          "S004",
+          "S008"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+            "sections": [
+              "空间与连续性",
+              "审阅方法与本集落点"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+            "sections": [
+              "连续性核对"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/teams/storyboardTeam/members/reviewer.md",
+            "sections": [
+              "分镜审阅"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          }
+        ]
+      },
+      {
+        "id": "K003",
+        "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+        "sources": [
+          "S009",
+          "S011",
+          "S012"
+        ],
+        "version": "1.1.0",
+        "source_locators": [
+          {
+            "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+            "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+            "sections": [
+              "从分镜到单帧",
+              "字段映射",
+              "质量与忠实性检查"
+            ],
+            "repository": "HBAI-Ltd/Toonflow-app"
+          },
+          {
+            "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+            "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+            "sections": [
+              "_FRAME_FOCUS",
+              "_SHOT_FRAME_INPUT_VARS",
+              "_SHOT_FRAME_TEMPLATE"
+            ],
+            "repository": "Forget-C/Jellyfish"
+          }
+        ]
+      }
+    ],
+    "request": {
+      "profile": {
+        "version": 1,
+        "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+      },
+      "aspect_ratio": "16:9",
+      "instructions": "",
+      "target_shots": 1,
+      "visual_style": "",
+      "source_version": 1,
+      "idempotency_key": "423a325d05af4aefa53be7d5790a359b",
+      "reasoning_effort": "low"
+    },
+    "prompt_sha256": "f48000c6e4b9dc4e258988c6a269245c341b39e327968e2982b59e31c6698c4e",
+    "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+    "source_sha256": "56ceebc7c50da18503dea8ee467b0edba7b030a09cb2ce9047d1da2c8d073f2d",
+    "context_sha256": "9150ef55b0c39c745000f8d37f979b301e0ce9ec9dfcd5965e3f9be87d31a05a",
+    "parameter_rules": "chat-parameters-1.0.0",
+    "workflow_version": "storyboard-planner-1.1.0",
+    "source_version_id": "09bdd118263d58da8ac3abad9ed45348",
+    "reasoning_protocol": "deepseek",
+    "request_parameters": {
+      "model": "deepseek-flash",
+      "thinking": {
+        "type": "enabled"
+      },
+      "max_tokens": 16000,
+      "response_format": {
+        "type": "json_object"
+      },
+      "reasoning_effort": "low"
+    },
+    "capabilities_verified": false
+  },
+  "status": "succeeded",
+  "error_code": null,
+  "usage": {
+    "total_tokens": 6346,
+    "prompt_tokens": 4502,
+    "completion_tokens": 1844
+  },
+  "created_at": "2026-10-20T03:27:46.720255+00:00",
+  "finished_at": "2026-10-20T03:27:57.809707+00:00",
+  "error": "",
+  "board": {
+    "id": "67249e891e01489ca8156abfb28a81c7",
+    "version_id": "1d49eccf72a04796af0244adab62d9e3",
+    "version": 1,
+    "current_version": 1,
+    "project_id": "a4df18b9d0644a61add2111ccc7f021b",
+    "source_version": 1,
+    "source_version_id": "09bdd118263d58da8ac3abad9ed45348",
+    "source_current": true,
+    "source_confirmed": true,
+    "confirmed": false,
+    "confirmation_effective": false,
+    "confirmed_at": null,
+    "content": {
+      "schema_version": 1,
+      "title": "门前推近",
+      "aspect_ratio": "16:9",
+      "visual_style": "",
+      "scenes": [
+        {
+          "key": "SC001",
+          "title": "林站在门前",
+          "source_quote": "林站在门前。镜头从全景缓慢推近，最终停在他的面部近景。"
+        }
+      ],
+      "shots": [
+        {
+          "key": "SH001",
+          "scene_key": "SC001",
+          "source_quote": "林站在门前。镜头从全景缓慢推近，最终停在他的面部近景。",
+          "purpose": "以单一连续推近镜头呈现林站在门前，并由全景逐渐聚焦到他的面部。",
+          "action": "林站在门前，保持站立。镜头从包含林与门周环境的全景起幅，沿直线缓慢推近，景别逐渐收窄，最终停在林的面部近景。",
+          "duration_ms": 6000,
+          "shot_size": "全景推至面部近景",
+          "camera_angle": "平视（建议，待确认）",
+          "camera_motion": "起幅为固定全景；随后沿直线向林缓慢推近，速度均匀；落幅停在林的面部近景并停住。",
+          "composition": "起幅中林位于门前，门作为其身后的空间锚点；推近过程中林保持在画面中心附近，最终面部近景占据主要画幅。林的左右位置、身体朝向及门的具体样式剧本未指定，建议按面朝门的方向处理，待确认。",
+          "screen_direction": "单镜连续推近，不改变林与门的左右关系；具体左右映射待确认。",
+          "lighting": "剧本未指定；建议采用现场可用光线，不添加画面内光源，待确认。",
+          "continuity_notes": "单镜，无同场相邻镜承接；起幅与落幅应保持林同一站立姿态和门的位置关系。",
+          "action_beats": [
+            {
+              "description": "起幅全景：林站在门前，镜头保持固定。",
+              "duration_ms": 2000
+            },
+            {
+              "description": "镜头沿直线缓慢推近，景别由全景逐渐收窄。",
+              "duration_ms": 3000
+            },
+            {
+              "description": "镜头停在林的面部近景，林保持站立。",
+              "duration_ms": 1000
+            }
+          ],
+          "frame_prompts": {
+            "first": "全景起幅，平视机位。林站在门前，身体处于画面中心附近，门作为身后空间锚点；林保持站立，尚未被近景裁切。场景具体环境、服装与光线待确认。",
+            "key": "推近过程中的中近景过渡瞬间：摄影机已向林靠近，林仍站在门前，面部逐渐成为画面重点，门仍可辨认为空间背景。",
+            "last": "面部近景落幅：林的面部占据主要画幅，仍保持站立；门的具体细节可被裁切，但空间关系延续自起幅。"
+          },
+          "dialogue": "",
+          "sound": "剧本未指定环境声与动作声；不自动添加旁白、配乐或额外音效（待确认）。",
+          "state_start": "全景起幅：林站在门前，镜头处于固定全景。",
+          "state_end": "镜头停在林的面部近景，林仍站在门前，站立姿态延续。",
+          "image_prompt": "",
+          "video_prompt": "画面从全景开始：林站在门前。摄影机沿直线缓慢推近，景别由全景逐渐收至林的面部近景，最终停住；林保持站立，不新增台词或事件。",
+          "characters": [
+            "林"
+          ],
+          "dialogue_lines": [],
+          "creative_notes": "剧本未指定门的类型、室内外环境、时间、光线、林的具体朝向与服装；以上均待确认，本镜未添加新事件或道具。建议确认林是否面朝门以及推近路径是否保持平视。"
+        }
+      ],
+      "bindings": {
+        "text": {
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225",
+          "version": 1
+        }
+      }
+    },
+    "total_duration_ms": 6000,
+    "created_at": "2026-10-20T03:27:57.809707+00:00",
+    "creation_method": "ai",
+    "provenance": {
+      "run_id": "adb7bf95ce25427a9affedaf7f096086",
+      "skills": [
+        {
+          "id": "K001",
+          "sha256": "734a43fef8b639b4db86b0988e87af37c999486ec2f6b494519940cf84fe4823",
+          "sources": [
+            "S001",
+            "S002",
+            "S007",
+            "S008",
+            "S010"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/storyboardTable.md",
+              "sections": [
+                "拆分方法",
+                "输出格式",
+                "写入后审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "分场与表演依据",
+                "镜头语法",
+                "台词与时长"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K002",
+          "sha256": "9c26122be55e0c5ca1c60a4e0291252b31ffaedca9faad263028d4c5c7961f37",
+          "sources": [
+            "S002",
+            "S003",
+            "S004",
+            "S008"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+              "sections": [
+                "空间与连续性",
+                "审阅方法与本集落点"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+              "sections": [
+                "连续性核对"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/teams/storyboardTeam/members/reviewer.md",
+              "sections": [
+                "分镜审阅"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            }
+          ]
+        },
+        {
+          "id": "K003",
+          "sha256": "27b121910958832decd6b242f821aed977671e97699f40caa4f88423b8660b3b",
+          "sources": [
+            "S009",
+            "S011",
+            "S012"
+          ],
+          "version": "1.1.0",
+          "source_locators": [
+            {
+              "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+              "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+              "sections": [
+                "从分镜到单帧",
+                "字段映射",
+                "质量与忠实性检查"
+              ],
+              "repository": "HBAI-Ltd/Toonflow-app"
+            },
+            {
+              "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+              "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+              "sections": [
+                "_FRAME_FOCUS",
+                "_SHOT_FRAME_INPUT_VARS",
+                "_SHOT_FRAME_TEMPLATE"
+              ],
+              "repository": "Forget-C/Jellyfish"
+            }
+          ]
+        }
+      ],
+      "request": {
+        "profile": {
+          "version": 1,
+          "profile_id": "0a6e6cf244df4525bdc9800d85f61225"
+        },
+        "aspect_ratio": "16:9",
+        "instructions": "",
+        "target_shots": 1,
+        "visual_style": "",
+        "source_version": 1,
+        "idempotency_key": "423a325d05af4aefa53be7d5790a359b",
+        "reasoning_effort": "low"
+      },
+      "prompt_sha256": "f48000c6e4b9dc4e258988c6a269245c341b39e327968e2982b59e31c6698c4e",
+      "schema_sha256": "31dd85e45c9ec2ac6b2ccc2ee9309003903abe90943183c4796f218f08b32648",
+      "source_sha256": "56ceebc7c50da18503dea8ee467b0edba7b030a09cb2ce9047d1da2c8d073f2d",
+      "context_sha256": "9150ef55b0c39c745000f8d37f979b301e0ce9ec9dfcd5965e3f9be87d31a05a",
+      "parameter_rules": "chat-parameters-1.0.0",
+      "workflow_version": "storyboard-planner-1.1.0",
+      "source_version_id": "09bdd118263d58da8ac3abad9ed45348",
+      "reasoning_protocol": "deepseek",
+      "request_parameters": {
+        "model": "deepseek-flash",
+        "thinking": {
+          "type": "enabled"
+        },
+        "max_tokens": 16000,
+        "response_format": {
+          "type": "json_object"
+        },
+        "reasoning_effort": "low"
+      },
+      "capabilities_verified": false
+    }
+  },
+  "review": {
+    "rules_version": "storyboard-checks-1.0.0",
+    "semantic_verified": false,
+    "issues": [
+      {
+        "code": "human_review",
+        "severity": "warning",
+        "message": "本镜有连续性说明或创作补充，请人工审阅。",
+        "shot_key": "SH001",
+        "scene_key": null
+      }
+    ],
+    "notice": "程序只检查结构与有限启发式；请人工核对剧情、空间、动作和静态帧。"
+  },
+  "max_runs": 10
+}

@@ -54,6 +54,9 @@ async function render(value,{discardDraft=false}={}){
  clearActionMessage();
  if(project?.id!==value.id)activeFacet='theme';project=value;const s=value.state;
  $('output').hidden=false;$('project-id').value=value.id;localStorage.setItem('framepilot:last-project',value.id);
+ let storyboardLink=$('storyboard-link');
+ if(!storyboardLink){storyboardLink=el('a','进入分镜工作台 ↗');storyboardLink.id='storyboard-link';$('export').parentElement.append(document.createTextNode(' · '),storyboardLink);}
+ storyboardLink.href='/storyboard?project='+encodeURIComponent(value.id);
  $('message').textContent=(s.error?Presentation.error(s.error):Presentation.text(s.stop_reason))||'请审阅当前版本。';$('error-panel').hidden=true;if(s.error)showError(s.error);
  const modes={direct:'原稿直接制作',collaborative:'协作创作',free:'自由编剧',faithful:'旧版忠于原稿'};
  $('summary').textContent=`${Presentation.label(modes,s.mode,'待确认模式')} · ${Presentation.label(statuses,s.status,'状态待确认')} · 版本 ${s.version} · 修订 ${s.revision_count}/3 · 请求 ${value.calls_used}/${value.max_calls}`;

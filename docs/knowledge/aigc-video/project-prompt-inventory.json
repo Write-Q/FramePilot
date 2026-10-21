@@ -1,0 +1,798 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-10-19",
+  "scope": "固定版本目录与提示词定义盘点，不是全部精读/质量验证/已接入声明",
+  "repositories": [
+    {
+      "id": "toonflow",
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "tree_truncated": false
+    },
+    {
+      "id": "jellyfish",
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "tree_truncated": false
+    }
+  ],
+  "counts": {
+    "toonflow_skill_entries": 5,
+    "toonflow_reference_documents": 31,
+    "toonflow_role_prompts": 3,
+    "toonflow_continuity_documents": 1,
+    "jellyfish_business_prompt_modules": 12,
+    "jellyfish_business_agent_classes": 14,
+    "jellyfish_prompt_template_objects": 14,
+    "jellyfish_database_seed_templates": 6,
+    "framepilot_integrated_prompt_modules": 3
+  },
+  "exclusions": [
+    "Jellyfish的.cursor/skills/ui-ux-pro-max为开发UI技能，不算影视业务Skill。",
+    "agent基类、重导出文件、接口、schema、测试和自动生成客户端不算独立提示词。",
+    "14个PromptTemplate包含由一个共享模板生成的首/尾/关键帧三个对象，不等于14个完全独立模板家族。",
+    "Toonflow的5个SKILL入口包含画布操作/MCP操作及不同工作流，不等于5种分镜能力。",
+    "一份参考文档内可能含多个模板，不能把文件数直接当模板数。"
+  ],
+  "entries": [
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/mcp/skills/toonflow/SKILL.md",
+      "blob_sha": "98c1fa35a2cf1ee83eaf679db3e3d65cc916f55a",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/mcp/skills/toonflow/SKILL.md",
+      "kind": "skill_entry",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# Toonflow",
+        "## 定位目标",
+        "## 操作画布和节点",
+        "## 生成媒体",
+        "## 文件与文档",
+        "## 管理应用与委托 Agent"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/canvas/SKILL.md",
+      "blob_sha": "3e7ee831bbab09a3560dc6892df6f0000958d6d2",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/canvas/SKILL.md",
+      "kind": "skill_entry",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 画布操作手册",
+        "## 操作流程",
+        "## 读取画布",
+        "## 画布管理",
+        "## 节点与连线",
+        "### 参数约束",
+        "### 连接规则",
+        "## 调用节点函数",
+        "## 常见任务",
+        "### 把创作方案转成可执行画布",
+        "### 新建画布并添加节点",
+        "### 连接两个已有节点",
+        "### 查找并读取指定片段",
+        "### 批量整理节点",
+        "## 失败后的处理"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/canvas/references/videoProduction.md",
+      "blob_sha": "e65c8b7aac8201a3a92e7c5074d81d0fb56dd5a6",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/canvas/references/videoProduction.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/SKILL.md",
+      "blob_sha": "6cb5594c2d6203e6427f4869fc2b4c534ca237f4",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/SKILL.md",
+      "kind": "skill_entry",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# v1.1.8 分集制作流程",
+        "## 先定位进度与画布",
+        "## 主流程与确认关口",
+        "## 知识如何随流程使用",
+        "## 每一步如何确认",
+        "## 续作、修改与失败"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/adaptationStrategy.md",
+      "blob_sha": "11f6fceb982666a9fbbe268ec9d65325db7d782c",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/adaptationStrategy.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/baseAssets.md",
+      "blob_sha": "c9770609f463fdd7e07f4e46f1f1e57a0378302f",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/baseAssets.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/canvasOperations.md",
+      "blob_sha": "c6be6ace648066bc91e37d6fc381d74ef0cc18d7",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/canvasOperations.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/deriveAssets.md",
+      "blob_sha": "eb78052f5e2535ff1fff48de985c251192dbca18",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/deriveAssets.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/directorPlan.md",
+      "blob_sha": "21aa7caad434be15f66d40cd2002c9001dfc33f3",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/directorPlan.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/episodeScript.md",
+      "blob_sha": "988cc7acd1fda4f94e9b72ce9c06672adc4a730f",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/episodeScript.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/generateAssets.md",
+      "blob_sha": "74523fa1a95fc6959b3f2068761fd7654691c336",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/generateAssets.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/knowledge/assetDesign.md",
+      "blob_sha": "99d48c32490d8aae28ce99567cbc00ed270ade3e",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/knowledge/assetDesign.md",
+      "kind": "reference_document",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 资产设计、变体与提示词方法",
+        "## 设计依据与画布记录",
+        "## 角色：先辨识，再造型",
+        "### 建立有差异的基础人物",
+        "### 面部特写加完整三视图",
+        "### 角色造型分层与变体",
+        "## 场景：建立可复用的空间",
+        "### 基础场景设计",
+        "### 国风赛博场景四方向设定",
+        "### 场景变体",
+        "## 道具：结构、材料与剧情状态",
+        "### 判断是否单列及如何展示",
+        "### 材质如何表达状态",
+        "## 可直接填充的提示词模板",
+        "### 基础角色",
+        "### 基础场景与场景变体",
+        "### 基础道具与道具变体",
+        "### 负向约束的选择",
+        "## 生成前与回读验收"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+      "blob_sha": "8c68320565d7370a8f6ad87ad4d02ec9357ef846",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/knowledge/imagePromptCraft.md",
+      "kind": "reference_document",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 分镜图提示词与首帧知识",
+        "## 输入与模型边界",
+        "## 从分镜到单帧",
+        "### 字段映射",
+        "## 位置与身份",
+        "## Seedream 中文参考模板",
+        "## Nanobanana/Gemini 结构化参考模板",
+        "## 单帧转换示例",
+        "## 质量与忠实性检查",
+        "## 写入本集画布"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/knowledge/narrativeGenres.md",
+      "blob_sha": "b7df20a2a77ff95b239a4f4573eb881e0251514e",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/knowledge/narrativeGenres.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/knowledge/scriptCraft.md",
+      "blob_sha": "02d97892e62372a66c55523acbb0d3723b3a6096",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/knowledge/scriptCraft.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+      "blob_sha": "3b8464f413746917acd237412795bd61f79d4c2c",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/knowledge/shotCraft.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/knowledge/videoPromptCraft.md",
+      "blob_sha": "036d0ff5ebe0ac31efb5d1ed3d6195e302e69087",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/knowledge/videoPromptCraft.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/knowledge/visualStyles.md",
+      "blob_sha": "6f631af8c52a13c2570d8e239d61af5175b9ff38",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/knowledge/visualStyles.md",
+      "kind": "reference_document",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 十一种画风与视觉规则",
+        "## 先建立项目视觉约定",
+        "## 1. 90 年代日式动画 · `2D_90s_japanese_anime`",
+        "## 2. 国风二次元 · `2D_chinese_guofeng`",
+        "## 3. 二维扁平设计 · `2D_flat_design`",
+        "## 4. 成熟都市言情动画 · `2D_mature_urban_romance`",
+        "## 5. 三维动画渲染 · `3D_anime_render`",
+        "## 6. 国风三维 · `3D_chinese_traditional`",
+        "## 7. 黏土定格 · `3D_clay_stopmotion`",
+        "## 8. 国风赛博三维 · `3D_guofeng_cyber`",
+        "## 9. 古风真人 · `realpeople_ancient_chinese`",
+        "## 10. 真人都市电影 · `realpeople_modern_city`",
+        "## 11. 都市甜宠写实 · `realpeople_urban_modern`",
+        "## 把风格落实到资产与分镜"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/projectSetup.md",
+      "blob_sha": "f48c2a26e28d7600663605a6987e18dd51ccf192",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/projectSetup.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/sourceEvents.md",
+      "blob_sha": "eadd8eb22e312e09715f33ec4c5bf24759f762fb",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/sourceEvents.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/sourceMap.md",
+      "blob_sha": "9330082de8bfbeb78b3b03ce4f4f3e25236fecf2",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/sourceMap.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/storySkeleton.md",
+      "blob_sha": "f79f2ea7d4bd795f9270e08db6590d736378cfa8",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/storySkeleton.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/storyboardImages.md",
+      "blob_sha": "d653525c6eeb444cd1f4578adfc775b7dc832943",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/storyboardImages.md",
+      "kind": "reference_document",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 分镜图片生成与验收",
+        "## 输入与落点",
+        "## 生成前核查",
+        "## 执行",
+        "## 图片验收",
+        "## 回读与用户确认"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/storyboardPanel.md",
+      "blob_sha": "a87c02b35f18579fa2181869c4d318f46a55759f",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/storyboardPanel.md",
+      "kind": "reference_document",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 将分镜表落实为画布节点",
+        "## 前置条件",
+        "## 路线 A：文本多参",
+        "## 路线 B：首帧",
+        "## 引用与提示词规则",
+        "## 可验产出",
+        "## 回读与确认"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/storyboardTable.md",
+      "blob_sha": "9516c6290b31325177ee644c468ba72ac632477b",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/storyboardTable.md",
+      "kind": "reference_document",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 单集分镜表与审阅",
+        "## 输入与落点",
+        "## 拆分方法",
+        "## 输出格式",
+        "## 场1：场景名 ｜ 参演角色：角色A、角色B",
+        "### 片段1（约10s）",
+        "## 写入后审阅",
+        "## 确认点"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/v118workflow/references/videoProduction.md",
+      "blob_sha": "d1db9221a3352b94e5ee4e7d5a33c13fdd099c01",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/v118workflow/references/videoProduction.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/SKILL.md",
+      "blob_sha": "0cb7413d8682dd9b729c4ed1b6592f779f7b83bc",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/SKILL.md",
+      "kind": "skill_entry",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# Toonflow 画布制作工作流",
+        "## 从哪里开始",
+        "### Seedance 路由锁存（最高优先级入口规则）",
+        "### Seedance 阶段硬隔离（强制）",
+        "## Seedance 提示词生成的内嵌执行核心",
+        "# PART A — 执行规则",
+        "## A0. 输入判定",
+        "### A0.1 剧情保真锁（最高优先级 · 全流程生效）",
+        "## A1. 输出语言与资产命名",
+        "### A1.1 输出语言（强制）",
+        "### A1.2 资产命名与参考标签",
+        "### A1.2.1 Seedance 2.5 参考图片绑定（强制）",
+        "### A1.3 画面文字：后期字幕 vs 实体资产文字",
+        "## A2. 全量节拍解析与顺序保持（不筛掉剧情）",
+        "### A2.1 原子节拍：全部保留，并建立“源剧情账本”",
+        "### A2.2 五类关键标签：只标重要性，不改顺序",
+        "### A2.3 每个节拍先做时间预算",
+        "### A2.4 节拍 → 镜头 → 生成段",
+        "### A2.5 长剧情的分批方式",
+        "### A2.6 兜底",
+        "## A3. 分段与时长预算",
+        "### A3.0 先区分“理论最少段数”和“实际段数”",
+        "### A3.1 实际段数的确定顺序",
+        "### A3.2 对白时长检查（硬门槛）",
+        "### A3.3 时间轴写法",
+        "### A3.4 长剧情与单批容量",
+        "### A3.5 单段镜头密度（推荐，不是硬上限）",
+        "### A3.6 通用禁止与文字规则",
+        "## A4. 资产与出镜状态规划（按时间轴写）",
+        "## 资产标识",
+        "### 涉及角色",
+        "### 涉及场景",
+        "### 关键道具",
+        "### A4.1 角色出镜状态词表",
+        "### A4.2 角色条目必含 6 类信息",
+        "### A4.3 场景条目必含 4 类信息",
+        "### A4.4 道具条目必含 4 类信息",
+        "### A4.5 禁止",
+        "## A5. 站位：世界坐标 + 画面坐标（双层 · 自包含）",
+        "### A5.1 每段必须自包含的 5 块信息"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/references/assets.md",
+      "blob_sha": "6945d0f2af73e6a70ef11590f33990619800f8a1",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/references/assets.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/references/canvasExecution.md",
+      "blob_sha": "8974749879d39485cd2e7b3bd76ba2af43933415",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/references/canvasExecution.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/references/methods/colorAndLight.md",
+      "blob_sha": "1078bf56ea4a72c7479af87093965df8d19546a6",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/references/methods/colorAndLight.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/references/methods/screenAdaptation.md",
+      "blob_sha": "e1fa5bfefe69eb07080ee3599fcd30e6c5a9cad7",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/references/methods/screenAdaptation.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/references/methods/storyDevelopment.md",
+      "blob_sha": "f00cb70aaafa4fc598fb066a33aec585ec6bf61b",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/references/methods/storyDevelopment.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/references/methods/visualDesign.md",
+      "blob_sha": "c4b0c58014d98157d260a0245e87b5b028ae3cd3",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/references/methods/visualDesign.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/references/sourceAndScript.md",
+      "blob_sha": "6a25568eec6e6a850fcc5d858e0e9c84c314b38a",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/references/sourceAndScript.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/skills/workflow/references/stateAndDelivery.md",
+      "blob_sha": "0012e02fe40e0ed6663293c3c256e45f2e1dc37b",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/skills/workflow/references/stateAndDelivery.md",
+      "kind": "reference_document",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/teams/storyboardTeam/knowledge/continuity.md",
+      "blob_sha": "ff912b4e0cd5537b44a162013670f05456b52462",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/teams/storyboardTeam/knowledge/continuity.md",
+      "kind": "continuity_knowledge",
+      "read_status": "tree_verified",
+      "headings": []
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/teams/storyboardTeam/members/director.md",
+      "blob_sha": "65208108454629fd53ff7baf74417c1e9d64e546",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/teams/storyboardTeam/members/director.md",
+      "kind": "role_prompt",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 导演"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/teams/storyboardTeam/members/reviewer.md",
+      "blob_sha": "c52f845d889bdf5911b0132b7d2ffd22ff1346c8",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/teams/storyboardTeam/members/reviewer.md",
+      "kind": "role_prompt",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 分镜审阅"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/teams/storyboardTeam/members/writer.md",
+      "blob_sha": "438cffa1bdcd99707bae7b07381344029f4eead6",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/teams/storyboardTeam/members/writer.md",
+      "kind": "role_prompt",
+      "read_status": "content_structure_checked",
+      "headings": [
+        "# 分镜编写"
+      ]
+    },
+    {
+      "repository": "HBAI-Ltd/Toonflow-app",
+      "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+      "path": "packages/teams/storyboardTeam/skills/storyboard/SKILL.md",
+      "blob_sha": "8c99cfb3a98b927a446cf60d068c2eb41871d4cb",
+      "url": "https://github.com/HBAI-Ltd/Toonflow-app/blob/d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d/packages/teams/storyboardTeam/skills/storyboard/SKILL.md",
+      "kind": "skill_entry",
+      "read_status": "content_structure_checked",
+      "headings": []
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/character_portrait_analysis_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/character_portrait_analysis_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "CharacterPortraitAnalysisAgent"
+      ],
+      "prompt_symbols": [
+        "CHARACTER_PORTRAIT_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/consistency_checker_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/consistency_checker_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "ConsistencyCheckerAgent"
+      ],
+      "prompt_symbols": [
+        "CONSISTENCY_CHECKER_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/costume_info_analysis_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/costume_info_analysis_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "CostumeInfoAnalysisAgent"
+      ],
+      "prompt_symbols": [
+        "COSTUME_INFO_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/element_extractor_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/element_extractor_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "ElementExtractorAgent"
+      ],
+      "prompt_symbols": [
+        "SCRIPT_EXTRACTOR_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/entity_merger_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/entity_merger_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "EntityMergerAgent"
+      ],
+      "prompt_symbols": [
+        "ENTITY_MERGER_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/prop_info_analysis_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/prop_info_analysis_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "PropInfoAnalysisAgent"
+      ],
+      "prompt_symbols": [
+        "PROP_INFO_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/scene_info_analysis_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/scene_info_analysis_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "SceneInfoAnalysisAgent"
+      ],
+      "prompt_symbols": [
+        "SCENE_INFO_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/script_divider_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/script_divider_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "ScriptDividerAgent"
+      ],
+      "prompt_symbols": [
+        "SCRIPT_DIVIDER_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/script_optimizer_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/script_optimizer_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "ScriptOptimizerAgent"
+      ],
+      "prompt_symbols": [
+        "SCRIPT_OPTIMIZER_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/script_simplifier_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/script_simplifier_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "ScriptSimplifierAgent"
+      ],
+      "prompt_symbols": [
+        "SCRIPT_SIMPLIFIER_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/shot_frame_prompt_agents.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/shot_frame_prompt_agents.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "ShotFirstFramePromptAgent",
+        "ShotLastFramePromptAgent",
+        "ShotKeyFramePromptAgent"
+      ],
+      "prompt_symbols": [
+        "SHOT_FIRST_FRAME_PROMPT",
+        "SHOT_LAST_FRAME_PROMPT",
+        "SHOT_KEY_FRAME_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/app/chains/agents/variant_analyzer_agent.py",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/app/chains/agents/variant_analyzer_agent.py",
+      "kind": "business_prompt_module",
+      "read_status": "prompt_definitions_checked",
+      "agent_classes": [
+        "VariantAnalyzerAgent"
+      ],
+      "prompt_symbols": [
+        "VARIANT_ANALYZER_PROMPT"
+      ]
+    },
+    {
+      "repository": "Forget-C/Jellyfish",
+      "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+      "path": "backend/sql/001-init-prompt-template.sql",
+      "url": "https://github.com/Forget-C/Jellyfish/blob/a9678194ddf2d9be3ccbe78d4287d87d5089e123/backend/sql/001-init-prompt-template.sql",
+      "kind": "database_seed_templates",
+      "read_status": "template_rows_checked",
+      "templates": [
+        {
+          "id": "1",
+          "category": "actor_image_front",
+          "name": "演员正面图片提示词"
+        },
+        {
+          "id": "2",
+          "category": "actor_image_other",
+          "name": "演员侧面/后面图片提示词"
+        },
+        {
+          "id": "3",
+          "category": "character_image_front",
+          "name": "角色正面图片提示词"
+        },
+        {
+          "id": "4",
+          "category": "prop_image_front",
+          "name": "道具图片提示词"
+        },
+        {
+          "id": "5",
+          "category": "scene_image_front",
+          "name": "场景图片提示词"
+        },
+        {
+          "id": "6",
+          "category": "costume_image_front",
+          "name": "服装图片提示词"
+        }
+      ]
+    }
+  ]
+}
