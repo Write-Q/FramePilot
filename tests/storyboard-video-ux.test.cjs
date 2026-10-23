@@ -91,3 +91,134 @@ test('视频播放器、选用门禁、任务恢复和项目隔离',async()=>{
     assert.deepEqual(errors,[]);
   }finally{await browser.close();}
 });
+
+async function inspectionFixture(t) {
+  const browser=await chromium.launch({headless:true,...(process.env.FRAMEPILOT_CHROME?{executablePath:process.env.FRAMEPILOT_CHROME}:{})});
+  t.after(()=>browser.close());
+  const page=await browser.newPage({viewport:{width:390,height:844}});
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
+  await page.route('**/*',route=>route.fulfill({contentType:'text/html',body:fs.readFileSync('app/static/storyboard.html','utf8').replace(/<script[\s\S]*?<\/script>/g,'')}));
+  await page.goto('http://localhost/storyboard');
+  await page.addStyleTag({content:fs.readFileSync('app/static/storyboard.css','utf8')});
+  await page.evaluate(()=>{
+    window.$=id=>document.getElementById(id);window.project={id:'p'};window.current={id:'b',version:2,current_version:2,confirmed:true};window.working=false;window.dirty=false;window.readonly=()=>current.version!==current.current_version;
+    window.node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el;};
+    window.prefix='/api/production';window.boardUrl=()=>'/boards/'+current.id;
+    window.testRuns=[{id:'candidate',status:'succeeded',shot_key:'shot-1',version:2,applicable:true,media_url:'/media/video.mp4',duration_ms:4000}];
+    window.testReport={id:'report-1',version:2,applicable:true,technical:{actual:{duration_ms:1000,width:1280,height:720},planned:{duration_ms:4000,aspect_ratio:'16:9'},warnings:['duration_mismatch'],semantic_review:'not_configured',audio_review:'not_performed'},frames:[{at_ms:250,url:'/evidence/first.jpg'},{at_ms:750,url:'https://elsewhere.example/frame.jpg'}],content_status:'pending',notes:[]};
+    window.reports=[];window.requests=[];window.failInspection=0;window.failNote=0;window.testErrors=[];
+    window.api=async(url,body)=>{
+      requests.push({url,body:body===undefined?undefined:structuredClone(body)});
+      if(url.endsWith('video-adapters'))return {registered:[],media_validator_configured:false};
+      if(url.endsWith('/inspections')){
+        if(body){if(failInspection-->0)throw Error('检查响应丢失');reports=[structuredClone(testReport)];return structuredClone(testReport);}
+        return {reports:structuredClone(reports)};
+      }
+      if(url.endsWith('/notes')){
+        if(failNote-->0)throw Error('记录响应丢失');
+        if(window.rejectNote){const error=new Error('版本已失效');error.status=409;throw error;}
+        reports[0].notes.push({...structuredClone(body),id:'note-1'});reports[0].content_status=body.decision;return structuredClone(reports[0]);
+      }
+      return {runs:structuredClone(testRuns),selections:[]};
+    };
+    window.busy=async fn=>{working=true;StoryboardVideo.availability();try{await fn();}catch(error){testErrors.push(error.message);}finally{working=false;StoryboardVideo.availability();}};
+    $('board').hidden=false;
+  });
+  await page.addScriptTag({content:fs.readFileSync('app/static/storyboard-video.js','utf8')});
+  await page.evaluate(()=>StoryboardVideo.refresh());
+  return {page,errors};
+}
+
+test('视频检查按需抽帧、定位证据并保存人工结论，不自动选用',async t=>{
+  const {page,errors}=await inspectionFixture(t);
+  assert.equal(await page.evaluate(()=>requests.some(request=>request.url.endsWith('/inspections'))),false,'载入候选不自动抽帧或读取全部报告');
+  const inspect=page.getByRole('button',{name:'检查视频',exact:true});
+  assert.equal(await inspect.count(),1);
+  await inspect.click();await page.waitForFunction(()=>!working);
+  const inspectionRequest=await page.evaluate(()=>requests.find(request=>request.url.endsWith('/inspections')&&request.body));
+  assert.equal(inspectionRequest.url,'/boards/b/video-runs/candidate/inspections');
+  assert.equal(inspectionRequest.body.count,8);
+  assert.ok(inspectionRequest.body.idempotency_key);
+  assert.match(await page.locator('#video-runs').textContent(),/待人工审核/);
+  assert.match(await page.locator('#video-runs').textContent(),/抽帧.*不能.*完整/);
+  assert.match(await page.locator('#video-runs').textContent(),/声音|音频/);
+  assert.match(await page.locator('#video-runs').textContent(),/1280 × 720/);
+  assert.match(await page.locator('#video-runs').textContent(),/实际 1.000 秒.*计划 4.000 秒/);
+  assert.match(await page.locator('#video-runs').textContent(),/实际时长与计划不一致/);
+  assert.equal(await page.locator('.video-inspection-frames img').count(),1,'证据图片只使用同源URL');
+  const frame=page.getByRole('button',{name:'定位视频至 0.250 秒',exact:true});
+  await frame.click();
+  assert.equal(await page.locator('video').evaluate(video=>video.currentTime),0.25);
+  assert.equal(await page.locator('video').evaluate(video=>video.paused),true,'点击证据不自动播放');
+  await page.getByRole('button',{name:'添加时间区间发现',exact:true}).click();
+  await page.getByLabel('开始（秒）',{exact:true}).fill('0.25');
+  await page.getByLabel('结束（秒）',{exact:true}).fill('0.75');
+  await page.getByLabel('问题描述',{exact:true}).fill('口型与台词不同步');
+  await page.getByLabel('审核补充说明',{exact:true}).fill('已播放整段，建议修正声音。');
+  await page.getByLabel('人工结论',{exact:true}).selectOption('needs_revision');
+  await page.getByRole('button',{name:'保存人工结论',exact:true}).click();await page.waitForFunction(()=>!working);
+  const noteRequest=await page.evaluate(()=>requests.find(request=>request.url.endsWith('/notes')));
+  assert.equal(noteRequest.url,'/boards/b/video-runs/candidate/inspections/report-1/notes');
+  assert.deepEqual({...noteRequest.body,idempotency_key:'key'},{expected_version:2,idempotency_key:'key',decision:'needs_revision',findings:[{start_ms:250,end_ms:750,severity:'medium',description:'口型与台词不同步'}],comment:'已播放整段，建议修正声音。'});
+  assert.match(await page.locator('#video-runs').textContent(),/需修改/);
+  assert.match(await page.locator('#video-runs').textContent(),/0.250.*0.750.*口型与台词不同步/);
+  assert.equal(await page.evaluate(()=>requests.some(request=>request.url.endsWith('/select'))),false);
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'报告及人工表单在390px无横向溢出');
+  await page.setViewportSize({width:1440,height:1000});
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'桌面报告布局无横向溢出');
+  assert.deepEqual(errors,[]);
+});
+
+test('历史审核记录可读，未确认、未保存、失效版本不可创建检查或提交结论',async t=>{
+  const {page,errors}=await inspectionFixture(t);
+  const inspect=page.getByRole('button',{name:'检查视频',exact:true});
+  for(const change of ['current.confirmed=false','current.confirmed=true;dirty=true','dirty=false;current.current_version=3']){
+    await page.evaluate(code=>{eval(code);StoryboardVideo.availability();},change);
+    assert.equal(await inspect.isDisabled(),true);
+  }
+  await page.evaluate(()=>{current.current_version=2;StoryboardVideo.availability();reports=[{...testReport,id:'history',version:1,applicable:false,content_status:'reviewed',notes:[{decision:'reviewed',comment:'旧版本已核对',findings:[]}]}];});
+  await page.getByRole('button',{name:'查看审核记录',exact:true}).click();await page.waitForFunction(()=>!working);
+  assert.match(await page.locator('#video-runs').textContent(),/历史.*只读|只读.*历史/);
+  assert.match(await page.locator('#video-runs').textContent(),/旧版本已核对/);
+  assert.equal(await page.getByRole('button',{name:'保存人工结论',exact:true}).count(),0);
+  await page.evaluate(()=>{reports=[structuredClone(testReport)];});
+  await page.getByRole('button',{name:'查看审核记录',exact:true}).click();await page.waitForFunction(()=>!working);
+  await page.evaluate(()=>{dirty=true;StoryboardVideo.availability();});
+  assert.equal(await page.getByRole('button',{name:'保存人工结论',exact:true}).isDisabled(),true);
+  assert.equal(await page.getByLabel('审核补充说明',{exact:true}).isDisabled(),true);
+  assert.equal(await page.getByRole('button',{name:'查看审核记录',exact:true}).isEnabled(),true);
+  assert.equal(await page.evaluate(()=>requests.some(request=>request.body)),false);
+  assert.deepEqual(errors,[]);
+});
+
+test('检查和人工记录在响应丢失后使用同一幂等键及原始内容恢复，4xx后允许改正',async t=>{
+  const {page,errors}=await inspectionFixture(t);
+  await page.evaluate(()=>{failInspection=1;});
+  await page.getByRole('button',{name:'检查视频',exact:true}).click();await page.waitForFunction(()=>!working);
+  assert.match(await page.locator('#video-runs').textContent(),/响应丢失|原请求/);
+  await page.evaluate(()=>StoryboardVideo.refresh());
+  await page.getByRole('button',{name:/恢复.*检查/}).click();await page.waitForFunction(()=>!working);
+  const checks=await page.evaluate(()=>requests.filter(request=>request.url.endsWith('/inspections')&&request.body));
+  assert.deepEqual(checks[0],checks[1],'刷新候选后仍使用同一检查请求');
+  await page.getByLabel('审核补充说明',{exact:true}).fill('第一次提交的核对说明');
+  await page.getByLabel('人工结论',{exact:true}).selectOption('reviewed');
+  await page.evaluate(()=>{failNote=1;});
+  await page.getByRole('button',{name:'保存人工结论',exact:true}).click();await page.waitForFunction(()=>!working);
+  assert.equal(await page.getByLabel('审核补充说明',{exact:true}).isDisabled(),true,'待恢复请求锁定原始内容');
+  await page.getByRole('button',{name:/恢复.*人工结论/}).click();await page.waitForFunction(()=>!working);
+  const notes=await page.evaluate(()=>requests.filter(request=>request.url.endsWith('/notes')));
+  assert.deepEqual(notes[0],notes[1]);
+  await page.getByLabel('审核补充说明',{exact:true}).fill('将被拒绝的说明');
+  await page.getByLabel('人工结论',{exact:true}).selectOption('reviewed');
+  await page.evaluate(()=>{rejectNote=true;});
+  await page.getByRole('button',{name:'保存人工结论',exact:true}).click();await page.waitForFunction(()=>!working);
+  assert.equal(await page.evaluate(()=>requests.filter(request=>request.url.endsWith('/notes')).length),3,'明确拒绝确已发送第三次请求');
+  assert.equal(await page.getByLabel('审核补充说明',{exact:true}).isEnabled(),true,'明确409清除待恢复状态');
+  await page.getByLabel('审核补充说明',{exact:true}).fill('修正后的说明');
+  await page.evaluate(()=>{rejectNote=false;});
+  await page.getByRole('button',{name:'保存人工结论',exact:true}).click();await page.waitForFunction(()=>!working);
+  const finalNotes=await page.evaluate(()=>requests.filter(request=>request.url.endsWith('/notes')));
+  assert.notEqual(finalNotes.at(-1).body.idempotency_key,finalNotes.at(-2).body.idempotency_key);
+  assert.equal(finalNotes.at(-1).body.comment,'修正后的说明');
+  assert.deepEqual(errors,[]);
+});

@@ -1,0 +1,11 @@
+{
+  "full_regression": {
+    "tests": "369",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "200.928"
+  },
+  "browser_mock_passed": 4,
+  "external_model_calls": 0
+}

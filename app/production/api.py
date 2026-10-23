@@ -17,6 +17,7 @@ from app.production.review_contracts import ReviewRequest
 from app.production.reviews import StoryboardReviewer
 from app.production.media_api import install_media_routes
 from app.production.video_api import install_video_routes
+from app.production.inspection_api import install_inspection_routes
 
 
 def _known_fields():
@@ -170,4 +171,5 @@ def install_production(app, configured_database_url=None, storyboard_provider=No
 
     install_media_routes(router, invoke)
     install_video_routes(router, invoke, app)
+    install_inspection_routes(router, invoke)
     app.include_router(router)
