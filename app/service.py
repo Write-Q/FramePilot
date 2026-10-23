@@ -3,7 +3,7 @@ from contextlib import ExitStack
 from psycopg.rows import dict_row
 from psycopg_pool import ConnectionPool
 from threading import Lock
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from langgraph.checkpoint.postgres import PostgresSaver
 from app.database import database_url, checkpoint_conninfo
@@ -91,11 +91,23 @@ class StoryService:
         return self.repo.get(project_id)
 
     # 创建初始状态；direct 只保存原稿，其余模式启动工作流。
-    def create(self, request):
+    def create(self, request, *, project_id=None):
+        # Trusted internal reservation only; the public CreateProject schema has no ID.
+        if project_id is not None:
+            try:
+                if not isinstance(project_id, str) or UUID(hex=project_id).hex != project_id:
+                    raise ValueError()
+            except (ValueError, AttributeError):
+                raise ValueError('预留项目编号必须为32位小写十六进制UUID。') from None
         if not self.operation_lock.acquire(blocking=False):
             raise Conflict('当前有任务正在执行，请稍后再试。')
         try:
-            project_id = uuid4().hex
+            if project_id is not None:
+                try:
+                    return self.repo.get(project_id)
+                except KeyError:
+                    pass
+            project_id = project_id or uuid4().hex
             state = {'project_id': project_id, 'original_story': request.story, 'draft': request.story,
                      'mode': request.mode, 'constraints': request.constraints, 'version': 1,
                      'reviewed_version': 0, 'revision_count': 0, 'card': {}, 'issues': [],

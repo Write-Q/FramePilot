@@ -1,0 +1,33 @@
+/* Stage layouts retain the existing forms, with content taking the first read. */
+.studio-mounted #studio-workspace main{max-width:none;margin:0;padding:24px 28px;display:block;min-width:0}
+.studio-mounted #studio-workspace{padding:0}
+.studio-mounted main>.studio-tools{margin:0 0 22px}
+.studio-mounted .studio-tools{border-bottom:1px solid #dbe3d9;padding:0 0 12px;margin:18px 0}
+.studio-mounted .studio-tools>summary{cursor:pointer;padding:10px 0;font-size:14px;font-weight:600;color:#365544}
+.studio-mounted .studio-tools>aside{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;padding-top:14px}
+.studio-mounted .panel{box-shadow:none;border:0;border-radius:0;background:transparent;padding:0;margin:0 0 24px}
+.studio-mounted .eyebrow{display:none}
+.studio-mounted .workspace{min-width:0}
+.studio-mounted h2{font-size:21px;line-height:1.4;letter-spacing:-.025em}
+.studio-mounted h3{font-size:16px;line-height:1.5}
+.studio-mounted .hint{color:#5d6c62}
+.studio-mounted .studio-script{border:0;padding:18px 0 26px;margin-bottom:20px;border-bottom:1px solid #dbe3d9}
+.studio-mounted .studio-script>summary{font-size:18px;font-weight:600}
+.studio-mounted .studio-script pre{font-family:inherit;font-size:16px;line-height:1.9;max-height:none;background:transparent;padding:10px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.studio-mounted .cards{display:block}
+.studio-mounted .facet{border:0;padding:14px 0}
+.studio-mounted .shot-workspace{grid-template-columns:minmax(165px,27%) minmax(0,1fr);gap:24px;align-items:start}
+.studio-mounted .shot-list{position:sticky;top:0;max-height:70dvh;overflow:auto;border-right:1px solid #dbe3d9;padding-right:16px}
+.studio-mounted .shot-card{box-shadow:none;border-radius:5px;padding:12px 10px;margin-bottom:6px}
+.studio-mounted .shot-card[aria-pressed=true]{border-color:#9fbbaa;background:#e8f0e8}
+.studio-mounted .board-top{padding-bottom:18px;border-bottom:1px solid #dbe3d9}
+.studio-stage-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 24px;border-bottom:1px solid #dbe3d9}
+.studio-stage-tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:#59665e;padding:12px 10px;box-shadow:none}
+.studio-stage-tabs button[aria-pressed=true]{color:#254b38;border-bottom-color:#366c4c}
+.studio-mounted .studio-preview{margin-bottom:28px;min-height:200px;background:#edf1eb;padding:16px;border-radius:6px}
+.studio-preview video{display:block;width:100%;max-height:52dvh;object-fit:contain;background:#17241d;margin:12px 0}
+.studio-mounted .export-item{border:0;border-top:1px solid #dbe3d9;border-radius:0;padding:16px 0;background:transparent}
+.studio-mounted .clip,.studio-mounted .subtitle,.studio-mounted .audio-track{box-shadow:none;background:transparent}
+.studio-mounted #identifier,.studio-mounted #identity{font-size:12px;overflow-wrap:anywhere}
+.studio-mounted main [hidden]{display:none!important}
+@media(max-width:760px){.studio-mounted #studio-workspace main{padding:18px 16px}.studio-mounted .shot-workspace{display:block}.studio-mounted .shot-list{position:static;max-height:240px;border:0;padding-right:0}.studio-mounted .studio-tools>aside{display:block}}

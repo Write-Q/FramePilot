@@ -18,7 +18,7 @@ from app.streaming import stream_operation
 
 
 # 组装 FastAPI 应用；注入 provider/database_url 便于测试替换模型和数据库。
-def create_app(*, database_url=None, provider=None, storyboard_provider=None, review_provider=None):
+def create_app(*, database_url=None, provider=None, storyboard_provider=None, review_provider=None, assistant_provider=None):
     @asynccontextmanager
     async def lifespan(app):
         app.state.stories = StoryService(
@@ -26,6 +26,8 @@ def create_app(*, database_url=None, provider=None, storyboard_provider=None, re
             provider or DeepSeekProvider(),
         )
         yield
+        if hasattr(app.state, 'assistant_store'):
+            app.state.assistant_store.close()
         if hasattr(app.state, 'production'):
             app.state.production.close()
         if hasattr(app.state, 'game'):
@@ -131,6 +133,8 @@ def create_app(*, database_url=None, provider=None, storyboard_provider=None, re
     install_game(app, database_url)
     from app.production.api import install_production
     install_production(app, database_url, storyboard_provider, review_provider)
+    from app.assistant_api import install_assistant
+    install_assistant(app, database_url, assistant_provider, storyboard_provider, review_provider)
     return app
 
 

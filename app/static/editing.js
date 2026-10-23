@@ -6,7 +6,7 @@
   const base = `/api/production/projects/${encodeURIComponent(project || '')}/storyboards/${encodeURIComponent(board || '')}/editing`;
   const pendingKey = `framepilot:editing:export:${project}:${board}`;
   let data = null, draft = null, saved = '', busy = false, historical = false, pending = null, blocked = false;
-  let localPending = null;
+  let localPending = null, previewExport = null;
   const copy = value => JSON.parse(JSON.stringify(value));
   const el = (tag, text, cls) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (cls) node.className = cls; return node; };
   const button = (text, action, label) => { const n = el('button', text, 'secondary'); n.type = 'button'; if (label) n.setAttribute('aria-label', label); n.addEventListener('click', action); return n; };
@@ -36,6 +36,7 @@
     finally { busy = false; availability(); }
   }
   function availability() {
+    window.dispatchEvent(new Event('framepilot:studio-context'));
     const editable = writable() && !busy;
     document.querySelectorAll('#clips input,#clips button,#subtitles input,#subtitles textarea,#subtitles button,#audio-tracks input,#audio-tracks select,#audio-tracks button').forEach(n => n.disabled = !editable);
     $('preset').disabled = !editable;
@@ -134,20 +135,23 @@
   function renderExports() {
     $('exports').replaceChildren();
     const statuses={queued:'排队等待',running:'正在渲染',succeeded:'渲染成功',failed:'渲染失败',unknown:'结果未知'};
+    const successful=(data.exports||[]).filter(x=>x.status==='succeeded');
+    if(!successful.some(x=>x.id===previewExport))previewExport=successful[0]?.id||null;
+    const current=successful.find(x=>x.id===previewExport);
+    const preview=$('export-preview');if(preview){preview.replaceChildren();if(current){const path=`/exports/${encodeURIComponent(current.id)}`,media=safeMedia(current.media_url||base+path+'/media');preview.append(el('p',`正在预览：时间线 V${current.timeline_version??current.version??'?'} · ${current.id.slice(0,8)}`,'status'));if(media){const video=el('video');video.controls=true;video.preload='metadata';video.src=media;video.setAttribute('aria-label','导出成片预览');preview.append(video);}const link=el('a','下载当前成片');link.href=safeMedia(current.download_url)||base+path+'/download';link.download='';preview.append(link);}else preview.append(el('p','保存时间线并导出后，在这里预览成片。','empty'));}
     (data.exports||[]).forEach(record=>{
-      const row=el('article',undefined,'export-item'),head=el('h3',`时间线 V${record.timeline_version ?? record.version ?? '?'} · ${record.id}`);head.append(el('span',statuses[record.status] || record.status,'stage'));row.append(head);
-      if(record.status==='queued')row.append(el('p','已排队，等待独立渲染进程处理。请使用“重新读取”查看状态。','hint'));
-      if(record.status==='running')row.append(el('p','独立渲染进程正在处理。页面不会自行启动或重新执行渲染。','hint'));
+      const row=el('article',undefined,'export-item'),head=el('h3',`时间线 V${record.timeline_version??record.version??'?'} · ${statuses[record.status]||record.status}`);row.append(head);
+      const identity=el('details'),identityText=el('small',record.id);identity.append(el('summary','任务编号'),identityText);row.append(identity);
+      if(['queued','running'].includes(record.status))row.append(el('p',record.status==='queued'?'已排队，等待独立渲染进程。':'独立渲染进程正在处理。','hint'));
       if(record.error)row.append(el('p',typeof record.error==='string'?record.error:JSON.stringify(record.error),'hint'));
-      if(record.status==='unknown')row.append(el('p','上次渲染结果未知，不会自动重新渲染。核对后可从已保存时间线另行提交。','hint'));
+      if(record.status==='unknown')row.append(el('p','结果未知，请核对已有文件；不会自动重新渲染。','hint'));
       const path=`/exports/${encodeURIComponent(record.id)}`;
       if(['running','queued'].includes(record.status))row.append(button('标记结果未知',()=>work(async()=>{await api(path+'/abandon',{});await load(false);})));
       if(record.status==='succeeded'){
-        const media=safeMedia(record.media_url || base+path+'/media');
-        if(media){const video=el('video');video.controls=true;video.preload='metadata';video.src=media;video.setAttribute('aria-label','导出成片预览');row.append(video);const link=el('a','下载成片');link.href=safeMedia(record.download_url)||base+path+'/download';link.download='';row.append(link);}
-        const accepted=record.acceptance || record.accepted_at || record.accepted;
+        const choose=button(record.id===previewExport?'正在预览':'预览此版本',()=>{previewExport=record.id;renderExports();$('export-preview')?.scrollIntoView({block:'start'});});choose.setAttribute('aria-pressed',String(record.id===previewExport));row.append(choose);
+        const accepted=record.acceptance||record.accepted_at||record.accepted;
         row.append(el('p',accepted?'已人工验收':'未人工验收 · 请播放检查画面、声音与字幕。','status'));
-        if(!accepted){const label=el('label','成片验收意见'),text=el('textarea');text.rows=2;text.maxLength=2000;label.append(text);row.append(label,button('记录人工验收',()=>work(async()=>{await api(path+'/accept',{comment:text.value.trim()});await load(false);})));}
+        if(!accepted){const label=el('label',`验收时间线 V${record.timeline_version??record.version??'?'} · ${record.id.slice(0,8)}`),text=el('textarea');text.rows=2;text.maxLength=2000;label.append(text);row.append(label,button('记录人工验收',()=>work(async()=>{if(previewExport!==record.id)throw Error('请先预览此版本，再记录对应成片的人工验收。');await api(path+'/accept',{comment:text.value.trim()});await load(false);})));}
       }
       $('exports').append(row);
     });
@@ -216,6 +220,10 @@
   });});
   $('retry-local').addEventListener('click',()=>work(submitLocal));
   window.addEventListener('beforeunload',event=>{if(dirty()||localPending){event.preventDefault();event.returnValue='';}});
+  window.FramePilotWorkspace = {
+    getContext(){return {stage:'editing',project_id:project,storyboard_id:board,workspace_dirty:dirty(),project_label:'后期项目',version_label:data?.timeline?'时间线 V'+data.timeline.version:'尚无时间线',save_label:dirty()?'有未保存修改':'已保存',context_label:data?.timeline?'时间线 V'+data.timeline.version:'后期制作'};},
+    async refresh(){if(dirty())throw Error('时间线有未保存修改，请先处理后重新读取。');await load();}
+  };
   availability();
   $('identity').textContent=project&&board?`项目 ${project} / 分镜 ${board}`:'缺少项目或分镜编号';
   if(project&&board){$('back').href=`/storyboard?project=${encodeURIComponent(project)}&board=${encodeURIComponent(board)}`;try{const stored=JSON.parse(localStorage.getItem(pendingKey)||'null');if(stored&&Number.isInteger(stored.expected_version)&&typeof stored.idempotency_key==='string')pending=stored;}catch{showError(Error('无法读取上一次导出请求；请检查浏览器本地存储。'));}work(()=>load());}

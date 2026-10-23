@@ -1,0 +1,122 @@
+/* A quiet, continuous conversation beside the existing production workspace. */
+body.studio-mounted{margin:0;background:#f2f1eb;color:#263c34;font:14px/1.65 "Microsoft YaHei","Segoe UI",sans-serif;overflow:hidden}
+.studio-mounted>header,.studio-mounted>footer{display:none}
+#studio-root{--assistant-width:360px;--studio-ink:#263c34;--studio-muted:#596b60;--studio-line:#d9dfd5;--studio-accent:#2d624a;display:grid;grid-template-columns:var(--assistant-width) 8px minmax(0,1fr);grid-template-rows:60px minmax(0,1fr);height:100dvh;min-height:0;width:100%;overflow:hidden}
+#studio-root *,#studio-root *::before,#studio-root *::after{box-sizing:border-box}
+#studio-root :focus-visible{outline:2px solid #2d624a;outline-offset:3px}
+#studio-root ::selection{background:#ccdfc8;color:#1e3529}
+#studio-root ::placeholder{color:#657265;opacity:1}
+#studio-root textarea{caret-color:#2d624a}
+#studio-root ::-webkit-scrollbar{width:8px;height:8px}
+#studio-root ::-webkit-scrollbar-thumb{background:#c4cdbf;border-radius:5px;border:2px solid #f7f7f2}
+#studio-root a{color:var(--studio-accent);text-underline-offset:3px}
+#studio-nav{grid-column:1/-1;display:flex;align-items:center;gap:36px;width:100%;margin:0;padding:0 26px;border-bottom:1px solid var(--studio-line);background:#f7f7f2;min-width:0;box-shadow:none}
+#studio-nav .studio-brand{font:600 18px/1.2 "Segoe UI",sans-serif;letter-spacing:-.02em;color:var(--studio-ink);text-decoration:none;white-space:nowrap}
+.studio-stages{display:flex;align-items:stretch;gap:28px;height:100%;min-width:0}
+#studio-nav .studio-stage{display:flex;align-items:center;color:var(--studio-muted);text-decoration:none;font-size:14px;padding:0 2px;position:relative;white-space:nowrap}
+#studio-nav .studio-stage[aria-current=page]{color:var(--studio-ink);font-weight:600}
+#studio-nav .studio-stage[aria-current=page]::after{content:"";position:absolute;height:2px;left:0;right:0;bottom:0;background:var(--studio-accent)}
+#studio-nav .studio-restore{margin-left:auto}
+.studio-mobile-tabs{display:none}
+#assistant-panel{grid-column:1;grid-row:2;display:flex;flex-direction:column;min-width:0;min-height:0;background:#f7f7f2;overflow:hidden}
+.studio-assistant-header{display:flex;align-items:center;gap:4px;padding:18px 18px 8px;flex-shrink:0}
+.studio-assistant-header h2{font:600 16px/1.5 "Microsoft YaHei",sans-serif;margin:0 auto 0 0;padding:0;white-space:nowrap}
+#studio-root .studio-button{font:inherit;font-size:14px;line-height:1.4;min-height:34px;padding:7px 12px;border:1px solid var(--studio-line);border-radius:6px;background:#fff;color:var(--studio-ink);cursor:pointer;box-shadow:none;transition:background-color 120ms ease-out;white-space:nowrap;width:auto}
+#studio-root .studio-button:hover:not(:disabled){background:#e8eee3;color:#234633;box-shadow:none}
+#studio-root .studio-button:disabled{opacity:.55;cursor:not-allowed}
+#studio-root .studio-text-button{background:transparent;border-color:transparent;color:var(--studio-muted);padding:6px 7px;font-size:12px}
+.studio-context{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:30px;padding:0 20px 12px;color:var(--studio-muted);font-size:12px;border-bottom:1px solid var(--studio-line)}
+.studio-context-stage{color:#365a40;background:#e7eede;padding:1px 7px;border-radius:4px;white-space:nowrap}
+.studio-context-detail{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#studio-root .studio-context-reference{background:none;border:0;padding:0;color:#2d624a;font:inherit;font-size:12px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.studio-notice{font-size:12px;margin:12px 18px 0;padding:10px 12px;background:#edf1e7;color:#40583b;border-radius:5px;overflow-wrap:anywhere;flex-shrink:0;max-height:140px;overflow:auto}
+.studio-notice[data-type=error]{background:#f8ece5;color:#7a3f2b}
+.studio-messages{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:22px 20px 30px;scrollbar-gutter:stable}
+.studio-message{margin:0;padding:0 0 26px;min-width:0;overflow-wrap:anywhere}
+.studio-message+.studio-message{padding-top:22px;border-top:1px solid #e2e6dc}
+.studio-message-label{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:600;color:var(--studio-muted);margin-bottom:8px}
+.studio-message-context{font-size:12px;font-weight:400;color:#64745f}
+.studio-message-text{white-space:pre-wrap;font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+.studio-message-user .studio-message-text{font-weight:500;color:#263c34}
+.studio-message-state{display:block;color:#785837;font-size:12px;margin-top:8px}
+.studio-empty{padding:28px 0;max-width:29ch}
+.studio-empty h3{font-size:20px;font-weight:500;line-height:1.5;letter-spacing:-.02em;margin:0 0 12px;color:#304d3d}
+.studio-empty p{font-size:14px;color:var(--studio-muted);margin:0;line-height:1.85}
+#studio-root .studio-composer{margin:0 14px 12px;padding:12px;border:1px solid #cbd6c4;border-radius:12px;background:#fff;flex-shrink:0;min-width:0}
+.studio-status{font-size:12px;color:var(--studio-muted);margin:0 0 8px;line-height:1.5}
+#studio-root #assistant-input{display:block;width:100%;border:0;border-radius:0;background:transparent;box-shadow:none;resize:vertical;min-height:76px;max-height:180px;padding:0;color:var(--studio-ink);font:inherit;line-height:1.7;margin:0}
+#studio-root #assistant-input:focus-visible{outline:0;box-shadow:inset 0 -2px 0 #7a9870}
+.studio-composer:focus-within{border-color:#6a8b60}
+.studio-composer-tools{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px}
+#studio-root .studio-control{display:flex;margin:0;min-width:0;max-width:100%;flex:1 1 125px}
+#studio-root .studio-effort-control{flex:0 1 67px}
+#studio-root .studio-control select{font:inherit;font-size:12px;line-height:1.4;color:#3e5746;border:0;background:#edf2e7;border-radius:5px;width:100%;max-width:100%;padding:7px 20px 7px 7px;margin:0;min-height:34px;cursor:pointer;text-overflow:ellipsis}
+#studio-root .studio-send{margin-left:auto;background:var(--studio-accent);border-color:var(--studio-accent);color:#fff}
+#studio-root .studio-send:hover:not(:disabled){background:#214b37;color:#fff}
+.studio-composer-hint{font-size:12px;line-height:1.4;margin:9px 0 0;color:#657361}
+.studio-config-link{display:block;font-size:12px;margin-top:8px}
+.studio-attachment{display:flex;gap:7px;align-items:center;justify-content:space-between;padding:6px 8px;margin-bottom:9px;background:#edf2e7;color:#40523e;border-radius:5px;font-size:12px;overflow-wrap:anywhere}
+.studio-attachment>span{min-width:0}
+.studio-recovery{font-size:12px;color:#755435}
+.studio-recovery p{margin:0 0 8px}
+.studio-recovery:not(:empty){padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--studio-line)}
+.studio-proposal{padding:16px 0;margin:10px 0 4px;border-top:1px solid var(--studio-line);border-bottom:1px solid var(--studio-line);background:transparent;overflow-wrap:anywhere}
+.studio-proposal+.studio-proposal{margin-top:22px}
+.studio-proposal-heading{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}
+.studio-proposal h3{font-size:15px;line-height:1.5;margin:0;color:#304a36}
+.studio-proposal p{margin:9px 0;font-size:14px;line-height:1.75}
+.studio-proposal-state{font-size:12px;color:#526b46;white-space:nowrap;padding-top:2px}
+.studio-proposal details{margin:12px 0}
+.studio-proposal summary{font-size:12px;color:#42633c;cursor:pointer}
+.studio-proposal h4{font-size:12px;font-weight:500;margin:12px 0 5px;color:var(--studio-muted)}
+.studio-proposal pre{font:12px/1.7 Consolas,"Microsoft YaHei",monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0;padding:10px;background:#eef1e8;border:0;border-radius:4px;max-height:300px;overflow:auto}
+.studio-proposal pre.studio-diff-before{background:#f4eee8;color:#6e4b39}
+.studio-proposal pre.studio-diff-after{background:#eaf0e2;color:#3d5734}
+.studio-proposal-actions{display:flex;gap:8px;align-items:center;margin-top:12px}
+.studio-proposal p.studio-proposal-meta{font-size:12px;color:#596b51}
+.studio-proposal p.studio-proposal-error{font-size:12px;color:#8a432f}
+.studio-separator{grid-column:2;grid-row:2;position:relative;cursor:col-resize;touch-action:none;background:#f2f1eb;border-left:1px solid var(--studio-line);outline-offset:-2px!important}
+.studio-separator::after{content:"";position:absolute;left:2px;top:calc(50% - 20px);width:2px;height:40px;border-radius:2px;background:#b9c7b2}
+.studio-separator:hover,.studio-separator:focus-visible{background:#dce7d4}
+.studio-resizing{cursor:col-resize;user-select:none}
+#studio-workspace{grid-column:3;grid-row:2;min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain;padding:24px 26px 48px;scrollbar-gutter:stable}
+#studio-workspace>main{width:100%;max-width:1440px;margin:0 auto;min-width:0}
+.studio-workspace-heading{padding:0 0 20px;margin:0 0 24px;border-bottom:1px solid var(--studio-line)}
+.studio-workspace-heading h1{font:600 24px/1.5 "Microsoft YaHei",sans-serif;margin:0 0 5px;letter-spacing:-.02em;overflow-wrap:anywhere}
+.studio-workspace-heading p{margin:0;font-size:12px;color:var(--studio-muted);overflow-wrap:anywhere}
+.studio-assistant-collapsed#studio-root{grid-template-columns:minmax(0,1fr)}
+.studio-assistant-collapsed #assistant-panel,.studio-assistant-collapsed #studio-separator{display:none}
+.studio-assistant-collapsed #studio-workspace{grid-column:1}
+.studio-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#studio-root [hidden]{display:none!important}
+@media(max-width:1250px) and (min-width:1024px){#studio-workspace{padding:20px 18px 40px}#studio-workspace>main{gap:18px}}
+@media(max-width:1023px){
+ body.studio-mounted{overflow:hidden}
+ #studio-root,.studio-assistant-collapsed#studio-root{grid-template-columns:minmax(0,1fr);grid-template-rows:56px 49px minmax(0,1fr)}
+ #studio-nav{gap:22px;padding:0 16px}
+ #studio-nav .studio-brand{font-size:16px}
+ .studio-stages{gap:20px}
+ #studio-nav .studio-stage{font-size:14px;min-height:44px}
+ #studio-nav .studio-restore{display:none}
+ .studio-mobile-tabs{grid-column:1;grid-row:2;display:flex;gap:0;padding:0 16px;background:#f7f7f2;border-bottom:1px solid var(--studio-line)}
+ #studio-root .studio-mobile-tabs button{border:0;border-radius:0;background:transparent;flex:1;min-height:48px;color:var(--studio-muted)}
+ #studio-root .studio-mobile-tabs button[aria-pressed=true]{box-shadow:inset 0 -2px 0 var(--studio-accent);font-weight:600;color:var(--studio-ink)}
+ #assistant-panel,.studio-assistant-collapsed #assistant-panel{grid-column:1;grid-row:3;display:flex}
+ #studio-workspace,.studio-assistant-collapsed #studio-workspace{grid-column:1;grid-row:3;padding:18px 16px 36px}
+ #studio-root[data-mobile=assistant] #studio-workspace,#studio-root[data-mobile=workspace] #assistant-panel{display:none}
+ #studio-separator,.studio-assistant-collapsed #studio-separator{display:none}
+ .studio-assistant-header{padding:12px 16px 5px}
+ .studio-assistant-header button:last-child{display:none}
+ .studio-context{padding:0 16px 10px}
+ .studio-messages{padding:22px 20px 28px}
+ #studio-root .studio-composer{margin:0 12px max(12px,env(safe-area-inset-bottom));padding:12px}
+ #studio-root .studio-button,#studio-root .studio-control select{min-height:44px}
+ #studio-root .studio-control select{font-size:14px}
+ #studio-root .studio-control{flex-basis:155px}
+ #studio-root .studio-effort-control{flex-basis:80px}
+ .studio-composer-hint{display:none}
+ .studio-context-reference{min-height:44px}
+ .studio-empty{max-width:31ch;padding:18px 0}
+ #studio-root textarea,#studio-root input{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){#studio-root *,#studio-root *::before,#studio-root *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

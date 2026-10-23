@@ -48,7 +48,7 @@ const sources = {original:'原稿明确',user:'用户指定',ai_suggestion:'AI �
 const statuses = {awaiting_input:'等待补充',awaiting_confirmation:'等待确认',confirmed:'已确认',limit_reached:'已达修订上限',budget_exhausted:'调用额度不足',failed:'执行失败',running:'执行中',no_progress:'自动修订无进展',awaiting_direction:'等待选择方向',ready_for_production:'原稿待交接'};
 function el(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;}
 async function api(url,body){const r=await fetch(url,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{});const data=await r.json();if(!r.ok)throw new Error(Presentation.validation(data.detail));return data;}
-async function busy(fn){clearActionMessage();$('error-panel').hidden=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);$('message').textContent='正在处理，请勿重复提交。模型调用可能需要一两分钟。';try{await fn();}catch(e){$('message').textContent=Presentation.error(e.message);showError(e.message);}finally{document.querySelectorAll('button').forEach(b=>b.disabled=false);}}
+async function busy(fn){clearActionMessage();$('error-panel').hidden=true;document.querySelector('main').querySelectorAll('button').forEach(b=>b.disabled=true);$('message').textContent='正在处理，请勿重复提交。模型调用可能需要一两分钟。';try{await fn();}catch(e){$('message').textContent=Presentation.error(e.message);showError(e.message);}finally{document.querySelector('main').querySelectorAll('button').forEach(b=>b.disabled=false);}}
 async function render(value,{discardDraft=false}={}){
  if(discardDraft)forgetEditorDraft(project);else saveEditorDraft();
  clearActionMessage();
@@ -95,6 +95,8 @@ async function render(value,{discardDraft=false}={}){
  $('versions').replaceChildren();const versions=await api(`/api/projects/${value.id}/versions`);
  for(const v of versions){const d=el('details');d.append(el('summary',`版本 ${v.version}`),el('pre',v.draft));if(v.version>1){const button=el('button','与上一版对比','secondary');button.type='button';const diff=el('pre');diff.hidden=true;button.onclick=()=>busy(async()=>{const result=await api(`/api/projects/${value.id}/diff?from_version=${v.version-1}&to_version=${v.version}`);diff.textContent=result.diff||'正文没有变化。';diff.hidden=false;});d.append(button,diff);}$('versions').append(d);}
  $('export').href=`/api/projects/${value.id}/export`;
+ const studioUrl=new URL(location.href);studioUrl.searchParams.set('project',value.id);history.replaceState(null,'',studioUrl);
+ window.dispatchEvent(new Event('framepilot:studio-context'));
 }
 function renderDirections(state){
  $('directions').replaceChildren();$('directions-panel').hidden=state.status!=='awaiting_direction';
@@ -241,3 +243,14 @@ function showError(message){
  $('error-panel').hidden=false;
  requestAnimationFrame(()=>{$('error-panel').scrollIntoView({block:'start',behavior:'instant'});$('error-panel').focus({preventScroll:true});});
 }
+
+// A small bridge keeps the existing writer controls and saved/draft rules authoritative.
+window.FramePilotWorkspace = {
+ getContext(){const unsaved=!!project&&!!($('feedback').value.trim()||$('direction-feedback').value.trim()||document.querySelector('[name="direction"]:checked')||selectedDecisions().length);
+ return {stage:'writer',project_id:project?.id||new URL(location.href).searchParams.get('project')||null,workspace_dirty:unsaved,project_label:project?.state?.card?.plot?.text?.slice(0,36)||'故事项目',version_label:project?'剧本 V'+project.state.version:'新项目',save_label:unsaved?'有未提交意见':'已保存',context_label:project?'剧本 V'+project.state.version:'新的创作讨论'};},
+ async refresh(result){if(this.getContext().workspace_dirty)throw Error('工作区有未提交意见，请先处理后重新读取。');const id=result.project_id||project?.id;if(id)await render(await api('/api/projects/'+encodeURIComponent(id)),{discardDraft:true});}
+};
+document.querySelector('main').addEventListener('input',()=>window.dispatchEvent(new Event('framepilot:studio-context')));
+document.querySelector('main').addEventListener('change',()=>window.dispatchEvent(new Event('framepilot:studio-context')));
+const requestedProject=new URL(location.href).searchParams.get('project');
+if(requestedProject)busy(async()=>render(await api('/api/projects/'+encodeURIComponent(requestedProject))));

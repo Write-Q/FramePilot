@@ -52,13 +52,14 @@ function availability() {
   window.StoryboardReview?.availability();
   window.StoryboardMedia?.availability();
   window.StoryboardVideo?.availability();
+  window.dispatchEvent(new Event('framepilot:studio-context'));
 }
 async function busy(operation) {
   if(working)return;
   working=true; $('error').hidden=true; document.body.classList.add('busy');
-  document.querySelectorAll('button,select').forEach(el=>el.disabled=true); availability();
+  document.querySelector('main').querySelectorAll('button,select').forEach(el=>el.disabled=true); availability();
   try { await operation(); } catch(e) { error(e.message); }
-  finally { working=false; document.body.classList.remove('busy'); document.querySelectorAll('button,select').forEach(el=>el.disabled=false); availability(); }
+  finally { working=false; document.body.classList.remove('busy'); document.querySelector('main').querySelectorAll('button,select').forEach(el=>el.disabled=false); availability(); }
 }
 function markDirty() {
   dirty=true; $('review-read').checked=false;
@@ -82,7 +83,8 @@ async function loadProject(id) {
   $('source-body').textContent=value.state.draft;
   $('board').hidden=true; $('empty').hidden=false;
   await profiles(); await refreshRuns(); await refreshBoards();
-  const identity=last('framepilot:last-board:'+id);
+  const requestedBoard=new URL(location.href).searchParams.get('board');
+  const identity=requestedBoard||last('framepilot:last-board:'+id);
   if(boards.length)await openBoard(boards.find(x=>x.id===identity)?.id||boards[boards.length-1].id);
   notice('剧本已载入。可生成新分镜，或继续编辑已有方案。');
 }
@@ -96,6 +98,7 @@ async function openBoard(identity, version) {
   current=await api(path); draft=copy(current.content); dirty=false; selected=0;rawFields=new Map();
   const saved=readMemory(scope());
   if(!readonly()&&saved?.version===current.version&&saved.content?.shots?.length) { draft=saved.content;rawFields=new Map(Object.entries(saved.raw||{}));dirty=true; notice('已恢复本标签页未保存的分镜修改，请核对后保存。'); }
+  const studioUrl=new URL(location.href);studioUrl.searchParams.set('board',identity);history.replaceState(null,'',studioUrl);
   remember('framepilot:last-board:'+project.id,identity); $('board-series').value=identity;
   $('empty').hidden=true; $('board').hidden=false; $('edit-title').value=draft.title;
   $('board-title').textContent=current.content.title; $('board-version').textContent='V'+current.version;
@@ -261,3 +264,9 @@ $('download-board').onclick=()=>{if(!validateAllShots())return;const data={...cu
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 const initial=new URL(location.href).searchParams.get('project')||last('framepilot:last-project');
 if(initial){$('project-id').value=initial;busy(()=>loadProject(initial));}else busy(()=>profiles());
+
+window.FramePilotWorkspace = {
+ getContext(){return {stage:'storyboard',project_id:project?.id||new URL(location.href).searchParams.get('project')||null,storyboard_id:current?.id||null,shot_key:draft?.shots?.[selected]?.key||null,workspace_dirty:dirty,project_label:current?.content?.title||'分镜项目',version_label:current?'分镜 V'+current.version:'尚无分镜',save_label:dirty?'有未保存修改':'已保存',context_label:current?'分镜 V'+current.version+' · 第 '+(selected+1)+' 镜':'分镜规划'};},
+ async refresh(result){if(dirty)throw Error('分镜有未保存修改，请先处理后重新读取。');if(!project||result.project_id!==project.id){await loadProject(result.project_id);return;}await refreshBoards();await refreshRuns();const id=result.storyboard_id||current?.id||boards.at(-1)?.id;if(id)await openBoard(id);},
+ async selectReference(ref){if(ref.storyboard_id&&ref.storyboard_id!==current?.id){if(!allowDiscard())return;await openBoard(ref.storyboard_id);}const index=draft?.shots.findIndex(x=>x.key===ref.shot_key)??-1;if(index<0)return;selected=index;renderShots();renderEditor();availability();document.querySelector('.shot-editor').scrollIntoView({block:'start'});}
+};

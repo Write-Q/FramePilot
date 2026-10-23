@@ -19,7 +19,8 @@ test('真实工作台：图片排队、生成、选用与版本隔离',{timeout:
     await page.goto(base+'/storyboard?project='+project.id);
     await page.waitForFunction(()=>window.StoryboardMedia&&document.getElementById('board-state').textContent.includes('已确认'));
     await page.waitForFunction(()=>!document.body.classList.contains('busy'));
-    await page.locator('#image-config-details').evaluate(el=>el.open=true);
+    await page.getByRole('button',{name:'图片素材',exact:true}).click();
+    await page.locator('#image-config-details > summary').click();
     await page.locator('#image-config-name').fill('隔离测试图片');
     await page.locator('#image-config-model').fill('fixture-image');
     await page.locator('#image-config-url').fill('https://example.test/v1');
@@ -50,6 +51,7 @@ test('真实工作台：图片排队、生成、选用与版本隔离',{timeout:
     fs.mkdirSync('.runtime/storyboard-media-qa',{recursive:true});
     await page.locator('#media-panel').screenshot({path:'.runtime/storyboard-media-qa/desktop.png'});
     await page.setViewportSize({width:390,height:844});
+    await page.getByRole('button',{name:'工作区',exact:true}).click();
     await page.locator('#media-panel').screenshot({path:'.runtime/storyboard-media-qa/mobile.png'});
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
     await page.locator('#edit-title').fill('钥匙交接第二版');

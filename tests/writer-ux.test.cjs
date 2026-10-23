@@ -16,6 +16,9 @@ before(async () => {
 after(async () => { await browser?.close(); });
 
 async function create(page, input=story) {
+  const workspace=page.getByRole('button',{name:'工作区',exact:true});
+  if(await workspace.isVisible())await workspace.click();
+  if(!await page.locator('#story').isVisible())await page.getByText('创作输入与项目切换',{exact:true}).click();
   await page.locator('#story').fill(input);
   await page.locator('#create-form button').click();
   await page.locator('.issue-choice').waitFor();
@@ -28,6 +31,9 @@ async function refresh(page) {
   ]);
 }
 async function load(page, id) {
+  const workspace=page.getByRole('button',{name:'工作区',exact:true});
+  if(await workspace.isVisible())await workspace.click();
+  if(!await page.locator('#project-id').isVisible())await page.getByText('创作输入与项目切换',{exact:true}).click();
   await page.locator('#project-id').fill(id);
   await Promise.all([
     page.waitForResponse(r => r.url().endsWith(`/api/projects/${id}/versions`)),

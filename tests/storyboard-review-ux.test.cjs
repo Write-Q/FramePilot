@@ -16,13 +16,15 @@ test('独立文字审核、报告过期、重审和网络恢复',async()=>{
     const profile=await post('/api/production/model-profiles',config);
     const generated=await post(`/api/production/projects/${project.id}/storyboard-runs`,{source_version:1,profile:{profile_id:profile.id,version:1},target_shots:1,idempotency_key:'browser-review-plan-key'});
     await page.goto(base+'/storyboard?project='+project.id);
+    await page.getByRole('button',{name:'文字审核',exact:true}).click();
     await page.locator('#model-review-panel').waitFor();
     await page.waitForLoadState('networkidle');
     assert.equal(await page.locator('#effort').count(),1,'规划输入区需要思考等级选择器');
     assert.equal(await page.locator('#review-effort').count(),1,'审核输入区需要思考等级选择器');
     assert.equal(await page.locator('#effort').isDisabled(),true,'未知能力不显示虚假的思考档位');
     assert.equal(await page.locator('#start-review').isDisabled(),true);
-    await page.locator('#config-details').evaluate(el=>el.open=true);
+    await page.getByText('项目、生成设置与运行记录',{exact:true}).click();
+    await page.locator('#config-details > summary').click();
     await page.locator('#config-purpose').selectOption('review');
     await page.locator('#config-protocol').selectOption('deepseek');
     await page.locator('#config-name').fill('独立审核模型');
@@ -76,6 +78,7 @@ test('独立文字审核、报告过期、重审和网络恢复',async()=>{
     await page.locator('#model-review-panel').screenshot({path:'.runtime/storyboard-review-qa/model-picker-desktop.png'});
     await page.screenshot({path:'.runtime/storyboard-review-qa/desktop.png',fullPage:true});
     await page.setViewportSize({width:390,height:844});
+    await page.getByRole('button',{name:'工作区',exact:true}).click();
     await page.screenshot({path:'.runtime/storyboard-review-qa/mobile.png',fullPage:true});
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
     assert.deepEqual(errors,[]);

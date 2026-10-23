@@ -18,8 +18,9 @@ test('分镜生成、编辑、排序、版本、确认与移动端', async () =>
     await json(`/api/projects/${project.id}/resume`, {action:'confirm',version:1,interrupt_id:project.interrupt.id});
     await page.goto(base+'/storyboard?project='+project.id);
     await page.waitForLoadState('networkidle');
+    await page.getByText('项目、生成设置与运行记录',{exact:true}).click();
     await page.locator('#source-state').filter({hasText:'已确认'}).waitFor();
-    await page.locator('#config-details').evaluate(el=>el.open=true);
+    await page.locator('#config-details > summary').click();
     await page.locator('#config-name').fill('测试分镜模型');
     await page.locator('#config-url').fill('https://example.test/v1');
     await page.locator('#config-model').fill('test-planner');
@@ -30,7 +31,7 @@ test('分镜生成、编辑、排序、版本、确认与移动端', async () =>
     await page.locator('.shot-card').waitFor();
     assert.equal(await page.locator('.shot-card').count(),1);
     const dialogue=page.locator('#edit-dialogue_lines');
-    await dialogue.evaluate(el=>{const group=el.closest('details');if(group)group.open=true;});
+    await dialogue.locator('xpath=ancestor::details[1]/summary').click();
     await dialogue.fill('没有分隔符的台词');
     await page.locator('#save-board').click();
     assert.match(await page.locator('#board-version').textContent(),/V1/);
@@ -42,6 +43,7 @@ test('分镜生成、编辑、排序、版本、确认与移动端', async () =>
     assert.equal(await page.locator('#confirm-board').isDisabled(),true);
     await page.locator('#save-board').click();
     await page.locator('#board-version').filter({hasText:'V2'}).waitFor();
+    await page.getByRole('button',{name:'文字审核',exact:true}).click();
     await page.locator('#review-read').check();
     await page.locator('#confirm-board').click();
     await page.locator('#board-state').filter({hasText:'已确认'}).waitFor();
@@ -61,7 +63,7 @@ test('分镜生成、编辑、排序、版本、确认与移动端', async () =>
     await page.locator('#board-version').filter({hasText:'V3'}).waitFor();
     assert.match(await page.locator('#board-state').textContent(),/待确认/);
     await page.locator('#add-shot').click();
-    await dialogue.evaluate(el=>el.closest('details').open=true);
+    await dialogue.locator('xpath=ancestor::details[1]/summary').click();
     await dialogue.fill('第二镜无效且尚未解析的台词');
     page.once('dialog',dialog=>dialog.accept());
     await page.reload();
@@ -77,6 +79,7 @@ test('分镜生成、编辑、排序、版本、确认与移动端', async () =>
     const original=await page.request.get(base+`/api/production/projects/${project.id}/storyboard-runs`);
     const runs=await original.json();
     await page.evaluate(({projectId,payload})=>sessionStorage.setItem('framepilot:board-pending:'+projectId,JSON.stringify(payload)),{projectId:project.id,payload:runs[0].manifest.request});
+    await page.getByText('项目、生成设置与运行记录',{exact:true}).click();
     await page.locator('#refresh-runs').click();
     await page.waitForFunction(id=>sessionStorage.getItem('framepilot:board-pending:'+id)===null,project.id);
     const countBefore=runs.length;
@@ -96,6 +99,7 @@ test('分镜生成、编辑、排序、版本、确认与移动端', async () =>
     fs.mkdirSync('.runtime/storyboard-qa',{recursive:true});
     await page.screenshot({path:'.runtime/storyboard-qa/desktop.png',fullPage:true});
     await page.setViewportSize({width:390,height:844});
+    await page.getByRole('button',{name:'工作区',exact:true}).click();
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     await page.screenshot({path:'.runtime/storyboard-qa/mobile.png',fullPage:true});
     assert.deepEqual(errors,[]);
