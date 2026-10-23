@@ -8,3 +8,9 @@
 - 提交前验证：本轮系统验收2 passed/0 skipped/1既有警告，5.07秒；核对此前完整351项及独立补测证据。README/功能文档同步0009实际状态。
 - fetch后本地与origin/codex/database-foundation无分叉或新增提交。明确84个文件进入索引；对工作文件及索引字节做本机KEY/TOKEN/PASSWORD/SECRET值匹配检查通过，git diff --cached --check通过。15个无关学习/运维文件未暂存，.env/.runtime/data不在清单。
 - 沙箱Git索引写入权限不足，未创建成功；使用正常受批准权限完成相同明确清单暂存。未删除锁文件或改Git权限。
+
+## 推送回执
+
+- 功能提交3b28661fbc6ad7af723972461e4695ecd70e170c，84文件，4367新增/18删除；普通推送至origin/codex/database-foundation成功，git ls-remote返回同一SHA。
+- 已同步本阶段媒体制作、审核优化、0008/0009、系统验收和主动阶段归档约定。未合并main、未强推、未创建PR或清理工作区；无关15文件继续保留。
+- 本回执单独文档提交后同步，不修改已验证功能代码。之后按AGENTS.md的里程碑规则主动验证、提交和推送，不等待用户反复提醒。
