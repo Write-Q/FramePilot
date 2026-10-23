@@ -30,6 +30,7 @@ def inspect(data, mime):
         for s in container.streams:
             s.codec_context.thread_count = 1
         count, total, end, start = 0, 0, 0.0, None
+        picture_start, picture_end = None, 0.0
         for packet in container.demux():
             for frame in packet.decode():
                 total += 1
@@ -40,6 +41,8 @@ def inspect(data, mime):
                     if frame.width != width or frame.height != height or frame.time is None:
                         raise ValueError()
                     duration = float(frame.duration * frame.time_base) if frame.duration else 1 / float(stream.average_rate or 25)
+                    picture_start = float(frame.time) if picture_start is None else min(picture_start, float(frame.time))
+                    picture_end = max(picture_end, float(frame.time) + duration)
                 else:
                     if frame.time is None or not frame.sample_rate:
                         raise ValueError()
@@ -50,7 +53,10 @@ def inspect(data, mime):
                     raise ValueError()
         if not count or (stream.frames and count != stream.frames) or end <= 0:
             raise ValueError()
-        return {'width': width, 'height': height, 'duration_ms': round((end - start) * 1000)}
+        # A timeline cuts picture. A longer source soundtrack must not make a
+        # default trim extend beyond the last picture frame; audio is trimmed
+        # to this visual duration by the renderer. All streams remain bounded.
+        return {'width': width, 'height': height, 'duration_ms': round((picture_end - picture_start) * 1000)}
 
 
 if __name__ == '__main__':

@@ -134,3 +134,20 @@ test('导出明确被服务端拒绝后不留下无法恢复的待确认请求',
   assert.equal(await page.evaluate(()=>localStorage.getItem('framepilot:editing:export:p:b')),null);
   await page.locator('#refresh').click();await page.waitForFunction(()=>!document.querySelector('#export').disabled);
 });
+
+
+test('其他标签更新后刷新验收记录不会导出未显示的新时间线',async t=>{
+  const initial={version:1,source_version:2,applicable:true,content:{preset:'landscape',clips:[{run_id:'a',start_ms:0,end_ms:4000,gain:1}],subtitles:[],audio_tracks:[]}};
+  const {page,state,calls}=await fixture(t,{timeline:initial,versions:[initial],exports:[{id:'e',status:'succeeded',version:1}]});
+  assert.equal(await page.locator('#export').isDisabled(),false);
+  state.timeline={...initial,version:2,content:{...initial.content,preset:'portrait'}};
+  state.versions.push(state.timeline);
+  await page.getByRole('button',{name:'记录人工验收'}).click();
+  await page.waitForFunction(()=>document.querySelector('#exports').textContent.includes('已人工验收'));
+  assert.equal(await page.locator('#preset').inputValue(),'landscape','保留当前显示的旧内容');
+  assert.equal(await page.locator('#export').isDisabled(),true,'需明确重新读取新版本');
+  assert.equal(calls.filter(x=>x.path.endsWith('/exports')&&x.method==='POST').length,0);
+  await page.locator('#refresh').click();
+  await page.waitForFunction(()=>document.querySelector('#preset').value==='portrait');
+  assert.equal(await page.locator('#export').isDisabled(),false);
+});

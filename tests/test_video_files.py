@@ -74,3 +74,17 @@ def test_byte_limit_checked_before_subprocess(tmp_path, monkeypatch):
     monkeypatch.setattr(module, 'MAX_VIDEO_BYTES', 2)
     with pytest.raises(ValueError):
         VideoFiles(tmp_path).put(b'123', 'video/mp4')
+
+
+def test_editable_duration_uses_picture_when_audio_has_longer_tail(tmp_path):
+    from imageio_ffmpeg import get_ffmpeg_exe
+    from tests.test_editing_render import video, wav, decode
+    from app.production.editing_render import render_timeline
+    clip=video(tmp_path/'picture.mp4',seconds=1)
+    wav(tmp_path/'long.wav',seconds=2)
+    path=tmp_path/'long-audio.mp4'
+    subprocess.run([get_ffmpeg_exe(),'-v','error','-nostdin','-i',str(clip['path']),'-i',str(tmp_path/'long.wav'),'-c:v','copy','-c:a','aac',str(path)],check=True,timeout=15)
+    saved=VideoFiles(tmp_path/'stored').put(path.read_bytes(),'video/mp4')
+    assert saved['metadata']['duration_ms']==1000,'可裁切时长须与画面一致，不能使用较长原声音轨尾部'
+    _,frames,sound=decode(render_timeline({},[clip|{'path':path,'end_ms':saved['metadata']['duration_ms']}],[]))
+    assert len(frames)==24 and sound

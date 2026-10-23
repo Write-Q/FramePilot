@@ -1,0 +1,29 @@
+{
+  "phase": "upgraded_verified",
+  "target": {
+    "host": "127.0.0.1",
+    "port": 5433,
+    "database": "framepilot"
+  },
+  "before_revision": "0010_video_inspections",
+  "backup": "D:\\VScode\\Python\\FramePilot\\.runtime\\db-upgrade-20261023-editing-01a151\\before-0010.dump",
+  "backup_bytes": 335170,
+  "backup_sha256": "db9a3c7ca29bbe8a922239d22b780d850af50902b7df266d230ba4041d563e5e",
+  "rehearsal": {
+    "restored": true,
+    "all_existing_tables_unchanged": 51,
+    "after_revision": "0011_editing",
+    "schema_check": "passed"
+  },
+  "after_revision": "0011_editing",
+  "existing_tables_unchanged": 51,
+  "new_tables": [
+    "fp_editing_acceptances",
+    "fp_editing_audio",
+    "fp_editing_exports",
+    "fp_editing_timelines"
+  ],
+  "schema_check": "passed",
+  "running_before": 0,
+  "started_calls_before": 0
+}

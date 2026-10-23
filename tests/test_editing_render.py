@@ -211,3 +211,20 @@ def test_mixing_multiple_loud_tracks_limits_peak(tmp_path):
     track = wav(tmp_path / 'loud.wav') | {'gain': 2, 'offset_ms': 0}
     _, _, sound = decode(render_timeline({'preset': 'square'}, [clip], [track] * 4))
     assert 0.5 < max(abs(x) for x in samples(sound)) <= 1
+
+
+def test_original_sound_keeps_delayed_start_relative_to_picture(tmp_path):
+    from imageio_ffmpeg import get_ffmpeg_exe
+    clip=video(tmp_path/'picture.mp4',seconds=1)
+    wav(tmp_path/'tone.wav',seconds=.3)
+    path=tmp_path/'delayed.mp4'
+    subprocess.run([get_ffmpeg_exe(),'-v','error','-nostdin','-i',str(clip['path']),'-itsoffset','0.5','-i',str(tmp_path/'tone.wav'),'-c:v','copy','-c:a','aac',str(path)],check=True,timeout=15)
+    _,_,sound=decode(render_timeline({},[clip|{'path':path}],[]))
+    early=samples([f for f in sound if float(f.time)<.3])
+    late=samples([f for f in sound if .5<float(f.time)<.7])
+    assert max(abs(x) for x in early)<.001,'Delayed original audio must not shift to the clip start'
+    assert max(abs(x) for x in late)>.05
+    # A trim beginning inside the leading silence must keep the remaining gap.
+    _,_,cut=decode(render_timeline({},[clip|{'path':path,'start_ms':200}],[]))
+    assert max(abs(x) for x in samples([f for f in cut if float(f.time)<.2]))<.001
+    assert max(abs(x) for x in samples([f for f in cut if .35<float(f.time)<.5]))>.05

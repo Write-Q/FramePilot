@@ -1,0 +1,14 @@
+{
+  "full_regression": {
+    "tests": "418",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "time": "302.228"
+  },
+  "independent_node_mock_tests": 18,
+  "post_review_media_tests": 45,
+  "real_browser_render_e2e": true,
+  "business_revision": "0011_editing",
+  "external_model_calls": 0
+}

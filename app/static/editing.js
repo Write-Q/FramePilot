@@ -134,6 +134,10 @@
   }
   async function load(replaceDraft=true) {
     const result=await api();
+    if(!replaceDraft && data && result.timeline?.version !== data.timeline?.version) {
+      blocked=true;
+      showError(Error('时间线已在其他页面更新。当前编辑内容仍保留，请点击“重新读取”核对新版本后再保存或导出。'));
+    }
     data={...result,audio:result.audio||[],selected_clips:result.selected_clips||[],versions:result.versions||[],exports:result.exports||[]};
     $('source-state').textContent=!data.source_current?'上游来源已变化 · 请返回分镜重新确认。':!data.confirmed?'分镜尚未确认 · 请先完成确认。':`分镜 V${data.source_version} · 已确认`;
     $('message').textContent=data.source_current&&data.confirmed?'从已选用视频开始。先整理节奏与声音，再保存并导出。':'当前来源不能用于新导出；已有记录仍可回看。';

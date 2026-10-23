@@ -63,7 +63,9 @@ def render_timeline(timeline: dict, clips: list[dict], audio: list[dict], *, tim
                 # the EOF frame duration, causing fps after scale to lose a frame.
                 filters.append(f'[{index}:v:0]trim=start={start}:end={end},setpts=PTS-STARTPTS,fps=24,scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p[v{index}]')
                 if has_audio[index]:
-                    filters.append(f'[{index}:a:0]atrim=start={start}:end={end},asetpts=PTS-STARTPTS,aresample=48000,aformat=sample_fmts=fltp:channel_layouts=stereo,volume={gain},apad,atrim=duration={duration}[a{index}]')
+                    # Keep the original soundtrack's offset from picture. An
+                    # independent STARTPTS reset would pull delayed audio early.
+                    filters.append(f'[{index}:a:0]atrim=start={start}:end={end},asetpts=PTS-{start}/TB,aresample=48000:async=1:first_pts=0,aformat=sample_fmts=fltp:channel_layouts=stereo,volume={gain},apad,atrim=duration={duration}[a{index}]')
                 else:
                     filters.append(f'anullsrc=r=48000:cl=stereo,atrim=duration={duration}[a{index}]')
                 pairs.append(f'[v{index}][a{index}]')
