@@ -41,8 +41,20 @@ class VideoFiles:
             raise ValueError('视频解码、尺寸或处理时限校验失败') from None
         self.root.mkdir(parents=True, exist_ok=True)
         key = uuid4().hex + ('.mp4' if mime == 'video/mp4' else '.webm')
-        with self.path(key).open('xb') as output:
-            output.write(data)
+        path, created = self.path(key), False
+        try:
+            with path.open('xb') as output:
+                created = True
+                output.write(data)
+        except BaseException:
+            # Only this attempt's new file may be removed. In particular, an
+            # exclusive-create collision must never remove existing media.
+            if created:
+                try:
+                    path.unlink(missing_ok=True)
+                except OSError:
+                    pass
+            raise
         return {'storage_key': key, 'checksum': hashlib.sha256(data).hexdigest(), 'size_bytes': len(data),
                 'mime_type': mime, 'metadata': metadata}
 

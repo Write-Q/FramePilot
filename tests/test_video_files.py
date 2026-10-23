@@ -88,3 +88,31 @@ def test_editable_duration_uses_picture_when_audio_has_longer_tail(tmp_path):
     assert saved['metadata']['duration_ms']==1000,'可裁切时长须与画面一致，不能使用较长原声音轨尾部'
     _,frames,sound=decode(render_timeline({},[clip|{'path':path,'end_ms':saved['metadata']['duration_ms']}],[]))
     assert len(frames)==24 and sound
+
+
+def test_partial_write_failure_removes_only_new_file(tmp_path,monkeypatch):
+    from pathlib import Path
+    original=Path.open
+    class BrokenWrite:
+        def __init__(self,path): self.handle=original(path,'xb')
+        def __enter__(self): return self
+        def write(self,data):
+            self.handle.write(data[:64]);self.handle.flush()
+            raise OSError('disk full')
+        def __exit__(self,*args): self.handle.close()
+    def open_path(path,mode='r',*args,**kwargs):
+        return BrokenWrite(path) if mode=='xb' else original(path,mode,*args,**kwargs)
+    monkeypatch.setattr(Path,'open',open_path)
+    with pytest.raises(OSError): VideoFiles(tmp_path).put(make_video(),'video/mp4')
+    assert not list(tmp_path.iterdir()),'An interrupted new file must not remain without an asset row'
+
+
+def test_exclusive_create_collision_preserves_existing_media(tmp_path,monkeypatch):
+    import app.production.video_files as module
+    from types import SimpleNamespace
+    key='f'*32
+    path=tmp_path/(key+'.mp4')
+    path.write_bytes(b'existing immutable media')
+    monkeypatch.setattr(module,'uuid4',lambda:SimpleNamespace(hex=key))
+    with pytest.raises(FileExistsError): VideoFiles(tmp_path).put(make_video(),'video/mp4')
+    assert path.read_bytes()==b'existing immutable media'

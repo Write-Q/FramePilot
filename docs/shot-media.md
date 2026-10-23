@@ -41,7 +41,7 @@ worker启动会处理已明确提交的队列任务，可能产生所配服务�
 - 任务：queued → running → succeeded/failed/unknown；仅queued可取消。超时或连接故障保留unknown，不能假定没有计费。进程硬退出可能停在running，人工核对后标记未知；不会自动重新付费提交。
 - 并发：数据库领取使用行锁和SKIP LOCKED；同一任务只由一个worker领取。标记未知后晚到结果不会恢复终态；文件写入与数据库提交之间中断可能留下未关联文件，当前不自动删除。
 - 版本：绑定分镜、镜号、角色、提示词及模型配置的固定版本。新版不继承旧图选用；旧图仍可查看。队列开始执行前检查来源是否仍有效，过期则不调用模型。
-- 视频：`video-input`仅预览同版本已选首帧、显式视频提示词和时长；有对白/声音会标注需要音频能力核对。Python适配协议区分submit和poll，测试使用模拟供应商；已有外部ID持久化运行器和视频解码验证；尚无具体供应商HTTP实现与剪辑。未选服务前不提供伪装成可用的生成按钮。
+- 视频：`video-input`仅预览同版本已选首帧、显式视频提示词和时长；有对白/声音会标注需要音频能力核对。Python适配协议区分submit和poll，测试使用模拟供应商；已有外部ID持久化运行器和视频解码验证；尚无具体供应商HTTP实现；本地剪辑/成片见[后期说明](postproduction.md)。未选服务前不提供伪装成可用的生成按钮。
 
 接口位于 `/api/production/projects/{project}/storyboards/{board}` 下：GET `frame-prompt`、POST/GET `media-runs`、POST `media-runs/{run}/select|cancel|abandon`、GET `video-input`。媒体读取为GET `/api/production/projects/{project}/media/{media}`。请求和历史通过幂等键对账。
 

@@ -39,14 +39,18 @@ def render_timeline(timeline: dict, clips: list[dict], audio: list[dict], *, tim
     try:
         with tempfile.TemporaryDirectory(prefix='framepilot-render-') as directory:
             work = Path(directory)
-            args = [executable, '-hide_banner', '-loglevel', 'error', '-nostdin', '-y', '-filter_complex_threads', '1']
-            has_audio = []
+            # Match PyAV's original stream timestamp coordinates. FFmpeg's
+            # default input start-time subtraction would otherwise apply the
+            # nonzero-origin compensation twice for ordinary single-track files.
+            args = [executable, '-hide_banner', '-loglevel', 'error', '-nostdin', '-y', '-copyts', '-filter_complex_threads', '1']
+            has_audio, origins = [], []
             for index, clip in enumerate(clips):
                 name = f'clip{index}.mp4'
                 metadata = _snapshot(clip.get('path'), work / name, 'video')
                 if clip['end_ms'] > metadata['duration_ms'] + 1:
                     raise EditingRenderError('Clip trim exceeds the actual source duration.')
                 has_audio.append(metadata['audio'])
+                origins.append(metadata['origin_seconds'])
                 args += ['-protocol_whitelist', 'file,pipe', '-f', metadata['format'], '-i', name]
             for index, track in enumerate(audio):
                 name = f'audio{index}.wav'
@@ -57,8 +61,10 @@ def render_timeline(timeline: dict, clips: list[dict], audio: list[dict], *, tim
             width, height = PRESETS[timeline.get('preset', 'landscape')]
             filters, pairs = [], []
             for index, clip in enumerate(clips):
-                start, end = clip['start_ms'] / 1000, clip['end_ms'] / 1000
-                duration, gain = end - start, float(clip.get('gain', 1))
+                # Timeline coordinates are relative to the first visible frame,
+                # which need not have container PTS zero (e.g. audio preroll).
+                start, end = origins[index] + clip['start_ms'] / 1000, origins[index] + clip['end_ms'] / 1000
+                duration, gain = (clip['end_ms'] - clip['start_ms']) / 1000, float(clip.get('gain', 1))
                 # Normalize timestamps before scale: FFmpeg 7 scale can discard
                 # the EOF frame duration, causing fps after scale to lose a frame.
                 filters.append(f'[{index}:v:0]trim=start={start}:end={end},setpts=PTS-STARTPTS,fps=24,scale={width}:{height}:force_original_aspect_ratio=decrease,pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1,format=yuv420p[v{index}]')
@@ -175,6 +181,7 @@ def _snapshot(path, target, kind):
         raise EditingRenderError('Source media exceeds its size limit.')
     def reject_external(*args):
         raise ValueError('External media resources are disabled')
+    origin = 0.0
     try:
         if kind == 'video':
             media_format = 'mov' if data[4:8] == b'ftyp' else 'matroska' if data[:4] == b'\x1aE\xdf\xa3' else None
@@ -192,6 +199,12 @@ def _snapshot(path, target, kind):
                 if not 0 < stream.codec_context.width * stream.codec_context.height <= 25_000_000:
                     raise ValueError()
                 duration = float(stream.duration * stream.time_base) if stream.duration is not None else float(media.duration or 0) / av.time_base
+                first = next(media.decode(video=0), None)
+                if first is None or first.time is None:
+                    raise ValueError()
+                origin = float(first.time)
+                if not math.isfinite(origin):
+                    raise ValueError()
             else:
                 if videos or len(sounds) != 1 or not sounds[0].codec_context.name.startswith('pcm_'):
                     raise ValueError()
@@ -202,7 +215,8 @@ def _snapshot(path, target, kind):
     except (ValueError, av.error.FFmpegError, OverflowError):
         raise EditingRenderError('Source media is invalid; use H.264 MP4 or VP8/VP9 WebM clips and PCM WAV audio.') from None
     target.write_bytes(data)
-    return {'duration_ms': round(duration * 1000), 'audio': bool(sounds), 'format': media_format}
+    return {'duration_ms': round(duration * 1000), 'audio': bool(sounds), 'format': media_format,
+            'origin_seconds': origin}
 
 
 def _subtitle_font():

@@ -55,3 +55,5 @@ from app.production.inspection_schema import register_inspections as _register_i
 production_tables.update(_register_inspections(Base.metadata))
 from app.production.editing_schema import register_editing as _register_editing
 production_tables.update(_register_editing(Base.metadata))
+from app.production.local_clip_schema import register_local_clips as _register_local_clips
+production_tables.update(_register_local_clips(Base.metadata))

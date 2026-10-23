@@ -38,7 +38,8 @@ def _tone():
     return output.getvalue()
 
 
-def test_browser_edits_renders_plays_downloads_and_accepts(editing, tmp_path, monkeypatch):
+@pytest.mark.parametrize('local_import', [False, True], ids=['generated-selection', 'local-upload'])
+def test_browser_edits_renders_plays_downloads_and_accepts(editing, tmp_path, monkeypatch, local_import):
     node = os.getenv('FRAMEPILOT_NODE') or shutil.which('node')
     if not node or subprocess.run([node, '-e', "require.resolve('playwright')"], capture_output=True).returncode:
         pytest.skip('需要配置 Node/Playwright 才能验证真实后期浏览器流程')
@@ -47,6 +48,9 @@ def test_browser_edits_renders_plays_downloads_and_accepts(editing, tmp_path, mo
     monkeypatch.setenv('FRAMEPILOT_AUDIO_ROOT', str(service.audio_root))
     audio = tmp_path / 'local-tone.wav'
     audio.write_bytes(_tone())
+    local_video = tmp_path / '本地输入.mp4'
+    if local_import:
+        local_video.write_bytes(service.video.media(project, board['id'], source_run['id'])[0].read_bytes())
     queued_signal = tmp_path / 'browser-queued.json'
     rendered_signal = tmp_path / 'worker-rendered.json'
     download = tmp_path / 'browser-download.mp4'
@@ -66,7 +70,8 @@ def test_browser_edits_renders_plays_downloads_and_accepts(editing, tmp_path, mo
         process = subprocess.Popen([node, 'tests/editing-real-playback.cjs'],
             cwd=Path(__file__).resolve().parents[1], env=dict(os.environ,
                 EDITING_TEST_URL=f'http://127.0.0.1:{port}/editing?project={project}&board={board["id"]}',
-                EDITING_TEST_AUDIO=str(audio), EDITING_TEST_QUEUED=str(queued_signal),
+                EDITING_TEST_AUDIO=str(audio), EDITING_TEST_LOCAL_CLIP=str(local_video) if local_import else '',
+                EDITING_TEST_QUEUED=str(queued_signal),
                 EDITING_TEST_RENDERED=str(rendered_signal), EDITING_TEST_DOWNLOAD=str(download)),
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding='utf-8', errors='replace')
         deadline = time.monotonic() + 45
@@ -97,12 +102,17 @@ def test_browser_edits_renders_plays_downloads_and_accepts(editing, tmp_path, mo
         timeline = state['timeline']
         assert timeline['version'] == 1 and len(state['versions']) == 1
         assert timeline['content']['clips'] == [
-            {'run_id': source_run['id'], 'start_ms': 100, 'end_ms': 900, 'gain': .5}]
+            {'run_id': state['local_clips'][0]['run_id'] if local_import else source_run['id'], 'start_ms': 100, 'end_ms': 900, 'gain': .5}]
         assert timeline['content']['subtitles'] == [
             {'start_ms': 0, 'end_ms': 500, 'text': '本地浏览器成片验收'}]
         assert len(state['audio']) == 1
         assert timeline['content']['audio_tracks'] == [
             {'asset_id': state['audio'][0]['id'], 'offset_ms': 0, 'gain': .4, 'loop': True}]
+        if local_import:
+            assert len(state['local_clips']) == 1
+            assert timeline['manifest']['clips'][0]['source'] == 'local_upload'
+            assert timeline['manifest']['clips'][0]['filename'] == '本地输入.mp4'
+            assert len(service.video.list(project, board['id'])['runs']) == 1
         assert state['exports'][0]['accepted']
         assert state['exports'][0]['acceptance']['comment'] == '本地合成素材浏览器验收；不代表真实模型质量评测。'
         exported = service.media(project, board['id'], row['id'])[0].read_bytes()

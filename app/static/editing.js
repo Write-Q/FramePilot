@@ -6,6 +6,7 @@
   const base = `/api/production/projects/${encodeURIComponent(project || '')}/storyboards/${encodeURIComponent(board || '')}/editing`;
   const pendingKey = `framepilot:editing:export:${project}:${board}`;
   let data = null, draft = null, saved = '', busy = false, historical = false, pending = null, blocked = false;
+  let localPending = null;
   const copy = value => JSON.parse(JSON.stringify(value));
   const el = (tag, text, cls) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (cls) node.className = cls; return node; };
   const button = (text, action, label) => { const n = el('button', text, 'secondary'); n.type = 'button'; if (label) n.setAttribute('aria-label', label); n.addEventListener('click', action); return n; };
@@ -48,6 +49,11 @@
     $('upload').disabled = busy || !data || !data.source_current || !data.confirmed;
     $('audio-file').disabled = $('upload').disabled;
     $('retry-export').disabled = busy || !pending;
+    $('upload-local').disabled = !editable || !!localPending;
+    $('local-video-file').disabled = $('upload-local').disabled;
+    $('retry-local').hidden = !localPending;
+    $('retry-local').disabled = busy || !localPending;
+    document.querySelectorAll('#local-clips button').forEach(n => n.disabled = !editable || n.dataset.applicable !== 'true' || draft.clips.length >= 30 || draft.clips.some(c=>c.run_id===n.dataset.asset));
     document.querySelectorAll('#exports button').forEach(n => n.disabled = busy);
     if (draft) {
       $('duration').replaceChildren(document.createTextNode((total() / 1000).toFixed(2) + ' '), el('small','秒'));
@@ -70,10 +76,10 @@
     $('preset').value=draft.preset;
     $('clips').replaceChildren();
     draft.clips.forEach((clip,index)=>{
-      const source=data.selected_clips.find(x=>x.run_id===clip.run_id);
+      const source=data.selected_clips.find(x=>x.run_id===clip.run_id) || data.local_clips.find(x=>x.run_id===clip.run_id);
       const title=source?.shot_key || `素材 ${clip.run_id}`;
       const row=el('article',undefined,'clip'), head=el('div',undefined,'clip-head'), info=el('div',undefined,'clip-info');
-      const heading=el('h3');heading.append(el('span',String(index+1).padStart(2,'0'),'clip-index'),document.createTextNode(title));info.append(heading,el('small',source ? `素材时长 ${(source.duration_ms/1000).toFixed(2)} 秒` : '该素材来自已保存版本'));
+      const heading=el('h3');heading.append(el('span',String(index+1).padStart(2,'0'),'clip-index'),document.createTextNode(title));info.append(heading,el('small',source ? `${source.source==='local_upload'?'本地导入 · ':''}素材时长 ${(source.duration_ms/1000).toFixed(2)} 秒` : '该素材来自已保存版本'));
       const actions=el('div',undefined,'row');
       if(index>0)actions.append(button('↑',()=>{[draft.clips[index-1],draft.clips[index]]=[draft.clips[index],draft.clips[index-1]];renderDraft();},`${title} 上移`));
       if(index<draft.clips.length-1)actions.append(button('↓',()=>{[draft.clips[index+1],draft.clips[index]]=[draft.clips[index],draft.clips[index+1]];renderDraft();},`${title} 下移`));
@@ -81,7 +87,7 @@
       const media=safeMedia(source?.media_url);if(media){const video=el('video');video.controls=true;video.preload='none';video.src=media;video.setAttribute('aria-label',`${title} 素材预览`);row.append(video);}
       const fields=el('div',undefined,'fields');numberField(fields,'起点（秒）',clip,'start_ms',{seconds:true,max:source?source.duration_ms/1000:undefined});numberField(fields,'终点（秒）',clip,'end_ms',{seconds:true,max:source?source.duration_ms/1000:undefined});numberField(fields,'原声增益',clip,'gain',{max:2});row.append(fields);$('clips').append(row);
     });
-    if(!draft.clips.length)$('clips').append(el('p','暂无镜头。请返回分镜选用成功视频，再从当前选片建立时间线。','empty'));
+    if(!draft.clips.length)$('clips').append(el('p','暂无镜头。可从上方本地素材库加入片段，或返回分镜选用视频后重新建立时间线。','empty'));
     $('subtitles').replaceChildren();
     draft.subtitles.forEach((item,index)=>{
       const row=el('div',undefined,'subtitle'),fields=el('div',undefined,'fields');
@@ -100,12 +106,27 @@
       const actions=el('div',undefined,'row');actions.append(loop,button('移除音轨',()=>{draft.audio_tracks.splice(index,1);renderDraft();},`移除音轨 ${index+1}`));row.append(fields,actions);$('audio-tracks').append(row);
     });
     $('audio-state').textContent=`已上传 ${data.audio.length} 份音频 · 当前 ${draft.audio_tracks.length} / 4 条音轨`;
-    availability();
+    renderLocalClips();availability();
+  }
+  function renderLocalClips() {
+    $('local-clips').replaceChildren();
+    for(const asset of data.local_clips) {
+      const row=el('article',undefined,'clip'), title=asset.filename || asset.shot_key || asset.id;
+      row.append(el('h3',title,'clip-info'),el('p',`本地导入 · 分镜 V${asset.version} · ${(asset.duration_ms/1000).toFixed(2)} 秒`,'hint'));
+      const media=safeMedia(asset.media_url);
+      if(media){const video=el('video');video.controls=true;video.preload='none';video.src=media;video.setAttribute('aria-label',`${title} 本地素材预览`);row.append(video);}
+      const add=button('加入时间线',()=>{if(!writable()||draft.clips.length>=30||draft.clips.some(c=>c.run_id===asset.run_id))return;draft.clips.push({run_id:asset.run_id,start_ms:0,end_ms:asset.duration_ms,gain:1});renderDraft();},`${title} 加入时间线`);
+      add.dataset.asset=asset.run_id;add.dataset.applicable=String(asset.applicable===true);row.append(add);
+      if(!asset.applicable)row.append(el('p','历史素材 · 不能用于当前分镜新导出','hint'));
+      $('local-clips').append(row);
+    }
+    if(!data.local_clips.length)$('local-clips').append(el('p','尚未上传本地视频。','empty'));
+    $('local-state').textContent=`已保存 ${data.local_clips.length} 份本地素材 · 上传不自动加入时间线`;
   }
   function selectionDraft() { return {preset:'landscape',clips:data.selected_clips.map(x=>({run_id:x.run_id,start_ms:0,end_ms:x.duration_ms,gain:1})),subtitles:[],audio_tracks:[]}; }
   function validate() {
     if(!draft.clips.length || draft.clips.length>30)throw Error('请选择 1 至 30 个镜头。');
-    draft.clips.forEach((c,i)=>{const source=data.selected_clips.find(x=>x.run_id===c.run_id);if(!Number.isInteger(c.start_ms)||!Number.isInteger(c.end_ms)||c.start_ms<0||c.end_ms-c.start_ms<200||(source&&c.end_ms>source.duration_ms)||!Number.isFinite(c.gain)||c.gain<0||c.gain>2)throw Error(`镜头 ${i+1} 的裁切或增益无效；至少保留 0.2 秒，裁切不能超出素材。`);});
+    draft.clips.forEach((c,i)=>{const source=data.selected_clips.find(x=>x.run_id===c.run_id)||data.local_clips.find(x=>x.run_id===c.run_id);if(!Number.isInteger(c.start_ms)||!Number.isInteger(c.end_ms)||c.start_ms<0||c.end_ms-c.start_ms<200||(source&&c.end_ms>source.duration_ms)||!Number.isFinite(c.gain)||c.gain<0||c.gain>2)throw Error(`镜头 ${i+1} 的裁切或增益无效；至少保留 0.2 秒，裁切不能超出素材。`);});
     if(total()>600000)throw Error('成片总时长不能超过 600 秒。');
     if(draft.subtitles.length>100||draft.subtitles.some(s=>!s.text.trim()||s.text.length>200||s.start_ms<0||s.end_ms<=s.start_ms||s.end_ms>total()))throw Error('请核对字幕：正文不能为空，时间范围必须在成片内。');
     if(draft.audio_tracks.length>4||draft.audio_tracks.some(a=>!a.asset_id||!Number.isFinite(a.offset_ms)||a.offset_ms<0||a.offset_ms>=total()||!Number.isFinite(a.gain)||a.gain<0||a.gain>2))throw Error('请核对音轨：进入时间必须在成片内，增益为 0 至 2。');
@@ -138,9 +159,9 @@
       blocked=true;
       showError(Error('时间线已在其他页面更新。当前编辑内容仍保留，请点击“重新读取”核对新版本后再保存或导出。'));
     }
-    data={...result,audio:result.audio||[],selected_clips:result.selected_clips||[],versions:result.versions||[],exports:result.exports||[]};
+    data={...result,audio:result.audio||[],selected_clips:result.selected_clips||[],local_clips:result.local_clips||[],versions:result.versions||[],exports:result.exports||[]};
     $('source-state').textContent=!data.source_current?'上游来源已变化 · 请返回分镜重新确认。':!data.confirmed?'分镜尚未确认 · 请先完成确认。':`分镜 V${data.source_version} · 已确认`;
-    $('message').textContent=data.source_current&&data.confirmed?'从已选用视频开始。先整理节奏与声音，再保存并导出。':'当前来源不能用于新导出；已有记录仍可回看。';
+    $('message').textContent=data.source_current&&data.confirmed?'选用分镜视频或加入本地素材。先整理节奏与声音，再保存并导出。':'当前来源不能用于新导出；已有记录仍可回看。';
     if(replaceDraft){blocked=false;historical=false;draft=data.timeline?copy(data.timeline.content):selectionDraft();saved=data.timeline?JSON.stringify(draft):'';$('history').value='latest';renderDraft();}
     const choice=$('history').value;$('history').replaceChildren();const latest=el('option','最新时间线');latest.value='latest';$('history').append(latest);
     data.versions.forEach(version=>{const option=el('option',`V${version.version} · 分镜 V${version.source_version}`);option.value=String(version.version);$('history').append(option);});$('history').value=choice||'latest';
@@ -174,7 +195,27 @@
       $('history-state').textContent=historical?'历史版本只读。选择最新时间线继续编辑。':'每次保存都会保留独立版本。';renderDraft();});
   });
   $('upload-form').addEventListener('submit',event=>{event.preventDefault();work(async()=>{const file=$('audio-file').files[0];if(!file||!/\.wav$/i.test(file.name)||file.size>20*1024*1024)throw Error('请选择不超过 20 MiB 的 WAV 文件。');const asset=await api('/audio',undefined,{method:'POST',headers:{'Content-Type':'audio/wav','X-Filename':encodeURIComponent(file.name)},body:file});data.audio.push(asset);$('audio-file').value='';renderDraft();$('message').textContent='音频已上传。点击“添加音轨”将它放入时间线。';});});
-  window.addEventListener('beforeunload',event=>{if(dirty()){event.preventDefault();event.returnValue='';}});
+  async function submitLocal() {
+    const attempt=localPending;
+    if(!attempt)return;
+    let asset;
+    try {
+      asset=await api('/local-clips',undefined,{method:'POST',headers:{'Content-Type':attempt.mime,'X-Filename':encodeURIComponent(attempt.file.name),'X-Expected-Version':String(attempt.version),'X-Idempotency-Key':attempt.key},body:attempt.file});
+      if(!asset.id||!asset.run_id||!Number.isInteger(asset.duration_ms))throw Error('上传结果尚未确认，请用原文件恢复上传。');
+    } catch(error) {if([400,404,409,413,422].includes(error.status))localPending=null;throw error;}
+    data.local_clips=data.local_clips.filter(x=>x.id!==asset.id);data.local_clips.push(asset);
+    localPending=null;$('local-video-file').value='';renderDraft();
+    $('message').textContent='本地视频已保存。请先预览，再明确加入时间线。';
+  }
+  $('local-upload-form').addEventListener('submit',event=>{event.preventDefault();work(async()=>{
+    if(!writable())throw Error('请重新读取当前已确认分镜后上传。');
+    const file=$('local-video-file').files[0];
+    if(!file||!file.size||! /\.(mp4|webm)$/i.test(file.name)||file.size>256*1024*1024)throw Error('请选择不超过 256 MiB 的 MP4 或 WebM 文件。');
+    localPending={file,version:data.source_version,key:crypto.randomUUID(),mime:/\.webm$/i.test(file.name)?'video/webm':'video/mp4'};
+    await submitLocal();
+  });});
+  $('retry-local').addEventListener('click',()=>work(submitLocal));
+  window.addEventListener('beforeunload',event=>{if(dirty()||localPending){event.preventDefault();event.returnValue='';}});
   availability();
   $('identity').textContent=project&&board?`项目 ${project} / 分镜 ${board}`:'缺少项目或分镜编号';
   if(project&&board){$('back').href=`/storyboard?project=${encodeURIComponent(project)}&board=${encodeURIComponent(board)}`;try{const stored=JSON.parse(localStorage.getItem(pendingKey)||'null');if(stored&&Number.isInteger(stored.expected_version)&&typeof stored.idempotency_key==='string')pending=stored;}catch{showError(Error('无法读取上一次导出请求；请检查浏览器本地存储。'));}work(()=>load());}

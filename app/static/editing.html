@@ -11,10 +11,11 @@
 <div class="workspace">
 <div id="message" role="status" aria-live="polite">正在准备后期工作台。</div><div id="error" role="alert" tabindex="-1" hidden></div>
 <section id="pending-panel" class="panel" hidden><h2>导出提交尚待确认</h2><p>上一次请求的结果尚未确认。请用原请求恢复；刷新页面也会保留该请求，避免重复排队。</p><button id="retry-export" type="button">用原请求恢复导出</button></section>
+<section class="panel"><span class="eyebrow">本地素材</span><h2>先用自己的片段，试出节奏。</h2><p class="hint">上传 MP4（H.264）或 WebM（VP8/VP9），每份最多 256 MiB、600 秒。素材保留在当前分镜版本中，加入时间线后才会用于导出；本地导入不会记录为模型生成。</p><form id="local-upload-form" class="upload"><label for="local-video-file">本地视频文件</label><input id="local-video-file" type="file" accept=".mp4,.webm,video/mp4,video/webm" required><button id="upload-local" class="secondary" type="submit">上传本地视频</button></form><p id="local-state" class="hint" role="status"></p><button id="retry-local" class="secondary" type="button" hidden>用原文件恢复上传</button><p class="hint">上传响应丢失时，可在当前页用原文件重试；刷新后请先核对素材库，确认结果后再上传。</p><div id="local-clips"></div></section>
 <section class="panel"><div class="section-heading"><div><span class="eyebrow">01 / 镜头剪辑</span><h2>把节奏，接起来。</h2></div><span class="stage" id="clip-count">0 镜</span></div><p class="hint">按选用顺序载入。裁切时间以素材起点为准，单位为秒；原声增益 0 为静音、1 为原音量、2 为两倍。</p><div id="clips"></div></section>
 <section class="panel"><div class="section-heading"><div><span class="eyebrow">02 / 字幕</span><h2>留下想说的话。</h2></div><button id="add-subtitle" class="secondary" type="button">添加字幕</button></div><p class="hint">时间以成片起点为准。直接烧录字幕，不会生成或识别台词。</p><div id="subtitles"></div></section>
 <section class="panel"><div class="section-heading"><div><span class="eyebrow">03 / 声音</span><h2>让声音，有所安放。</h2></div><button id="add-audio" class="secondary" type="button">添加音轨</button></div><p class="hint">上传自己的配音或音乐 WAV 文件，每份不超过 20 MiB、600 秒。音轨与镜头原声混合；本页不调用语音合成。</p><form id="upload-form" class="upload"><label for="audio-file">音频文件</label><input id="audio-file" type="file" accept=".wav,audio/wav,audio/x-wav" required><button id="upload" class="secondary" type="submit">上传 WAV</button></form><p id="audio-state" class="hint" role="status"></p><div id="audio-tracks"></div></section>
 <section class="panel"><div class="section-heading"><div><span class="eyebrow">04 / 成片档案</span><h2>看过，才算完成。</h2></div></div><p class="hint">渲染成功说明文件已生成。请实际播放核对镜头、声音和字幕，再单独记录人工验收。</p><div id="exports"><p class="empty">还没有导出记录。</p></div></section>
 </div>
-</main><footer>FramePilot · 本地后期工作台 · 素材来源沿用选片记录 · 成片效果需要人工审阅</footer>
+</main><footer>FramePilot · 本地后期工作台 · 保留素材来源与版本 · 成片效果需要人工审阅</footer>
 </body></html>

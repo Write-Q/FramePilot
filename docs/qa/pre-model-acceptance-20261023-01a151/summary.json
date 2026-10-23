@@ -1,14 +1,32 @@
 {
-  "full_regression": {
+  "phase1_full_regression": {
     "tests": "418",
     "errors": "0",
     "failures": "0",
     "skipped": "0",
     "time": "302.228"
   },
-  "independent_node_mock_tests": 18,
-  "post_review_media_tests": 45,
-  "real_browser_render_e2e": true,
-  "business_revision": "0011_editing",
-  "external_model_calls": 0
+  "final_full_regression": {
+    "tests": "450",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "time": "334.521"
+  },
+  "final_evidence": "pytest-final.xml",
+  "independent_node_mock_tests": 20,
+  "actual_media_boundary_tests": 50,
+  "real_browser_sources": [
+    "generated_selection",
+    "local_upload"
+  ],
+  "business_revision": "0012_local_clips",
+  "migration_existing_tables_unchanged": {
+    "0011": 51,
+    "0012": 55
+  },
+  "spec_review": "approved_after_fixes",
+  "code_quality_review": "approved_after_fixes",
+  "external_model_calls": 0,
+  "known_warning": "Existing Starlette AnyIO BlockingPortal deprecation"
 }

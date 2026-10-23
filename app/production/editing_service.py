@@ -13,6 +13,7 @@ import sqlalchemy as sa
 
 from app.models import production_tables as tables
 from app.production.editing_contracts import AcceptRequest, ExportRequest, TimelineContent, TimelineRequest
+from app.production.local_clips import LocalClips
 from app.production.planning import digest
 from app.production.store import InvalidProduction, ProductionConflict
 from app.production.video_files import VideoFiles
@@ -37,6 +38,7 @@ class EditingService:
         self.audio_root = Path(audio_root or os.getenv('FRAMEPILOT_AUDIO_ROOT') or
             Path(__file__).resolve().parents[2] / 'data' / 'audio').resolve()
         self.video = VideoRuntime(store, files=self.files)
+        self.local_clips = LocalClips(store, files=self.files)
 
     def _audio_path(self, key):
         if not isinstance(key, str) or not re.fullmatch(r'[a-f0-9]{32}\.wav', key):
@@ -89,6 +91,23 @@ class EditingService:
         selected = self.video._selected(conn, project)
         clips, audio = [], []
         for clip in content.clips:
+            if clip.run_id.startswith('local_'):
+                try:
+                    row = self.local_clips.get_owned(conn, project, series, clip.run_id)
+                except KeyError:
+                    raise InvalidProduction('本地视频不属于当前项目和分镜') from None
+                if not self.local_clips._applicable(row, board):
+                    raise ProductionConflict('仅能使用当前已确认版本的本地视频')
+                output = row['output']
+                if clip.end_ms > output['metadata']['duration_ms']:
+                    raise InvalidProduction('裁切区间超过实际视频时长')
+                try:
+                    self.files.verify(output)
+                except (OSError, ValueError, KeyError):
+                    raise InvalidProduction('视频素材文件不可读取或校验失败') from None
+                clips.append({'run_id': row['id'], 'shot_key': row['filename'], 'output': output,
+                    'source': 'local_upload', 'filename': row['filename']})
+                continue
             try:
                 row = self.video._run(conn, project, series, clip.run_id)
             except KeyError:
@@ -123,7 +142,8 @@ class EditingService:
                 manifest['board_sha256'] != digest(board['content'])):
             return False
         selected = self.video._selected(conn, row['project_id'])
-        return all(selected.get((row['storyboard_version_id'], clip['shot_key'])) == clip['run_id']
+        return all(clip.get('source') == 'local_upload' or
+                   selected.get((row['storyboard_version_id'], clip['shot_key'])) == clip['run_id']
                    for clip in manifest['clips'])
 
     def _serialize_timeline(self, conn, row, board):
@@ -183,7 +203,8 @@ class EditingService:
                 'exports': self._exports(conn, project, series), 'audio': [self._serialize_audio(item) for item in audio],
                 'source_version': board['version'], 'source_confirmed': bool(board['confirmation_effective']),
                 'source_current': bool(board['source_current']), 'confirmed': bool(board['confirmation_effective']),
-                'selected_clips': selected_clips}
+                'selected_clips': selected_clips,
+                'local_clips': self.local_clips.list(project, series, conn=conn, board=board)}
 
     def save(self, project, series, request):
         request = TimelineRequest.model_validate(request)

@@ -228,3 +228,34 @@ def test_original_sound_keeps_delayed_start_relative_to_picture(tmp_path):
     _,_,cut=decode(render_timeline({},[clip|{'path':path,'start_ms':200}],[]))
     assert max(abs(x) for x in samples([f for f in cut if float(f.time)<.2]))<.001
     assert max(abs(x) for x in samples([f for f in cut if .35<float(f.time)<.5]))>.05
+
+
+def test_nonzero_picture_origin_keeps_full_picture_and_relative_audio(tmp_path):
+    from imageio_ffmpeg import get_ffmpeg_exe
+    from app.production.video_files import VideoFiles
+    clip=video(tmp_path/'picture.mp4',seconds=1)
+    wav(tmp_path/'tone.wav',seconds=.3)
+    path=tmp_path/'offset-picture.mp4'
+    subprocess.run([get_ffmpeg_exe(),'-v','error','-nostdin','-itsoffset','0.5','-i',str(clip['path']),'-i',str(tmp_path/'tone.wav'),'-map','0:v:0','-map','1:a:0','-filter:a','adelay=800:all=1,apad=whole_dur=1.5','-c:v','copy','-c:a','aac',str(path)],check=True,timeout=15)
+    saved=VideoFiles(tmp_path/'stored').put(path.read_bytes(),'video/mp4')
+    assert saved['metadata']['duration_ms']==1000
+    _,frames,sound=decode(render_timeline({},[clip|{'path':path}],[]))
+    assert len(frames)==24,'Picture-origin offset must not truncate a full visual-second clip'
+    assert max(abs(x) for x in samples([f for f in sound if float(f.time)<.15]))<.001
+    assert max(abs(x) for x in samples([f for f in sound if .35<float(f.time)<.5]))>.05
+    _,cut,_=decode(render_timeline({},[clip|{'path':path,'start_ms':200}],[]))
+    assert len(cut)==19
+
+
+@pytest.mark.parametrize('with_audio',[False,True])
+def test_all_streams_with_nonzero_origin_do_not_shift_twice(tmp_path,with_audio):
+    from imageio_ffmpeg import get_ffmpeg_exe
+    clip=video(tmp_path/'plain.mp4',seconds=1)
+    path=tmp_path/'offset-all.mp4'
+    args=[get_ffmpeg_exe(),'-v','error','-nostdin','-itsoffset','0.5','-i',str(clip['path'])]
+    if with_audio:
+        wav(tmp_path/'tone.wav',seconds=1)
+        args+=['-itsoffset','0.5','-i',str(tmp_path/'tone.wav'),'-c:a','aac']
+    subprocess.run(args+['-c:v','copy',str(path)],check=True,timeout=15)
+    _,frames,_=decode(render_timeline({},[clip|{'path':path}],[]))
+    assert len(frames)==24,'Nonzero container start must be compensated exactly once'

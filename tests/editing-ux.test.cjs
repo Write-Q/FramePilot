@@ -9,13 +9,20 @@ async function fixture(t, overrides={}) {
   t.after(()=>browser.close());
   const page=await browser.newPage({viewport:{width:390,height:844}});
   page.on('dialog',dialog=>dialog.accept());
-  const state={timeline:null,versions:[],exports:[],audio:[],selected_clips:[{run_id:'a',shot_key:'镜头一',duration_ms:4000,media_url:'/a.mp4'},{run_id:'b',shot_key:'镜头二',duration_ms:3000,media_url:'/b.mp4'}],source_version:2,source_current:true,confirmed:true,...overrides};
-  const calls=[];let conflict=false, loseExport=false, exportConflict=false;
+  const state={timeline:null,versions:[],exports:[],audio:[],local_clips:[],selected_clips:[{run_id:'a',shot_key:'镜头一',duration_ms:4000,media_url:'/a.mp4'},{run_id:'b',shot_key:'镜头二',duration_ms:3000,media_url:'/b.mp4'}],source_version:2,source_current:true,confirmed:true,...overrides};
+  const calls=[];let conflict=false, loseExport=false, exportConflict=false, loseLocal=false;
   await page.route('**/*',async route=>{
     const req=route.request(), url=new URL(req.url());
     if(url.pathname.startsWith(root)) {
-      const body=req.postData()?JSON.parse(req.postData()):null;calls.push({path:url.pathname,method:req.method(),body});
+      const headers=req.headers(); const body=req.postData()&&headers['content-type']?.includes('application/json')?JSON.parse(req.postData()):null;calls.push({path:url.pathname,method:req.method(),body,headers});
       if(req.method()==='GET') return route.fulfill({json:url.pathname.endsWith('/timeline')?state.versions.find(x=>x.version===Number(url.searchParams.get('version'))):state});
+      if(url.pathname.endsWith('/local-clips')){
+        const key=headers['x-idempotency-key'];
+        let asset=state.local_clips.find(a=>a.idempotency_key===key);
+        if(!asset){asset={id:'local_a',run_id:'local_a',filename:decodeURIComponent(headers['x-filename']),duration_ms:2000,applicable:true,version:2,source:'local_upload',media_url:'/local.mp4',idempotency_key:key};state.local_clips.push(asset);}
+        if(loseLocal){loseLocal=false;return route.abort();}
+        return route.fulfill({status:201,json:asset});
+      }
       if(url.pathname.endsWith('/timeline')){
         if(conflict)return route.fulfill({status:409,json:{detail:'版本已改变'}});
         state.timeline={version:(state.timeline?.version||0)+1,source_version:body.source_version,content:body.content,applicable:true};state.versions.push(state.timeline);return route.fulfill({json:state.timeline});
@@ -33,8 +40,8 @@ async function fixture(t, overrides={}) {
     return route.fulfill({body:''});
   });
   await page.goto('http://localhost/editing?project=p&board=b');
-  await page.locator('#clips .clip').first().waitFor();
-  return {page,state,calls,setConflict:()=>conflict=true,setLoseExport:()=>loseExport=true,setExportConflict:()=>exportConflict=true};
+  await page.waitForFunction(()=>document.querySelector('#source-state').textContent.includes('已确认'));
+  return {page,state,calls,setLoseLocal:()=>loseLocal=true,setConflict:()=>conflict=true,setLoseExport:()=>loseExport=true,setExportConflict:()=>exportConflict=true};
 }
 
 test('选片顺序、原声默认值、裁切字幕音轨及不可变保存',async t=>{
@@ -150,4 +157,40 @@ test('其他标签更新后刷新验收记录不会导出未显示的新时间�
   await page.locator('#refresh').click();
   await page.waitForFunction(()=>document.querySelector('#preset').value==='portrait');
   assert.equal(await page.locator('#export').isDisabled(),false);
+});
+
+
+test('本地视频上传不自动采用，明确加入后可保存且显示来源',async t=>{
+  const {page,state}=await fixture(t,{selected_clips:[]});
+  assert.equal(await page.locator('#local-video-file').count(),1);
+  await page.getByLabel('本地视频文件',{exact:true}).setInputFiles({name:'本地片段.mp4',mimeType:'video/mp4',buffer:Buffer.from('fixture')});
+  await page.getByRole('button',{name:'上传本地视频',exact:true}).click();
+  await page.getByRole('button',{name:'本地片段.mp4 加入时间线',exact:true}).waitFor();
+  assert.equal(await page.locator('#clips .clip').count(),0);
+  assert.equal(await page.locator('#save').isDisabled(),true);
+  assert.match(await page.locator('#local-clips').textContent(),/本地导入/);
+  await page.getByRole('button',{name:'本地片段.mp4 加入时间线',exact:true}).click();
+  assert.equal(await page.locator('#clips .clip').count(),1);
+  assert.match(await page.locator('#clips').textContent(),/本地导入/);
+  assert.equal(await page.getByRole('button',{name:'本地片段.mp4 加入时间线',exact:true}).isDisabled(),true);
+  await page.locator('#save').click();
+  await page.waitForFunction(()=>!document.querySelector('#export').disabled);
+  assert.equal(state.timeline.content.clips[0].run_id,'local_a');
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+});
+
+test('本地上传响应丢失用原文件原key恢复，历史版本禁止上传',async t=>{
+  const {page,calls,state,setLoseLocal}=await fixture(t);
+  assert.equal(await page.locator('#local-video-file').count(),1);
+  await page.getByLabel('本地视频文件',{exact:true}).setInputFiles({name:'clip.mp4',mimeType:'video/mp4',buffer:Buffer.from('fixture')});
+  setLoseLocal();await page.getByRole('button',{name:'上传本地视频',exact:true}).click();
+  await page.locator('#retry-local').waitFor();
+  await page.locator('#retry-local').click();
+  await page.getByRole('button',{name:'clip.mp4 加入时间线',exact:true}).waitFor();
+  const uploads=calls.filter(c=>c.method==='POST'&&c.path.endsWith('/local-clips'));
+  assert.equal(uploads.length,2);assert.equal(uploads[0].headers['x-idempotency-key'],uploads[1].headers['x-idempotency-key']);
+  assert.equal(state.local_clips.length,1);
+  await page.locator('#save').click();await page.waitForFunction(()=>!document.querySelector('#export').disabled);
+  await page.locator('#history').selectOption('1');await page.waitForFunction(()=>document.querySelector('#save-state').textContent.includes('只读'));
+  assert.equal(await page.getByRole('button',{name:'上传本地视频',exact:true}).isDisabled(),true);
 });

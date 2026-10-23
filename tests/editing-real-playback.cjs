@@ -21,6 +21,24 @@ const {setTimeout: delay} = require('node:timers/promises');
     assert.equal(await page.locator('#clips .clip').count(), 1);
     assert.match(await page.locator('#source-state').innerText(), /已确认/);
     assert.equal(await page.locator('#export').isEnabled(), false);
+    if(process.env.EDITING_TEST_LOCAL_CLIP) {
+      await page.locator('#clips .clip').getByRole('button',{name:/ 移除$/}).click();
+      assert.equal(await page.locator('#clips .clip').count(),0);
+      await page.getByLabel('本地视频文件',{exact:true}).setInputFiles(process.env.EDITING_TEST_LOCAL_CLIP);
+      const uploaded=page.waitForResponse(r=>r.url().endsWith('/editing/local-clips')&&r.request().method()==='POST');
+      await page.getByRole('button',{name:'上传本地视频',exact:true}).click();
+      const response=await uploaded;assert.equal(response.status(),201);
+      // Chromium can evict a fetch upload response from its inspector cache.
+      // The application must finish consuming it and display the saved asset;
+      // independently read the durable record through the real HTTP API.
+      await page.getByRole('button',{name:'本地输入.mp4 加入时间线',exact:true}).waitFor();
+      const assets=await context.request.get(new URL('local-clips',response.url()).href);
+      const [asset]=await assets.json();assert.equal(asset.source,'local_upload');
+      assert.equal(await page.locator('#clips .clip').count(),0,'Upload must not adopt the clip');
+      await page.getByRole('button',{name:'本地输入.mp4 加入时间线',exact:true}).click();
+      await page.locator('#clips .clip').waitFor();
+      assert.match(await page.locator('#clips').innerText(),/本地导入/);
+    }
     await page.locator('#clips [data-field="start_ms"]').fill('0.1');
     await page.locator('#clips [data-field="end_ms"]').fill('0.9');
     await page.locator('#clips [data-field="gain"]').fill('0.5');
@@ -94,6 +112,7 @@ const {setTimeout: delay} = require('node:timers/promises');
     await page.reload();
     await page.waitForLoadState('networkidle');
     await page.waitForFunction(() => document.querySelector('#exports .status')?.textContent === '已人工验收');
+    if(process.env.EDITING_TEST_LOCAL_CLIP && process.env.FRAMEPILOT_EDITING_SCREENSHOT)await page.screenshot({path:process.env.FRAMEPILOT_EDITING_SCREENSHOT,fullPage:true});
     assert.equal(await page.getByRole('button', {name: '记录人工验收', exact: true}).count(), 0);
     assert.equal(await page.locator('#clips [data-field="start_ms"]').inputValue(), '0.1');
     assert.equal(await page.locator('#clips [data-field="end_ms"]').inputValue(), '0.9');
