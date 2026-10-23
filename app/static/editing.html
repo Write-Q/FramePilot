@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>后期工作台 · FramePilot</title><link rel="stylesheet" href="/static/editing.css"><script defer src="/static/editing.js"></script></head>
+<body>
+<header><div><a class="brand" href="/">FRAMEPILOT / FINISHING ROOM</a><h1>让每一镜，成为一部片。</h1><p>排序与裁切 · 原声与配乐 · 字幕与成片</p></div><nav aria-label="工作台导航"><a id="back" href="/storyboard">返回分镜 ↗</a><span class="stage">03 / 后期</span></nav></header>
+<main>
+<aside>
+<section class="panel"><span class="eyebrow">当前制作</span><h2>成片设置</h2><p id="identity" class="hint"></p><p id="source-state" class="status">正在读取分镜与选片…</p><label for="preset">输出画幅</label><select id="preset"><option value="landscape">横屏 · 1280 × 720</option><option value="portrait">竖屏 · 720 × 1280</option><option value="square">方形 · 720 × 720</option></select><p class="hint">24 帧 / 秒 · 保留完整画面并补边<br>镜头直接衔接，不额外添加转场。</p><div class="duration"><span>成片时长</span><strong id="duration">0.00 <small>秒</small></strong></div><p id="save-state" class="status">尚无时间线</p><div class="stack"><button id="save" type="button" disabled>保存时间线新版本</button><button id="export" type="button" disabled>提交成片导出</button><button id="refresh" class="secondary" type="button">重新读取</button></div><p class="hint">先保存，再导出。导出由独立渲染进程处理，请刷新查看结果；提交排队不表示渲染已运行。</p></section>
+<section class="panel"><span class="eyebrow">版本档案</span><label for="history">时间线版本</label><select id="history"><option value="latest">最新时间线</option></select><p id="history-state" class="hint">每次保存都会保留独立版本。</p><button id="new-from-selection" class="secondary" type="button">从当前选片重新建立</button><p class="hint">会替换未保存的编辑。旧版可以回看，不能直接修改。</p></section>
+</aside>
+<div class="workspace">
+<div id="message" role="status" aria-live="polite">正在准备后期工作台。</div><div id="error" role="alert" tabindex="-1" hidden></div>
+<section id="pending-panel" class="panel" hidden><h2>导出提交尚待确认</h2><p>上一次请求的结果尚未确认。请用原请求恢复；刷新页面也会保留该请求，避免重复排队。</p><button id="retry-export" type="button">用原请求恢复导出</button></section>
+<section class="panel"><div class="section-heading"><div><span class="eyebrow">01 / 镜头剪辑</span><h2>把节奏，接起来。</h2></div><span class="stage" id="clip-count">0 镜</span></div><p class="hint">按选用顺序载入。裁切时间以素材起点为准，单位为秒；原声增益 0 为静音、1 为原音量、2 为两倍。</p><div id="clips"></div></section>
+<section class="panel"><div class="section-heading"><div><span class="eyebrow">02 / 字幕</span><h2>留下想说的话。</h2></div><button id="add-subtitle" class="secondary" type="button">添加字幕</button></div><p class="hint">时间以成片起点为准。直接烧录字幕，不会生成或识别台词。</p><div id="subtitles"></div></section>
+<section class="panel"><div class="section-heading"><div><span class="eyebrow">03 / 声音</span><h2>让声音，有所安放。</h2></div><button id="add-audio" class="secondary" type="button">添加音轨</button></div><p class="hint">上传自己的配音或音乐 WAV 文件，每份不超过 20 MiB、600 秒。音轨与镜头原声混合；本页不调用语音合成。</p><form id="upload-form" class="upload"><label for="audio-file">音频文件</label><input id="audio-file" type="file" accept=".wav,audio/wav,audio/x-wav" required><button id="upload" class="secondary" type="submit">上传 WAV</button></form><p id="audio-state" class="hint" role="status"></p><div id="audio-tracks"></div></section>
+<section class="panel"><div class="section-heading"><div><span class="eyebrow">04 / 成片档案</span><h2>看过，才算完成。</h2></div></div><p class="hint">渲染成功说明文件已生成。请实际播放核对镜头、声音和字幕，再单独记录人工验收。</p><div id="exports"><p class="empty">还没有导出记录。</p></div></section>
+</div>
+</main><footer>FramePilot · 本地后期工作台 · 素材来源沿用选片记录 · 成片效果需要人工审阅</footer>
+</body></html>

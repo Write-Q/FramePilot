@@ -1,0 +1,17 @@
+{
+  "checkpoint_regression": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "47",
+    "time": "33.224",
+    "timestamp": "2026-10-23T19:35:52.985178+08:00",
+    "hostname": "LAPTOP-1KI6UI96"
+  },
+  "browser_mock_passed": 6,
+  "external_model_calls": 0,
+  "business_db_migrated": false,
+  "full_regression_run": false,
+  "real_browser_render_e2e": false
+}

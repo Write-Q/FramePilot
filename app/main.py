@@ -54,6 +54,10 @@ def create_app(*, database_url=None, provider=None, storyboard_provider=None, re
     def storyboard_page():
         return FileResponse(static / 'storyboard.html')
 
+    @app.get('/editing', include_in_schema=False)
+    def editing_page():
+        return FileResponse(static / 'editing.html')
+
     @app.get('/docs', include_in_schema=False)
     def docs():
         return get_swagger_ui_html(openapi_url='/openapi.json', title=app.title,

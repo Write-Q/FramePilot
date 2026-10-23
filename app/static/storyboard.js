@@ -23,6 +23,11 @@ async function api(url, body) {
   return data;
 }
 function availability() {
+  const editingLink = $('editing-link');
+  if(editingLink) {
+    editingLink.hidden = !current;
+    if(current) editingLink.href = '/editing?project=' + encodeURIComponent(project.id) + '&board=' + encodeURIComponent(current.id);
+  }
   const pending=project&&readMemory(pendingScope());
   $('generate').disabled=working || !project || project.state.status!=='confirmed' || project.state.mode==='direct' || project.state.reviewed_version!==project.state.version || !$('profile').value;
   for(const el of $('shot-form').querySelectorAll('input,textarea,select'))el.disabled=working||readonly();

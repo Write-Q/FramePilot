@@ -1,0 +1,66 @@
+"""Timeline versions, bounded WAV assets, export tasks and manual acceptance history."""
+import sqlalchemy as sa
+from sqlalchemy.dialects.postgresql import JSONB
+
+
+def register_editing(metadata):
+    timelines = sa.Table('fp_editing_timelines', metadata,
+        sa.Column('id', sa.String(64), primary_key=True),
+        sa.Column('project_id', sa.String(64), nullable=False),
+        sa.Column('storyboard_id', sa.String(64), nullable=False),
+        sa.Column('storyboard_version_id', sa.String(64), nullable=False),
+        sa.Column('version_no', sa.Integer, nullable=False),
+        sa.Column('source_version', sa.Integer, nullable=False),
+        sa.Column('content', JSONB, nullable=False),
+        sa.Column('manifest', JSONB, nullable=False),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        sa.UniqueConstraint('project_id', 'id', name='uq_editing_timeline_owned'),
+        sa.UniqueConstraint('project_id', 'storyboard_id', 'version_no', name='uq_editing_timeline_version'),
+        sa.ForeignKeyConstraint(['project_id', 'storyboard_id'], ['fp_breakdown_versions.project_id', 'fp_breakdown_versions.id']),
+        sa.ForeignKeyConstraint(['project_id', 'storyboard_version_id'], ['fp_storyboard_versions.project_id', 'fp_storyboard_versions.id']),
+        sa.CheckConstraint('version_no >= 1 AND source_version >= 1', name='ck_editing_timeline_version'))
+    audio = sa.Table('fp_editing_audio', metadata,
+        sa.Column('id', sa.String(64), primary_key=True),
+        sa.Column('project_id', sa.String(64), nullable=False),
+        sa.Column('storyboard_id', sa.String(64), nullable=False),
+        sa.Column('output', JSONB, nullable=False),
+        sa.Column('duration_ms', sa.Integer, nullable=False),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        sa.UniqueConstraint('project_id', 'id', name='uq_editing_audio_owned'),
+        sa.ForeignKeyConstraint(['project_id', 'storyboard_id'], ['fp_breakdown_versions.project_id', 'fp_breakdown_versions.id']),
+        sa.CheckConstraint('duration_ms BETWEEN 1 AND 600000', name='ck_editing_audio_duration'))
+    exports = sa.Table('fp_editing_exports', metadata,
+        sa.Column('id', sa.String(64), primary_key=True),
+        sa.Column('project_id', sa.String(64), nullable=False),
+        sa.Column('storyboard_id', sa.String(64), nullable=False),
+        sa.Column('timeline_id', sa.String(64), nullable=False),
+        sa.Column('idempotency_key', sa.String(64), nullable=False),
+        sa.Column('request_sha256', sa.String(64), nullable=False),
+        sa.Column('manifest', JSONB, nullable=False),
+        sa.Column('status', sa.String(16), nullable=False),
+        sa.Column('claim_id', sa.String(64)),
+        sa.Column('error_code', sa.String(64)),
+        sa.Column('output', JSONB),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        sa.Column('started_at', sa.DateTime(timezone=True)),
+        sa.Column('finished_at', sa.DateTime(timezone=True)),
+        sa.UniqueConstraint('project_id', 'id', name='uq_editing_export_owned'),
+        sa.UniqueConstraint('project_id', 'idempotency_key', name='uq_editing_export_request'),
+        sa.ForeignKeyConstraint(['project_id', 'storyboard_id'], ['fp_breakdown_versions.project_id', 'fp_breakdown_versions.id']),
+        sa.ForeignKeyConstraint(['project_id', 'timeline_id'], ['fp_editing_timelines.project_id', 'fp_editing_timelines.id']),
+        sa.CheckConstraint("status IN ('queued','running','succeeded','failed','unknown')", name='ck_editing_export_status'),
+        sa.CheckConstraint("(status IN ('queued','running')) = (finished_at IS NULL)", name='ck_editing_export_finished'),
+        sa.CheckConstraint("(status = 'running') = (claim_id IS NOT NULL)", name='ck_editing_export_claim'),
+        sa.CheckConstraint("(status = 'succeeded') = (output IS NOT NULL)", name='ck_editing_export_output'))
+    sa.Index('ix_editing_export_queue', exports.c.status, exports.c.created_at)
+    accepts = sa.Table('fp_editing_acceptances', metadata,
+        sa.Column('id', sa.String(64), primary_key=True),
+        sa.Column('project_id', sa.String(64), nullable=False),
+        sa.Column('export_id', sa.String(64), nullable=False),
+        sa.Column('comment', sa.Text, nullable=False),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
+        sa.UniqueConstraint('project_id', 'export_id', name='uq_editing_acceptance_export'),
+        sa.ForeignKeyConstraint(['project_id', 'export_id'], ['fp_editing_exports.project_id', 'fp_editing_exports.id']),
+        sa.CheckConstraint('length(comment) <= 2000', name='ck_editing_acceptance_comment'))
+    return {'editing_timelines': timelines, 'editing_audio': audio, 'editing_exports': exports,
+            'editing_acceptances': accepts}

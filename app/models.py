@@ -53,3 +53,5 @@ from app.production.video_runtime_schema import register_video_runtime as _regis
 production_tables.update(_register_video_runtime(Base.metadata))
 from app.production.inspection_schema import register_inspections as _register_inspections
 production_tables.update(_register_inspections(Base.metadata))
+from app.production.editing_schema import register_editing as _register_editing
+production_tables.update(_register_editing(Base.metadata))
