@@ -1,0 +1,221 @@
+{
+  "model": "deepseek-flash",
+  "effort": "low",
+  "max_tokens": 12000,
+  "max_calls": 4,
+  "calls": [
+    {
+      "case": "slack",
+      "status": "valid_report",
+      "manifest": {
+        "workflow_version": "storyboard-reviewer-1.1.0",
+        "skills": [
+          {
+            "id": "storyboard_review",
+            "version": "1.1.0",
+            "sha256": "00451de3fbe6eb0ccbaebc60535aaff433fa616973a9ac9cd62f2bd72f707892",
+            "sources": [
+              "S008",
+              "S010"
+            ],
+            "source_locators": [
+              {
+                "repository": "HBAI-Ltd/Toonflow-app",
+                "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+                "path": "packages/teams/storyboardTeam/members/reviewer.md",
+                "sections": [
+                  "分镜审阅"
+                ]
+              },
+              {
+                "repository": "HBAI-Ltd/Toonflow-app",
+                "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+                "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+                "sections": [
+                  "审阅方法与本集落点"
+                ]
+              },
+              {
+                "repository": "Forget-C/Jellyfish",
+                "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+                "path": "backend/app/chains/agents/consistency_checker_agent.py",
+                "sections": [
+                  "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+                ]
+              }
+            ]
+          }
+        ],
+        "prompt_sha256": "590e6bd97869c97b0942e121fdc74d1969b876b0a8c06af12a3bd6136eeebd3f",
+        "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150"
+      },
+      "usage": {
+        "prompt_tokens": 2144,
+        "completion_tokens": 262,
+        "total_tokens": 2406
+      },
+      "issue_count": 0,
+      "elapsed_seconds": 2.218
+    },
+    {
+      "case": "assumption",
+      "status": "valid_report",
+      "manifest": {
+        "workflow_version": "storyboard-reviewer-1.1.0",
+        "skills": [
+          {
+            "id": "storyboard_review",
+            "version": "1.1.0",
+            "sha256": "00451de3fbe6eb0ccbaebc60535aaff433fa616973a9ac9cd62f2bd72f707892",
+            "sources": [
+              "S008",
+              "S010"
+            ],
+            "source_locators": [
+              {
+                "repository": "HBAI-Ltd/Toonflow-app",
+                "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+                "path": "packages/teams/storyboardTeam/members/reviewer.md",
+                "sections": [
+                  "分镜审阅"
+                ]
+              },
+              {
+                "repository": "HBAI-Ltd/Toonflow-app",
+                "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+                "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+                "sections": [
+                  "审阅方法与本集落点"
+                ]
+              },
+              {
+                "repository": "Forget-C/Jellyfish",
+                "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+                "path": "backend/app/chains/agents/consistency_checker_agent.py",
+                "sections": [
+                  "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+                ]
+              }
+            ]
+          }
+        ],
+        "prompt_sha256": "f91c1003dd079d20dd308334694a5ddddb635db813b7f210ff471a8727b1629c",
+        "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150"
+      },
+      "usage": {
+        "prompt_tokens": 2179,
+        "completion_tokens": 344,
+        "total_tokens": 2523
+      },
+      "issue_count": 0,
+      "elapsed_seconds": 2.859
+    },
+    {
+      "case": "ownership",
+      "status": "valid_report",
+      "manifest": {
+        "workflow_version": "storyboard-reviewer-1.1.0",
+        "skills": [
+          {
+            "id": "storyboard_review",
+            "version": "1.1.0",
+            "sha256": "00451de3fbe6eb0ccbaebc60535aaff433fa616973a9ac9cd62f2bd72f707892",
+            "sources": [
+              "S008",
+              "S010"
+            ],
+            "source_locators": [
+              {
+                "repository": "HBAI-Ltd/Toonflow-app",
+                "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+                "path": "packages/teams/storyboardTeam/members/reviewer.md",
+                "sections": [
+                  "分镜审阅"
+                ]
+              },
+              {
+                "repository": "HBAI-Ltd/Toonflow-app",
+                "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+                "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+                "sections": [
+                  "审阅方法与本集落点"
+                ]
+              },
+              {
+                "repository": "Forget-C/Jellyfish",
+                "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+                "path": "backend/app/chains/agents/consistency_checker_agent.py",
+                "sections": [
+                  "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+                ]
+              }
+            ]
+          }
+        ],
+        "prompt_sha256": "6a717de2dd7a64e75be07cad4858dd37e4fe7fb9a1f315eac8e9689373fcf23b",
+        "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150"
+      },
+      "usage": {
+        "prompt_tokens": 2144,
+        "completion_tokens": 854,
+        "total_tokens": 2998
+      },
+      "issue_count": 1,
+      "elapsed_seconds": 5.094
+    },
+    {
+      "case": "first_frame",
+      "status": "valid_report",
+      "manifest": {
+        "workflow_version": "storyboard-reviewer-1.1.0",
+        "skills": [
+          {
+            "id": "storyboard_review",
+            "version": "1.1.0",
+            "sha256": "00451de3fbe6eb0ccbaebc60535aaff433fa616973a9ac9cd62f2bd72f707892",
+            "sources": [
+              "S008",
+              "S010"
+            ],
+            "source_locators": [
+              {
+                "repository": "HBAI-Ltd/Toonflow-app",
+                "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+                "path": "packages/teams/storyboardTeam/members/reviewer.md",
+                "sections": [
+                  "分镜审阅"
+                ]
+              },
+              {
+                "repository": "HBAI-Ltd/Toonflow-app",
+                "ref": "d2e94aca7b59659ff6b4ca15f03cf134ec7f0e1d",
+                "path": "packages/skills/v118workflow/references/knowledge/shotCraft.md",
+                "sections": [
+                  "审阅方法与本集落点"
+                ]
+              },
+              {
+                "repository": "Forget-C/Jellyfish",
+                "ref": "a9678194ddf2d9be3ccbe78d4287d87d5089e123",
+                "path": "backend/app/chains/agents/consistency_checker_agent.py",
+                "sections": [
+                  "_CONSISTENCY_CHECKER_SYSTEM_PROMPT"
+                ]
+              }
+            ]
+          }
+        ],
+        "prompt_sha256": "0dfd4693d1d40765bddaa79e8138dad371a2ead20d937689b1815b6cd7e858ae",
+        "schema_sha256": "e0908f890267d6e05a0d434c78cee11c0dd36e77c45b4c277c469468798ae150"
+      },
+      "usage": {
+        "prompt_tokens": 2145,
+        "completion_tokens": 776,
+        "total_tokens": 2921
+      },
+      "issue_count": 1,
+      "elapsed_seconds": 4.907
+    }
+  ],
+  "semantic_judgment": "Reviewed by coding agent; see report.md for case-level judgments and limitations. Not expert blind review."
+}

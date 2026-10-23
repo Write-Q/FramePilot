@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>分镜工作台 · FramePilot</title><link rel="stylesheet" href="/static/storyboard.css"><script defer src="/static/presentation.js"></script><script defer src="/static/model-picker.js"></script><script defer src="/static/storyboard.js"></script><script defer src="/static/storyboard-review.js"></script></head>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>分镜工作台 · FramePilot</title><link rel="stylesheet" href="/static/storyboard.css"><script defer src="/static/presentation.js"></script><script defer src="/static/model-picker.js"></script><script defer src="/static/storyboard.js"></script><script defer src="/static/storyboard-review.js"></script><script defer src="/static/storyboard-media.js"></script><script defer src="/static/storyboard-video.js"></script></head>
 <body>
 <header><div><a class="brand" href="/">FRAMEPILOT / PRODUCTION STUDIO</a><h1>把故事，落到每一镜。</h1><p>文字分镜 · 画面、动作与声音的制作计划</p></div><nav aria-label="工作台导航"><a href="/">编剧工作台 ↗</a><span class="stage">02 / 分镜</span></nav></header>
 <main>
@@ -10,7 +10,7 @@
 <section class="panel"><div class="row"><span class="eyebrow">运行记录</span><button id="refresh-runs" class="text-button" type="button">刷新</button></div><p id="run-count" class="hint">尚未载入项目。</p><div id="runs"></div></section>
 </aside>
 <section class="workspace"><div id="message" role="status" aria-live="polite">先在编剧工作台确认剧本，再来安排镜头。</div><p id="error" role="alert" hidden></p>
-<div id="empty" class="empty panel"><span class="film-mark" aria-hidden="true">01 ─── 02 ─── 03</span><h2>每个镜头，都有叙事任务。</h2><p>从已确认的故事出发，规划画面与表演。<br>生成草案后，在这里逐镜调整、检查和确认。</p><p class="hint">当前阶段输出文字分镜与提示词，图片和视频生成将接在后续流程。</p></div>
+<div id="empty" class="empty panel"><span class="film-mark" aria-hidden="true">01 ─── 02 ─── 03</span><h2>每个镜头，都有叙事任务。</h2><p>从已确认的故事出发，规划画面与表演。<br>生成草案后，在这里逐镜调整、检查和确认。</p><p class="hint">确认文字分镜后，可逐镜制作图片候选；视频生成待接入服务。</p></div>
 <section id="board" hidden>
 <div class="board-top panel"><div class="row"><div class="board-heading"><span class="eyebrow">STORYBOARD / 镜头清单</span><h2 id="board-title"></h2></div><span id="board-version" class="version"></span></div><div class="pair selectors"><div><label for="board-series">分镜方案</label><select id="board-series"></select></div><div><label for="history-version">版本</label><select id="history-version"></select></div></div><p id="board-state" class="status"></p><p id="board-stats" class="hint"></p><label for="edit-title">方案标题</label><input id="edit-title" maxlength="200"><div class="row actions"><button id="save-board" type="button" disabled>保存新版本</button><button id="download-board" type="button" class="secondary">导出 JSON</button><span id="dirty-state" class="hint">已保存</span></div><details><summary>来源与生成记录</summary><pre id="provenance"></pre></details></div>
 <div class="shot-workspace"><section class="shot-list panel"><div class="row"><h3>镜头</h3><button id="add-shot" class="text-button" type="button">＋ 加镜头</button></div><div id="shots"></div></section><section class="shot-editor panel"><div class="row"><h3 id="editor-heading">镜头详情</h3><div class="row"><button id="move-up" type="button" class="text-button" aria-label="镜头上移">↑</button><button id="move-down" type="button" class="text-button" aria-label="镜头下移">↓</button><button id="delete-shot" type="button" class="text-button danger">删除</button></div></div><form id="shot-form"><div id="shot-fields"></div></form></section></div>
@@ -23,6 +23,22 @@
 <div id="model-review-result"></div><details><summary>审核历史与来源</summary><div id="model-review-runs"></div></details>
 </section>
 <section class="panel review"><span class="eyebrow">03 / 检查与确认</span><h2>再看一遍镜头之间。</h2><p class="hint">以下是当前已保存版本的程序提醒。它不能证明剧情忠实、空间正确或画面效果合格；请对照原文检查人物、道具、动作和首尾帧。</p><ul id="review-issues"></ul><label class="check"><input type="checkbox" id="review-read">我已阅读提醒并人工核对当前分镜</label><button id="confirm-board" type="button" disabled>确认当前分镜</button><p class="hint">确认不触发图片或视频生成。修改后会创建待确认的新版本；上游剧本变化后需重新交接。</p></section>
+<section class="panel" id="media-panel" aria-labelledby="media-heading">
+<span class="eyebrow">04 / 静态帧制作</span><div class="row"><h2 id="media-heading">先把这一镜，定在画面里。</h2><span id="media-shot" class="stage"></span></div>
+<p class="hint">选择上方镜头，制作首帧、关键帧或尾帧。每次点击会提交一个图片请求，可能产生费用；生成后需人工选用。</p>
+<form id="image-form"><div class="pair"><div><label for="frame-role">帧位置</label><select id="frame-role"><option value="first">首帧</option><option value="key">关键帧</option><option value="last">尾帧</option></select></div><div><label for="image-profile">图像模型</label><select id="image-profile"><option value="">选择图像模型</option></select></div></div>
+<div class="row actions"><button type="button" id="preview-frame-prompt" class="secondary">从分镜预览提示词</button></div><label for="frame-prompt">本次图片提示词草稿</label><textarea id="frame-prompt" rows="5" placeholder="可先预览再修改；留空将使用已保存分镜的对应帧提示词。"></textarea>
+<label for="image-size">图片尺寸（宽 × 高，使用 x 分隔）</label><input id="image-size" value="1536x864" pattern="[0-9]+x[0-9]+" required maxlength="20"><p class="hint">例如 1536x864。请填写当前模型支持的尺寸；画幅建议不保证模型支持。</p>
+<div class="row actions"><button type="submit" id="generate-image" disabled>生成图片候选</button><button type="button" id="refresh-media" class="secondary">刷新图片记录</button></div></form>
+<p id="media-status" class="status" role="status" aria-live="polite"></p><div id="media-candidates" class="media-grid"></div>
+<details id="image-config-details"><summary>添加图像 API 配置</summary><form id="image-config-form"><div class="pair"><div><label for="image-config-name">配置名称</label><input id="image-config-name" required maxlength="100"></div><div><label for="image-config-model">图像模型名称</label><input id="image-config-model" required maxlength="200"></div></div><label for="image-config-url">API 基础地址</label><input id="image-config-url" type="url" required placeholder="https://your-gateway.example/v1"><label for="image-config-env">密钥环境变量名</label><input id="image-config-env" maxlength="128" placeholder="例如 IMAGE_API_KEY"><p class="hint">使用兼容 Images 的文生图接口。填写本机 .env 中的变量名称，不要填写密钥。暂支持直接返回图片数据的服务；保存配置不会验证连接。</p><button type="submit" class="secondary">保存图像配置</button></form></details>
+<div class="media-video-note"><strong>下一步 / 视频</strong><p class="hint">视频生成服务尚未接入。先选用同版本首帧，再核对这一镜的运动与时长。</p><button id="preview-video-input" type="button" class="secondary" disabled>预览本镜视频输入</button><div id="video-input-preview" aria-live="polite"></div></div>
+</section>
+<section class="panel" id="video-runtime-panel" aria-labelledby="video-runtime-heading">
+<span class="eyebrow">05 / 视频任务</span><div class="row"><h2 id="video-runtime-heading">跟进这一版的动态画面。</h2><button id="refresh-videos" class="secondary" type="button">刷新视频状态与记录</button></div>
+<p id="video-service-status" class="status" role="status" aria-live="polite">尚未读取视频服务状态。</p><p class="hint">此处查看服务状态与已记录的任务。已验证的成功候选可播放并人工选用。供应商尚未选定，当前页面不提供外部视频生成。</p>
+<p id="video-runs-status" class="hint" role="status" aria-live="polite">载入分镜后可查看视频记录。</p><div id="video-runs"></div>
+</section>
 </section></section>
 </main><footer>FramePilot · 分镜计划与生成素材分别留存 · AI 草案需要人工审阅</footer>
 </body></html>

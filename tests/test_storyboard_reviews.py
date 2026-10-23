@@ -44,6 +44,26 @@ def setup(database_url):
         yield client, reviewer, base + '/' + board['id'], request
 
 
+def test_truncated_review_keeps_usage_and_actionable_error_without_retry(setup):
+    client, reviewer, url, request = setup
+    calls = []
+
+    def fail(*args):
+        calls.append(1)
+        raise PlannerError('private-detail', 'output_truncated', {'completion_tokens': 12000})
+
+    reviewer.generate = fail
+    response = client.post(url + '/review-runs', json=request)
+    assert response.status_code == 201
+    run = response.json()
+    assert run['status'] == 'failed' and run['report'] is None
+    assert run['error_code'] == 'output_truncated'
+    assert run['usage'] == {'completion_tokens': 12000}
+    assert '降低思考等级' in run['error'] and 'private-detail' not in response.text
+    assert client.post(url + '/review-runs', json=request).json()['id'] == run['id']
+    assert len(calls) == 1
+
+
 def test_review_is_explicit_idempotent_and_does_not_confirm_or_edit(setup):
     client, reviewer, url, request = setup
     assert client.get(url + '/review-runs').json() == [] and not reviewer.calls
@@ -52,7 +72,7 @@ def test_review_is_explicit_idempotent_and_does_not_confirm_or_edit(setup):
     run = response.json()
     assert run['status'] == 'succeeded' and run['applicable']
     assert run['report']['issues'][0]['key'] == 'issue-1'
-    assert run['manifest']['skills'][0]['version'] == '1.0.0'
+    assert run['manifest']['skills'][0]['version'] == '1.1.0'
     assert client.post(url + '/review-runs', json=request).json()['id'] == run['id']
     assert len(reviewer.calls) == 1
     assert client.post(url + '/review-runs', json=request | {'expected_version': 2}).status_code == 409

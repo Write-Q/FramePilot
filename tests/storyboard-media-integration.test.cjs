@@ -1,0 +1,67 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+const fs=require('node:fs');
+const base=process.env.FRAMEPILOT_UI_URL;
+
+test('真实工作台：图片排队、生成、选用与版本隔离',{timeout:90000},async()=>{
+  const browser=await chromium.launch({headless:true,...(process.env.FRAMEPILOT_CHROME?{executablePath:process.env.FRAMEPILOT_CHROME}:{})});
+  const page=await browser.newPage({viewport:{width:1440,height:1000}});
+  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  const post=async(url,data)=>{const response=await page.request.post(base+url,{data});assert.ok(response.ok(),await response.text());return response.json();};
+  try {
+    const project=await post('/api/projects',{story:'小禾把唯一的钥匙交给阿林。'});
+    await post(`/api/projects/${project.id}/resume`,{action:'confirm',version:project.state.version,interrupt_id:project.interrupt.id});
+    const content={schema_version:1,title:'钥匙交接',aspect_ratio:'16:9',scenes:[{key:'scene-1',title:'门前',source_quote:'小禾把唯一的钥匙交给阿林。'}],shots:[{key:'shot-1',scene_key:'scene-1',source_quote:'钥匙交给阿林',purpose:'交代钥匙归属',action:'小禾将钥匙递给阿林',duration_ms:4000,shot_size:'中景',camera_angle:'平视',camera_motion:'缓慢推进',state_start:'钥匙在小禾手中',state_end:'钥匙在阿林手中',frame_prompts:{first:'小禾握住钥匙，阿林空手，门前中景'},video_prompt:'小禾将钥匙递给阿林'}]};
+    const board=await post(`/api/production/projects/${project.id}/storyboards`,{source_version:1,content});
+    const url=`/api/production/projects/${project.id}/storyboards/${board.id}`;
+    await post(url+'/confirm',{expected_version:1});
+    await page.goto(base+'/storyboard?project='+project.id);
+    await page.waitForFunction(()=>window.StoryboardMedia&&document.getElementById('board-state').textContent.includes('已确认'));
+    await page.waitForFunction(()=>!document.body.classList.contains('busy'));
+    await page.locator('#image-config-details').evaluate(el=>el.open=true);
+    await page.locator('#image-config-name').fill('隔离测试图片');
+    await page.locator('#image-config-model').fill('fixture-image');
+    await page.locator('#image-config-url').fill('https://example.test/v1');
+    await page.getByRole('button',{name:'保存图像配置',exact:true}).click();
+    await page.waitForFunction(()=>!document.getElementById('generate-image').disabled);
+    assert.equal(await page.locator('#preview-video-input').isDisabled(),true);
+    await page.locator('#preview-frame-prompt').click();
+    await page.waitForFunction(()=>document.getElementById('frame-prompt').value.includes('小禾握住钥匙'));
+    await page.locator('#generate-image').click();
+    await page.waitForFunction(()=>!document.body.classList.contains('busy'));
+    const deadline=Date.now()+15000;
+    while(!await page.getByRole('button',{name:'选用此图',exact:true}).count()) {
+      assert.ok(Date.now()<deadline,'worker did not return a candidate');
+      await page.locator('#refresh-media').click();
+      await page.waitForFunction(()=>!document.body.classList.contains('busy'));
+      await page.waitForTimeout(100);
+    }
+    await page.getByRole('button',{name:'选用此图',exact:true}).click();
+    await page.waitForFunction(()=>document.querySelector('#shots img')?.naturalWidth>0);
+    assert.equal(await page.locator('#media-candidates img').evaluate(img=>img.naturalWidth),16);
+    const result=await (await page.request.get(base+url+'/media-runs?version=1')).json();
+    assert.equal(result.runs.length,1);assert.equal(result.runs[0].status,'succeeded');assert.equal(result.runs[0].selected,true);
+    await page.locator('#preview-video-input').click();
+    await page.locator('#video-input-preview').filter({hasText:'计划时长：4 秒'}).waitFor();
+    assert.match(await page.locator('#video-input-preview').textContent(),/小禾将钥匙递给阿林/);
+    assert.match(await page.locator('#video-input-preview').textContent(),/尚未提交视频生成/);
+    await page.waitForFunction(()=>document.querySelector('#video-input-preview img')?.naturalWidth>0);
+    fs.mkdirSync('.runtime/storyboard-media-qa',{recursive:true});
+    await page.locator('#media-panel').screenshot({path:'.runtime/storyboard-media-qa/desktop.png'});
+    await page.setViewportSize({width:390,height:844});
+    await page.locator('#media-panel').screenshot({path:'.runtime/storyboard-media-qa/mobile.png'});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+    await page.locator('#edit-title').fill('钥匙交接第二版');
+    assert.equal(await page.locator('#generate-image').isDisabled(),true);
+    assert.equal(await page.locator('#preview-video-input').isDisabled(),true);
+    await page.locator('#save-board').click();
+    await page.locator('#board-version').filter({hasText:'V2'}).waitFor();
+    await page.waitForFunction(()=>!document.body.classList.contains('busy'));
+    assert.match(await page.locator('#media-candidates').textContent(),/历史记录/);
+    assert.equal(await page.locator('#media-candidates button').first().isDisabled(),true);
+    assert.equal(await page.locator('#shots img').count(),0);
+    assert.equal(await page.locator('#generate-image').isDisabled(),true);
+    assert.deepEqual(errors,[]);
+  } finally {await browser.close();}
+});

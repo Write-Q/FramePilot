@@ -13,6 +13,7 @@ from app.production.reasoning import choose_effort, execution_manifest, request_
 
 MAX_RUNS = 10
 ERRORS = {'invalid_output': '模型输出未通过分镜结构或来源校验，未创建分镜。',
+          'output_truncated': '模型输出达到长度上限，结果未采用。可降低思考等级，或在模型支持范围内调整配置的输出预算后手动重试；未自动重试。',
           'source_changed': '生成期间来源剧本发生变化，未采用过期结果。',
           'outcome_unknown': '请求超时或连接中断，外部执行结果可能未知；未自动重试。',
           'provider_error': '文本服务请求失败，请检查服务和配置；未自动重试。',

@@ -47,3 +47,7 @@ game_session_table = _register_game(Base.metadata)
 
 from app.production.schema import register_production as _register_production
 production_tables = _register_production(Base.metadata)
+from app.production.media_schema import register_media as _register_media
+production_tables.update(_register_media(Base.metadata))
+from app.production.video_runtime_schema import register_video_runtime as _register_video_runtime
+production_tables.update(_register_video_runtime(Base.metadata))

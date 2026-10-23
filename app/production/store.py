@@ -39,7 +39,8 @@ class ProductionStore:
         from app.production.reasoning import options
         return {'id': profile_id, 'version': row['version_no'], 'current_version': current,
                 'config': config.model_dump(mode='json'),
-                'executable': config.adapter == 'openai_chat' and config.purpose in ('text', 'review'),
+                'executable': ((config.adapter == 'openai_chat' and config.purpose in ('text', 'review'))
+                    or (config.adapter == 'openai_images' and config.purpose == 'image')),
                 'capabilities_verified': False,
                 'reasoning_options': options(config),
                 'created_at': row['created_at'].isoformat()}

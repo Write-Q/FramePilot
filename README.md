@@ -2,9 +2,9 @@
 
 本地单用户学习项目：FastAPI + Pydantic + LangGraph + LangChain/DeepSeek + PostgreSQL。
 协作创作、自由编剧、十维概括、审核建议、人工确认和版本追溯已接通。
-视频生成、RAG、后台任务队列和多用户认证尚未实现。
+视频生成、RAG和多用户认证尚未实现；分镜图片已有独立持久化任务队列。
 
-第二版新增[分镜工作台](docs/storyboard-workbench.md)：已确认剧本 → 通用文本 API 生成文字分镜 → 逐镜编辑 → 版本保存与人工确认。支持独立文字审核、型号与思考等级选择、专业规则提醒、生成追溯和重复请求保护。使用前需显式升级数据库至0007；[首轮真实模型评测](docs/qa/storyboard-real-20261020-01a151/report.md)已记录生成效果、审核误报及截断等局限，图像/视频生成尚未接通。现有编剧模型配置保持原样。[制作底座 API](docs/production-foundation.md)继续提供模型配置和手工分镜入口。
+第二版新增[分镜工作台](docs/storyboard-workbench.md)：已确认剧本 → 通用文本 API 生成文字分镜 → 逐镜编辑 → 版本保存与人工确认。支持独立文字审核、型号与思考等级选择、专业规则提醒、生成追溯和重复请求保护。图片阶段现有[静态帧制作、视频任务底座、播放与选用](docs/shot-media.md)，需显式迁移至0009并单独启动图片worker。尚未选定真实图像/视频供应商，媒体效果未验证；[文字模型评测](docs/qa/storyboard-real-20261020-01a151/report.md)与[审核控制组](docs/qa/review-controls-20261022-01a151/report.md)单独记录。现有编剧模型配置保持原样。
 
 研发参考统一从[AIGC 视频资料库](docs/knowledge/aigc-video/README.md)进入：按制作领域、开发问题和来源编号定位专业知识、官方接口、参考实现与评测案例，减少重复广域搜索。
 

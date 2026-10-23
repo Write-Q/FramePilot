@@ -45,6 +45,8 @@ class ChatPlanner:
             usage = {name: raw_usage[name] for name in ('prompt_tokens', 'completion_tokens', 'total_tokens')
                      if type(raw_usage.get(name)) is int and raw_usage[name] >= 0}
             choice = data['choices'][0]
+            if choice.get('finish_reason') == 'length':
+                raise PlannerError('模型输出达到长度上限，未采用不完整结果。', 'output_truncated', usage)
             if choice.get('finish_reason') != 'stop' or choice['message'].get('refusal'):
                 raise PlannerError('模型输出截断、拒绝或未正常结束，未采用结果。', 'invalid_output', usage)
             output = json.loads(choice['message']['content'])

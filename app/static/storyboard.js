@@ -45,6 +45,8 @@ function availability() {
   for(const id of ['profile','target-shots','aspect-ratio','visual-style','instructions'])$(id).disabled=working||!!pending;
   ModelPicker.sync('profile','effort',{pending,disabled:working});
   window.StoryboardReview?.availability();
+  window.StoryboardMedia?.availability();
+  window.StoryboardVideo?.availability();
 }
 async function busy(operation) {
   if(working)return;
@@ -62,6 +64,7 @@ async function profiles(selectId, purpose='text') {
   const items=await api(prefix+'/model-profiles');
   ModelPicker.setModels('profile','effort',items.filter(x=>x.config.purpose==='text'&&x.config.adapter==='openai_chat'),purpose==='text'?selectId:null);
   window.StoryboardReview?.setProfiles(items,purpose==='review'?selectId:null);
+  window.StoryboardMedia?.setProfiles(items,purpose==='image'?selectId:null);
   availability();
 }
 async function loadProject(id) {
@@ -97,13 +100,14 @@ async function openBoard(identity, version) {
   $('history-version').replaceChildren();
   for(let i=current.current_version;i>=1;i--) { const option=node('option',`V${i}${i===current.current_version?' · 当前版':' · 历史'}`); option.value=String(i); $('history-version').append(option); }
   $('history-version').value=String(current.version); $('review-read').checked=false;
-  renderShots(); renderEditor(); await showReview(); await window.StoryboardReview?.refresh(); availability();
+  renderShots(); renderEditor(); await showReview(); await window.StoryboardReview?.refresh(); await window.StoryboardMedia?.refresh(); await window.StoryboardVideo?.refresh(); availability();
 }
 function renderShots() {
   $('shots').replaceChildren();
   draft.shots.forEach((shot,index)=>{
     const button=node('button',undefined,'shot-card'); button.type='button'; button.setAttribute('aria-pressed',String(selected===index));
     button.append(node('strong',`${String(index+1).padStart(2,'0')} / ${shot.shot_size||'景别待定'} · ${shot.duration_ms/1000}s`),node('span',shot.purpose),node('span',shot.action));
+    const thumb=window.StoryboardMedia?.thumbnail(shot.key);if(thumb)button.append(thumb);
     button.onclick=()=>{if(!$('shot-form').reportValidity())return;selected=index;renderShots();renderEditor();availability();}; $('shots').append(button);
   });
 }
@@ -153,6 +157,7 @@ function validateAllShots() {
   return $('shot-form').reportValidity();
 }
 function renderEditor() {
+  window.StoryboardMedia?.render();
   const shot=draft.shots[selected]; $('editor-heading').textContent=`镜头 ${String(selected+1).padStart(2,'0')} · ${shot.key}`;
   $('shot-fields').replaceChildren();
   for(const [title,fields] of sections) {

@@ -15,6 +15,8 @@ from app.production.generation import StoryboardGenerator
 from app.production.planning import PlanningUnavailable
 from app.production.review_contracts import ReviewRequest
 from app.production.reviews import StoryboardReviewer
+from app.production.media_api import install_media_routes
+from app.production.video_api import install_video_routes
 
 
 def _known_fields():
@@ -113,8 +115,8 @@ def install_production(app, configured_database_url=None, storyboard_provider=No
         return {'capabilities_verified': False, 'adapters': [
             {'id': 'openai_chat', 'purposes': ['text', 'review'], 'executable': True,
              'status': 'implemented_unverified', 'description': '已实现兼容Chat Completions的文本规划；具体网关和模型待验证'},
-            {'id': 'openai_images', 'purposes': ['image'], 'executable': False,
-             'status': 'reserved', 'description': '预留图像协议，须接入并验证具体网关'},
+            {'id': 'openai_images', 'purposes': ['image'], 'executable': True,
+             'status': 'implemented_unverified', 'description': '单图文生图、base64输出；具体网关待验证，需独立worker'},
             {'id': 'vendor_native', 'purposes': ['text', 'image', 'video', 'review', 'asr', 'tts'],
              'executable': False, 'status': 'reserved', 'description': '原生协议扩展点，尚未接执行器'}]}
 
@@ -166,4 +168,6 @@ def install_production(app, configured_database_url=None, storyboard_provider=No
     def confirm(project_id: str, storyboard_id: str, request: ConfirmStoryboard):
         return invoke(lambda service: service.confirm_storyboard(project_id, storyboard_id, request.expected_version))
 
+    install_media_routes(router, invoke)
+    install_video_routes(router, invoke, app)
     app.include_router(router)

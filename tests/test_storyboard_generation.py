@@ -107,6 +107,24 @@ def test_missing_key_fails_before_network(monkeypatch):
         chat.ChatPlanner().generate(ModelConfig(**model_config()), [])
 
 
+@pytest.mark.parametrize('content', ['', '{"issues":[]}'])
+def test_output_budget_exhaustion_is_distinct_and_preserves_usage(monkeypatch, content):
+    monkeypatch.setenv('FP_PLANNER_KEY', 'test-key')
+    requests = []
+
+    def respond(request):
+        requests.append(request)
+        return httpx.Response(200, json={'choices': [{'finish_reason': 'length',
+            'message': {'content': content}}], 'usage': {'completion_tokens': 12000}})
+
+    with httpx.Client(transport=httpx.MockTransport(respond)) as client:
+        with pytest.raises(chat.PlannerError) as error:
+            chat.ChatPlanner(client=client).generate(ModelConfig(**model_config()), [])
+    assert error.value.code == 'output_truncated'
+    assert error.value.usage == {'completion_tokens': 12000}
+    assert len(requests) == 1
+
+
 def generate(client, project, payload):
     return client.post(f'/api/production/projects/{project}/storyboard-runs', json=payload)
 

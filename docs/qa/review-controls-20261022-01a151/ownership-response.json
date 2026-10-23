@@ -1,0 +1,44 @@
+{
+  "issues": [
+    {
+      "key": "key-state-end-contradiction",
+      "severity": "high",
+      "category": "continuity",
+      "certainty": "supported",
+      "shot_keys": [
+        "shot-1"
+      ],
+      "scene_keys": [
+        "scene-1"
+      ],
+      "description": "镜头动作、落幅和连续性备注都表明钥匙已从下禾转到阿林手中，但 state_end 写成“唯一钥匙仍在小禾手中，阿林手中无钥匙”，与同一镜头内的交接结果直接矛盾，会导致计划末状态错误。",
+      "suggestion": "将 state_end 改为与交接结果一致，例如“唯一钥匙在阿林手中，小禾空手”；也可按用户意图调整 action、落幅和连续性备注，但需保持全镜头一致。",
+      "evidence": [
+        {
+          "source": "shot",
+          "key": "shot-1",
+          "field": "action",
+          "quote": "小禾递出钥匙，阿林伸手接住"
+        },
+        {
+          "source": "shot",
+          "key": "shot-1",
+          "field": "state_end",
+          "quote": "唯一钥匙仍在小禾手中，阿林手中无钥匙"
+        },
+        {
+          "source": "shot",
+          "key": "shot-1",
+          "field": "continuity_notes",
+          "quote": "交接后钥匙留在阿林手中"
+        },
+        {
+          "source": "shot",
+          "key": "shot-1",
+          "field": "frame_prompts.last",
+          "quote": "阿林握着唯一钥匙，小禾空手"
+        }
+      ]
+    }
+  ]
+}

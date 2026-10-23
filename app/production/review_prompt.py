@@ -6,11 +6,11 @@ from app.production.contracts import Shot, StoryboardContent
 from app.production.planning import digest, load_skill_bundle
 from app.production.review_contracts import ReviewReport
 
-WORKFLOW_VERSION = 'storyboard-reviewer-1.0.0'
+WORKFLOW_VERSION = 'storyboard-reviewer-1.1.0'
 
 
 def build_review_packet(body, card, constraints, content):
-    instructions, skills = load_skill_bundle('review_registry.json', {'storyboard_review': 'storyboard-review-1.0.0.md'})
+    instructions, skills = load_skill_bundle('review_registry.json', {'storyboard_review': 'storyboard-review-1.1.0.md'})
     content = StoryboardContent.model_validate(content).model_dump(mode='json')
     content.pop('bindings', None)
     schema = ReviewReport.model_json_schema()

@@ -1,0 +1,17 @@
+{
+  "full_regression": {
+    "tests": "351",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "162.326"
+  },
+  "thirty_shot_supplement": {
+    "passed": 1
+  },
+  "browser_mock_supplement": {
+    "passed": 2
+  },
+  "real_supplier_calls": 0,
+  "verdict": "engineering_acceptance_passed_with_documented_limits"
+}

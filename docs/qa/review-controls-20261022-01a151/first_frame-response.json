@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "issues": [
+    {
+      "key": "first_frame_premature_handoff",
+      "severity": "high",
+      "category": "frame",
+      "certainty": "supported",
+      "shot_keys": [
+        "shot-1"
+      ],
+      "scene_keys": [
+        "scene-1"
+      ],
+      "description": "镜头起始状态明确写钥匙在小禾手中，动作也是小禾递出、阿林接住；但首帧却写成“阿林已经握着唯一钥匙，小禾空手”，相当于在动作开始前就完成了钥匙交接，与同一镜头的起幅和动作节拍直接矛盾。",
+      "suggestion": "将首帧改为交接开始前的状态：钥匙仍在小禾手中，阿林尚未接住（可处于准备接取状态）；保留末帧为阿林持钥匙。",
+      "evidence": [
+        {
+          "source": "shot",
+          "key": "shot-1",
+          "field": "state_start",
+          "quote": "唯一钥匙在小禾手中"
+        },
+        {
+          "source": "shot",
+          "key": "shot-1",
+          "field": "frame_prompts.first",
+          "quote": "阿林已经握着唯一钥匙，小禾空手"
+        },
+        {
+          "source": "shot",
+          "key": "shot-1",
+          "field": "action",
+          "quote": "小禾递出钥匙，阿林伸手接住"
+        }
+      ]
+    }
+  ]
+}
