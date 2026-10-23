@@ -16,3 +16,5 @@
 - 额度：阶段查询主窗口仅剩7%、周70%；按协作约定优先保存可验证检查点，不启动新大改动，未兑换/购买额度。未停留后台监控。
 - 修改文件：本次editing模块、static editing三文件、API/models/main注册、storyboard导航、worker、0011、依赖、专项测试及本任务文档。其余教学记录和旧任务文件未改动不纳入。
 - Git：准备按当前开发分支普通提交推送，不合并main、不强推。最终远端回执追加于后。
+
+- 阶段提交回执：功能检查点c15059917ede003b23f4bceb93e5a4e692cca7e4已普通推送origin/codex/database-foundation；git ls-remote核对远端SHA一致。尚未合并main。旧任务/教学记录仍未跟踪，未纳入提交。
