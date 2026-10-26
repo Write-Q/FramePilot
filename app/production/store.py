@@ -40,7 +40,8 @@ class ProductionStore:
         return {'id': profile_id, 'version': row['version_no'], 'current_version': current,
                 'config': config.model_dump(mode='json'),
                 'executable': ((config.adapter == 'openai_chat' and config.purpose in ('text', 'review'))
-                    or (config.adapter == 'openai_images' and config.purpose == 'image')),
+                    or (config.adapter in ('openai_images', 'ark_seedream') and config.purpose == 'image')
+                    or (config.adapter == 'ark_seedance' and config.purpose == 'video')),
                 'capabilities_verified': False,
                 'reasoning_options': options(config),
                 'created_at': row['created_at'].isoformat()}

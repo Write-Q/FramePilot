@@ -191,14 +191,14 @@
 
 ## S018 · 火山方舟创建视频任务API
 
-- 原始来源：[Volcengine Ark](https://docs.volcengine.com/docs/ark/create-video-generation-task-api?lang=zh)
+- 原始来源：[Volcengine Ark](https://console.volcengine.com/ark/region:cn-beijing/docs/create-video-generation-task-api)；配套[图片API](https://console.volcengine.com/ark/region:cn-beijing/docs/image-generation-api)、[查询任务](https://console.volcengine.com/ark/region:cn-beijing/docs/get-video-generation-task-api)。
 - 分类：托管视频模型与API；类型：api_docs
-- 精确定位：输入组合 / task ID / seed / camera_fixed
-- 核对：2026-10-19；已读所列关键段落；版本：floating; pin before implementation；生命周期：requires_recheck
+- 精确定位：content.role=first_frame、duration/resolution/generate_audio/output_format、任务状态/content.video_url；图片size/response_format/sequential_image_generation。
+- 核对：2026-10-26；已读所列关键段落；版本：官方浮动文档，扩展前复核；生命周期：requires_recheck
 - 来源要点：官方列出任务输入、媒体组合及部分能力限制。
 - FramePilot用途（本项目建议）：任务保存实际请求和外部ID；下载后探测实际时长。
 - 边界：接口接受固定机位等字段不代表画面一定实现；文档时长可为约数。
-- 运行验证：未运行。复用范围：链接与自行撰写摘要；复制代码、模板或权重前另核对对应许可证。
+- 采用：`app/production/ark.py`；[使用与限制](../../volcengine-ark.md)。模拟HTTP、隔离数据库和真实浏览器验证，不代表真实模型质量或账户可用已验证。复用范围：链接、自写摘要和原生协议适配。
 
 ## S019 · Kling图生视频官方API入口
 

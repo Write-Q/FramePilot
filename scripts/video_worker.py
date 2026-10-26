@@ -1,4 +1,4 @@
-"""Embedding entrypoint for hosts with explicit video adapters and a validated sink."""
+"""Run explicitly: python -m scripts.video_worker [--once]. No automatic POST retries."""
 import time
 
 
@@ -18,4 +18,14 @@ def work(runtime, *, once=False, stop=None):
 
 
 if __name__ == '__main__':
-    raise SystemExit('视频供应商尚未选定。请在宿主注册适配器和媒体验证存储后调用work(runtime)。')
+    import argparse
+    from app.production.store import ProductionStore
+    from app.production.video_runtime import VideoRuntime
+    parser = argparse.ArgumentParser(description='执行已由用户排队的视频任务；可能调用付费供应商')
+    parser.add_argument('--once', action='store_true', help='只处理一个可执行任务后退出')
+    args = parser.parse_args()
+    store = ProductionStore(None)
+    try:
+        work(VideoRuntime(store), once=args.once)
+    finally:
+        store.close()

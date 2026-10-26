@@ -32,6 +32,13 @@ class Capabilities(Contract):
     max_duration_ms: int | None = Field(default=None, ge=1, le=3600000, strict=True)
 
 
+class VideoOptions(Contract):
+    """Explicit production choices, separate from text sampling parameters."""
+    resolution: Literal['480p', '720p', '1080p'] = '720p'
+    generate_audio: bool = Field(default=False, strict=True)
+    watermark: bool = Field(default=True, strict=True)
+
+
 class ModelConfig(Contract):
     schema_version: Literal[1] = 1
     name: str = Field(min_length=1, max_length=100)
@@ -45,9 +52,16 @@ class ModelConfig(Contract):
     capabilities: Capabilities = Field(default_factory=Capabilities)
     reasoning_protocol: Literal['none', 'effort', 'deepseek'] = 'none'
     reasoning_levels: list[Effort] | None = Field(default=None, max_length=7)
+    video_options: VideoOptions | None = None
 
     @model_validator(mode='after')
     def validate_reasoning(self):
+        if self.purpose == 'video' and self.adapter == 'ark_seedance' and self.video_options is None:
+            # Persist effective defaults in the immutable profile version, rather
+            # than allowing a later adapter default change to alter queued work.
+            self.video_options = VideoOptions()
+        if self.video_options is not None and (self.purpose != 'video' or self.adapter != 'ark_seedance'):
+            raise ValueError('视频输出选项目前仅用于火山 Seedance 视频配置')
         allowed = (() if self.reasoning_protocol == 'none' else
                    REASONING_LEVELS['deepseek'] if self.reasoning_protocol == 'deepseek' else
                    ('none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max'))

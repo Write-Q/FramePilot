@@ -1,4 +1,4 @@
-"""Durable submit/poll orchestration; providers and real video validation are opt-in."""
+"""Durable submit/poll orchestration for explicitly queued production requests."""
 from datetime import datetime, timedelta, timezone
 import os
 import re
@@ -33,6 +33,9 @@ ERRORS = {
     'poll_recovered': '已恢复查询，将仅查询原任务，不重新提交。',
     'invalid_output': '视频输出未通过实际媒体校验，未采用结果。',
     'storage_error': '视频输出保存失败，请核对供应商结果。',
+    'invalid_input': '视频参数或首帧不符合此型号要求，未提交生成。',
+    'missing_key': '未找到有效的密钥环境变量，未提交生成。',
+    'unsupported_parameters': '此型号不支持所配置的制作参数，未提交生成。',
 }
 
 
@@ -46,7 +49,10 @@ class VideoRequest(Contract):
 class VideoRuntime:
     def __init__(self, store, adapters=None, files=None):
         self.store = store
-        self.adapters = dict(adapters or {})
+        if adapters is None:
+            from app.production.ark import video_adapters
+            adapters = video_adapters()
+        self.adapters = dict(adapters)
         self.files = files if files is not None else VideoFiles()
         self.images = MediaService(store, files=MediaFiles(os.getenv('FRAMEPILOT_MEDIA_ROOT')))
 
@@ -117,7 +123,7 @@ class VideoRuntime:
                 return self._serialize(existing, self.store._read(conn, project, series), self._selected(conn, project))
             board = self.images._board(conn, project, series, request.expected_version)
             config = ModelConfig.model_validate(self.store._profile(conn, request.profile.profile_id, request.profile.version)['config'])
-            self._adapter(config)
+            adapter = self._adapter(config)
             if conn.execute(sa.select(sa.func.count()).select_from(t).where(t.c.project_id == project)).scalar_one() >= MAX_VIDEO_RUNS:
                 raise ProductionConflict('已达到项目累计100次视频请求上限，取消和失败保留记录')
             if conn.execute(sa.select(t.c.id).where(t.c.project_id == project,
@@ -134,9 +140,15 @@ class VideoRuntime:
                 raise InvalidProduction(str(exc)) from None
             if config.capabilities.max_duration_ms is not None and packet['duration_ms'] > config.capabilities.max_duration_ms:
                 raise InvalidProduction('镜头时长超过配置声明的上限，请调整分镜或配置')
+            if callable(getattr(adapter, 'validate_input', None)):
+                try:
+                    adapter.validate_input(config, packet)
+                except PlannerError as exc:
+                    raise InvalidProduction(str(exc)) from None
             manifest = {'storyboard_id': series, 'version': board['version'], 'source_version_id': board['source_version_id'],
                 'board_sha256': digest(board['content']), 'packet': packet, 'profile': request.profile.model_dump(),
-                'adapter': config.adapter, 'model': config.model}
+                'adapter': config.adapter, 'model': config.model,
+                'video_options': config.video_options.model_dump() if config.video_options else None}
             identity = uuid4().hex
             conn.execute(t.insert().values(id=identity, project_id=project, storyboard_version_id=board['version_id'],
                 shot_id=image['shot_id'], shot_key=request.shot_key, first_frame_run_id=image_id,
@@ -229,6 +241,10 @@ class VideoRuntime:
             _inspect(first_frame, image['media_type'])
         except PlannerError:
             raise PlannerError('first frame invalid', 'input_unavailable') from None
+        if callable(getattr(adapter, 'validate_input', None)):
+            adapter.validate_input(config, row['manifest']['packet'])
+        if callable(getattr(adapter, 'validate_frame', None)):
+            adapter.validate_frame(first_frame)
         return config, adapter, first_frame
 
     def _save_output(self, result):
@@ -299,11 +315,11 @@ class VideoRuntime:
             status, error = ('failed', 'unsupported_adapter') if claimed == 'submitting' else ('submitted', 'poll_error')
         except PlannerError as exc:
             if claimed == 'polling':
-                status, error = ('failed', exc.code) if exc.code in ('invalid_output', 'storage_error') else ('submitted', 'poll_error')
+                status, error = ('failed', exc.code) if exc.code in ('invalid_output', 'storage_error', 'provider_error') else ('submitted', 'poll_error')
             elif submitted_call:
                 status, error = ('failed', 'provider_error') if exc.code == 'provider_error' else ('unknown', 'outcome_unknown')
             else:
-                status, error = 'failed', exc.code if exc.code in ('validator_unavailable', 'input_unavailable') else 'input_unavailable'
+                status, error = 'failed', exc.code if exc.code in ('validator_unavailable', 'input_unavailable', 'invalid_input', 'missing_key', 'unsupported_parameters') else 'input_unavailable'
         except Exception:
             if claimed == 'polling':
                 status, error = 'submitted', 'poll_error'

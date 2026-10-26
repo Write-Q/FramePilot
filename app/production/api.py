@@ -119,6 +119,10 @@ def install_production(app, configured_database_url=None, storyboard_provider=No
              'status': 'implemented_unverified', 'description': '已实现兼容Chat Completions的文本规划；具体网关和模型待验证'},
             {'id': 'openai_images', 'purposes': ['image'], 'executable': True,
              'status': 'implemented_unverified', 'description': '单图文生图、base64输出；具体网关待验证，需独立worker'},
+            {'id': 'ark_seedream', 'purposes': ['image'], 'executable': True,
+             'status': 'implemented_unverified', 'description': '火山 Seedream 单图文生图；需本机密钥与独立图片worker'},
+            {'id': 'ark_seedance', 'purposes': ['video'], 'executable': True,
+             'status': 'implemented_unverified', 'description': '火山 Seedance 2.x 单首帧视频；需本机密钥与独立视频worker'},
             {'id': 'vendor_native', 'purposes': ['text', 'image', 'video', 'review', 'asr', 'tts'],
              'executable': False, 'status': 'reserved', 'description': '原生协议扩展点，尚未接执行器'}]}
 

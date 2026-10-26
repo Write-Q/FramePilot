@@ -291,10 +291,10 @@ class AssistantActions:
             try:
                 profile = self.store.get_profile(params['profile']['profile_id'], params['profile']['version'])
                 config = ModelConfig.model_validate(profile['config'])
-                adapter = 'openai_images' if purpose == 'image' else 'openai_chat'
+                adapters = ('openai_images', 'ark_seedream') if purpose == 'image' else ('openai_chat',)
                 execution_model = {'profile_id': profile['id'], 'version': profile['version'], 'model': config.model,
                                    'purpose': config.purpose, 'adapter': config.adapter}
-                if config.purpose != purpose or config.adapter != adapter:
+                if config.purpose != purpose or config.adapter not in adapters:
                     reason = '所选配置用途或适配器未接入此动作'
                 if kind == 'image_generate' and (config.reasoning_protocol != 'none' or
                         any(v is not None for v in config.parameters.model_dump().values())):

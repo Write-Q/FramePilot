@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "title": "FramePilot AIGC视频资料库",
-  "updated_at": "2026-10-19",
+  "updated_at": "2026-10-26",
   "scope": "研发参考与来源导航；非完整互联网镜像，非已验证供应商能力清单",
   "categories": {
     "story": "需求、编剧与改编",
@@ -453,12 +453,12 @@
         "seed",
         "camera_fixed"
       ],
-      "url": "https://docs.volcengine.com/docs/ark/create-video-generation-task-api?lang=zh",
-      "locator": "输入组合 / task ID / seed / camera_fixed",
+      "url": "https://console.volcengine.com/ark/region:cn-beijing/docs/create-video-generation-task-api",
+      "locator": "content.role=first_frame / duration / resolution / generate_audio / output_format；同docs目录下get-video-generation-task-api与image-generation-api",
       "source_note": "官方列出任务输入、媒体组合及部分能力限制。",
       "framepilot_use": "任务保存实际请求和外部ID；下载后探测实际时长。",
-      "caveat": "接口接受固定机位等字段不代表画面一定实现；文档时长可为约数。",
-      "checked_at": "2026-10-19",
+      "caveat": "接口接受参数不代表画面一定实现；实际时长需解码核对；Endpoint ID与HEVC尚未接入，见docs/volcengine-ark.md。",
+      "checked_at": "2026-10-26",
       "access_status": "readable",
       "read_status": "selected_sections",
       "availability": "requires_recheck",

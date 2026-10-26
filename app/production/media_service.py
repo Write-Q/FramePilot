@@ -123,8 +123,8 @@ class MediaService:
             board = self._board(conn, project, series, request.expected_version)
             profile = self.store._profile(conn, request.profile.profile_id, request.profile.version)
             config = ModelConfig.model_validate(profile['config'])
-            if config.adapter != 'openai_images' or config.purpose != 'image' or config.reasoning_protocol != 'none':
-                raise InvalidProduction('请选择 openai_images 图片配置，不使用文本思考参数')
+            if config.adapter not in ('openai_images', 'ark_seedream') or config.purpose != 'image' or config.reasoning_protocol != 'none':
+                raise InvalidProduction('请选择兼容图片接口或火山 Seedream 图片配置，不使用文本思考参数')
             if any(value is not None for value in config.parameters.model_dump().values()):
                 raise InvalidProduction('图片适配器不接受文本生成参数，请使用独立图片配置')
             if conn.execute(sa.select(sa.func.count()).select_from(t).where(t.c.project_id == project)).scalar_one() >= MAX_MEDIA_RUNS:
@@ -137,6 +137,12 @@ class MediaService:
                 packet = build_frame_prompt(board['content'], request.shot_key, request.frame_role, request.prompt)
             except ValueError as exc:
                 raise InvalidProduction(str(exc)) from None
+            if config.adapter == 'ark_seedream':
+                from app.production.ark import ArkImageAdapter
+                try:
+                    ArkImageAdapter.validate_input(config, packet['prompt'], request.size)
+                except PlannerError as exc:
+                    raise InvalidProduction(str(exc)) from None
             shots = domain['shots']
             shot = conn.execute(sa.select(shots.c.id).where(shots.c.project_id == project,
                 shots.c.storyboard_version_id == board['version_id'],
@@ -213,6 +219,9 @@ class MediaService:
                     return True
                 self._board(conn, row['project_id'], row['manifest']['storyboard_id'], row['manifest']['version'])
                 config = ModelConfig.model_validate(self.store._profile(conn, row['profile_id'], row['profile_version'])['config'])
+            if adapter is None and config.adapter == 'ark_seedream':
+                from app.production.ark import ArkImageAdapter
+                adapter = ArkImageAdapter()
             result = (adapter or ImageAdapter()).generate(config, row['manifest']['prompt'], row['manifest']['size'])
             saved = self.files.put(result.data, result.mime_type)
         except ProductionConflict:

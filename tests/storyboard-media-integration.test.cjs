@@ -21,6 +21,7 @@ test('真实工作台：图片排队、生成、选用与版本隔离',{timeout:
     await page.waitForFunction(()=>!document.body.classList.contains('busy'));
     await page.getByRole('button',{name:'图片素材',exact:true}).click();
     await page.locator('#image-config-details > summary').click();
+    await page.locator('#image-config-adapter').selectOption('openai_images');
     await page.locator('#image-config-name').fill('隔离测试图片');
     await page.locator('#image-config-model').fill('fixture-image');
     await page.locator('#image-config-url').fill('https://example.test/v1');

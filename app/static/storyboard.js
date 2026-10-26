@@ -71,6 +71,7 @@ async function profiles(selectId, purpose='text') {
   ModelPicker.setModels('profile','effort',items.filter(x=>x.config.purpose==='text'&&x.config.adapter==='openai_chat'),purpose==='text'?selectId:null);
   window.StoryboardReview?.setProfiles(items,purpose==='review'?selectId:null);
   window.StoryboardMedia?.setProfiles(items,purpose==='image'?selectId:null);
+  window.StoryboardVideo?.setProfiles(items,purpose==='video'?selectId:null);
   availability();
 }
 async function loadProject(id) {

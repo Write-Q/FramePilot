@@ -3,6 +3,15 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const {chromium}=require('playwright');
 
+async function videoInputs(page) {
+  await page.evaluate(()=>{
+    window.draft={shots:[{key:'shot-1',duration_ms:4000}]};window.selected=0;
+    window.readMemory=k=>JSON.parse(sessionStorage.getItem(k)||'null');
+    window.memory=(k,v)=>v===null?sessionStorage.removeItem(k):sessionStorage.setItem(k,JSON.stringify(v));
+    window.StoryboardMedia={firstFrameSelected:()=>false};window.notice=()=>{};
+  });
+}
+
 test('视频播放器、选用门禁、任务恢复和项目隔离',async()=>{
   assert.ok(fs.existsSync('app/static/storyboard-video.js'),'video module exists');
   const browser=await chromium.launch({headless:true,...(process.env.FRAMEPILOT_CHROME?{executablePath:process.env.FRAMEPILOT_CHROME}:{})});
@@ -21,10 +30,11 @@ test('视频播放器、选用门禁、任务恢复和项目隔离',async()=>{
       window.busy=async fn=>{working=true;StoryboardVideo.availability();try{await fn();}finally{working=false;StoryboardVideo.availability();}};
       $('board').hidden=false;
     });
+    await videoInputs(page);
     await page.addScriptTag({content:fs.readFileSync('app/static/storyboard-video.js','utf8')});
     await page.evaluate(()=>StoryboardVideo.refresh());
     assert.match(await page.locator('#video-service-status').textContent(),/尚未接入视频服务/);
-    assert.equal(await page.locator('#video-runtime-panel button').count(),1,'仅提供刷新操作');
+    assert.equal(await page.locator('#generate-video').isDisabled(),true,'缺少模型配置时不可生成');
     await page.evaluate(async()=>{testRuns=[{id:'q',status:'queued',shot_key:'shot-1',version:2},{id:'u',status:'unknown',shot_key:'shot-1',version:1,error:'<img src=x onerror=alert(1)>',external_id:'job-123'}];await StoryboardVideo.refresh();});
     assert.match(await page.locator('#video-runs').textContent(),/等待生成服务处理/);
     assert.match(await page.locator('#video-runs').textContent(),/不会自动重新提交/);
@@ -74,7 +84,7 @@ test('视频播放器、选用门禁、任务恢复和项目隔离',async()=>{
     assert.equal(await page.locator('#video-runs article').count(),0,'切换项目立即隐藏旧记录');
     await page.evaluate(async()=>{testRuns=[];adapters={registered:['test-only'],media_validator_configured:false,capabilities_verified:false};await StoryboardVideo.refresh();});
     assert.match(await page.locator('#video-service-status').textContent(),/输出校验尚未配置/);
-    assert.equal(await page.locator('#video-runtime-panel button').count(),1,'注册状态不等于开放生成');
+    assert.equal(await page.locator('#generate-video').isDisabled(),true,'注册状态不等于开放生成');
     await page.evaluate(async()=>{
       window.api=async url=>url.endsWith('video-adapters')?adapters:new Promise(resolve=>window.lateResolve=resolve);
       window.lateRefresh=StoryboardVideo.refresh();
@@ -86,6 +96,23 @@ test('视频播放器、选用门禁、任务恢复和项目隔离',async()=>{
     assert.match(await page.locator('#video-service-status').textContent(),/无法读取/);
     assert.match(await page.locator('#video-runs-status').textContent(),/无法读取/);
     assert.equal(await page.locator('#video-runs article').count(),0);
+    await page.evaluate(()=>{
+      StoryboardMedia.firstFrameSelected=()=>true;
+      StoryboardVideo.setProfiles([{id:'ark',version:1,config:{purpose:'video',adapter:'ark_seedance',name:'test',model:'doubao-seedance-2-0-260128'}}]);
+      $('video-cost-confirm').checked=true;StoryboardVideo.availability();
+    });
+    assert.equal(await page.locator('#generate-video').isDisabled(),true,'读取任务历史失败不能开放新生成');
+    await page.evaluate(async()=>{
+      project.id='p';
+      memory('framepilot:video-pending:p:b',{expected_version:2,shot_key:'shot-1',profile:{profile_id:'ark',version:1},idempotency_key:'lost-response-key'});
+      StoryboardVideo.availability();
+      $('video-cost-confirm').checked=true;
+      window.api=async url=>url.endsWith('video-adapters')?adapters:{runs:[{id:'done',version:2,shot_key:'shot-1',status:'failed',idempotency_key:'lost-response-key'}]};
+      await StoryboardVideo.refresh();
+    });
+    assert.equal(await page.evaluate(()=>readMemory('framepilot:video-pending:p:b')),null,'刷新找到原任务后清除待恢复记录');
+    assert.equal(await page.locator('#video-cost-confirm').isChecked(),false,'恢复已完成任务不能沿用上一次的费用授权');
+    assert.equal(await page.locator('#generate-video').isDisabled(),true,'另一次生成必须重新确认');
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
     assert.equal(await page.evaluate(()=>requests.filter(r=>r.body!==undefined).length),4,'只提交用户点击的操作');
     assert.deepEqual(errors,[]);
@@ -124,6 +151,7 @@ async function inspectionFixture(t) {
     window.busy=async fn=>{working=true;StoryboardVideo.availability();try{await fn();}catch(error){testErrors.push(error.message);}finally{working=false;StoryboardVideo.availability();}};
     $('board').hidden=false;
   });
+  await videoInputs(page);
   await page.addScriptTag({content:fs.readFileSync('app/static/storyboard-video.js','utf8')});
   await page.evaluate(()=>StoryboardVideo.refresh());
   return {page,errors};

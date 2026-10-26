@@ -1,4 +1,4 @@
-"""Video job routes; concrete adapters must be registered explicitly by the host."""
+"""Video jobs with the selected Ark adapter and optional host overrides."""
 from app.production.video_runtime import VideoRequest, VideoRuntime
 from app.production.media_contracts import SelectMedia
 from fastapi.responses import FileResponse
@@ -9,12 +9,14 @@ def install_video_routes(router, invoke, app):
     base = '/projects/{project_id}/storyboards/{storyboard_id}/video-runs'
 
     def runtime(store):
-        return VideoRuntime(store, adapters=getattr(app.state, 'video_adapters', {}),
+        return VideoRuntime(store, adapters=getattr(app.state, 'video_adapters', None),
                             files=getattr(app.state, 'video_files', None))
 
     @router.get('/video-adapters')
     def adapters():
-        return {'registered': sorted(getattr(app.state, 'video_adapters', {})),
+        from app.production.ark import video_adapters
+        registered = getattr(app.state, 'video_adapters', None)
+        return {'registered': sorted(video_adapters() if registered is None else registered),
                 'media_validator_configured': bool(getattr(getattr(app.state, 'video_files', None) or VideoFiles(), 'validated_video', False)),
                 'capabilities_verified': False}
 

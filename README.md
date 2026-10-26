@@ -2,9 +2,9 @@
 
 本地单用户学习项目：FastAPI + Pydantic + LangGraph + LangChain/DeepSeek + PostgreSQL。
 协作创作、自由编剧、十维概括、审核建议、人工确认和版本追溯已接通。
-已实现分镜、图片/视频持久化任务与本地后期成片；尚未接入真实图片/视频供应商，RAG和多用户认证尚未实现。
+已实现分镜、图片/视频持久化任务与本地后期成片；新增[火山方舟 Seedream / Seedance 接入](docs/volcengine-ark.md)，已通过模拟联调，真实模型效果待配置密钥后验证。RAG和多用户认证尚未实现。
 
-第二版新增[分镜工作台](docs/storyboard-workbench.md)：已确认剧本 → 通用文本 API 生成文字分镜 → 逐镜编辑 → 版本保存与人工确认。支持独立文字审核、型号与思考等级选择、专业规则提醒、生成追溯和重复请求保护。图片阶段现有[静态帧制作、视频任务底座、播放与选用](docs/shot-media.md)，需显式迁移至0012并单独启动图片worker。尚未选定真实图像/视频供应商，媒体效果未验证；[文字模型评测](docs/qa/storyboard-real-20261020-01a151/report.md)与[审核控制组](docs/qa/review-controls-20261022-01a151/report.md)单独记录。现有编剧模型配置保持原样。
+第二版新增[分镜工作台](docs/storyboard-workbench.md)：已确认剧本 → 通用文本 API 生成文字分镜 → 逐镜编辑 → 版本保存与人工确认。支持独立文字审核、型号与思考等级选择、专业规则提醒、生成追溯和重复请求保护。现有[静态帧制作、视频任务、播放与选用](docs/shot-media.md)，图片与视频需各自启动独立worker，使用方式见[火山接入说明](docs/volcengine-ark.md)。真实媒体效果未验证；[文字模型评测](docs/qa/storyboard-real-20261020-01a151/report.md)与[审核控制组](docs/qa/review-controls-20261022-01a151/report.md)单独记录。现有编剧模型配置保持原样。
 
 视频审核第一版提供[技术报告、真实帧证据及人工时间段记录](docs/video-inspection.md)；没有接入自动多模态内容审核，人工记录不自动选用视频。
 

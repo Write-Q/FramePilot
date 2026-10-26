@@ -1,19 +1,48 @@
 'use strict';
 window.StoryboardVideo = (() => {
-  let loadedFor='', generation=0;
+  let loadedFor='', generation=0, modelProfiles=[], runs=[], intentContext='', historyFailureFor=null;
   const pendingActions=new Map();
   const identity=()=>current?`${project?.id}:${current.id}:${current.version}`:'';
   const labels={queued:'等待生成服务处理',submitting:'正在提交生成请求',submitted:'已提交，等待结果',running:'正在生成',polling:'正在查询结果',succeeded:'已生成',failed:'生成失败',unknown:'结果未知',cancelled:'已取消'};
   const canSelect=()=>!!current&&current.confirmed&&!dirty&&!readonly()&&loadedFor===identity();
+  const pendingKey=()=>`framepilot:video-pending:${project?.id}:${current?.id}`;
+  const shot=()=>draft?.shots[selected];
+  function setProfiles(items,selectedId) {
+    modelProfiles=items.filter(p=>p.config.purpose==='video'&&p.config.adapter==='ark_seedance');
+    const select=$('video-profile'), previous=selectedId||select.value;
+    select.replaceChildren(node('option','选择视频模型'));select.firstChild.value='';
+    for(const item of modelProfiles){const option=node('option',`${item.config.name} · ${item.config.model} · V${item.version}`);option.value=item.id+':'+item.version;select.append(option);}
+    if([...select.options].some(o=>o.value===previous))select.value=previous;
+    else if(select.options.length===2)select.selectedIndex=1;
+    availability();
+  }
   function mediaUrl(value) {
     if(!value)return null;
     try {const url=new URL(value,location.origin);return url.origin===location.origin&&['http:','https:'].includes(url.protocol)&&!url.username&&!url.password?url.href:null;}catch{return null;}
   }
   function availability() {
+    const pending=current&&readMemory(pendingKey()), selectedShot=shot();
+    if(pending){
+      const value=pending.profile.profile_id+':'+pending.profile.version;
+      if(![...$('video-profile').options].some(option=>option.value===value)){const option=node('option',`原视频请求配置 · V${pending.profile.version}`);option.value=value;$('video-profile').append(option);}
+      $('video-profile').value=value;
+    }
+    const context=identity()+':'+selectedShot?.key+':'+$('video-profile').value;
+    if(context!==intentContext){intentContext=context;$('video-cost-confirm').checked=false;}
+    const profile=modelProfiles.find(p=>p.id+':'+p.version===$('video-profile').value);
+    const options=profile?.config.video_options||{};
+    $('video-shot-context').textContent=pending?`${pending.shot_key} · V${pending.expected_version} · 待核对原请求`:selectedShot?`${selectedShot.key} · V${current?.version||'—'} · 计划 ${selectedShot.duration_ms/1000} 秒 · 使用已选首帧`:'先选择镜头';
+    $('video-profile-summary').textContent=profile?`${options.resolution||'720p'} · ${options.generate_audio?'生成同步声音':'无声视频'} · 保留水印 · 提交时固定此配置版本`:pending?`恢复原请求的配置 V${pending.profile.version}，不采用其他配置版本。`:'';
+    $('video-profile').disabled=working||!!pending;
+    $('video-cost-confirm').disabled=working||!!pending;
+    const active=loadedFor===identity()&&runs.some(r=>r.version===current?.version&&r.shot_key===selectedShot?.key&&['queued','submitting','submitted','polling'].includes(r.status));
+    $('generate-video').disabled=working||(pending?!current:!canSelect()||!selectedShot||!profile||!$('video-cost-confirm').checked||active||!window.StoryboardMedia?.firstFrameSelected(selectedShot?.key));
+    $('generate-video').textContent=pending?'核对上次视频请求':active?'本镜已有视频任务':'生成本镜视频';
+    $('video-create-status').textContent=pending?'响应尚未确认；核对会恢复原版本、镜头和请求编号，不创建新的生成意图。':dirty?'请先保存分镜修改，再人工确认。':!current?.confirmed?'请先人工确认分镜。':!window.StoryboardMedia?.firstFrameSelected(selectedShot?.key)?'请在图片页刷新并选用当前镜头的首帧。':loadedFor!==identity()?'请刷新视频状态与记录后继续。':'';
     $('refresh-videos').disabled=working||!current;
     if(loadedFor!==identity()) {
       $('video-runs').replaceChildren();
-      $('video-runs-status').textContent=current?'请刷新当前分镜的视频记录。':'载入分镜后可查看视频记录。';
+      if(historyFailureFor!==identity())$('video-runs-status').textContent=current?'请刷新当前分镜的视频记录。':'载入分镜后可查看视频记录。';
     }
     for(const button of $('video-runs').querySelectorAll('button')) {
       const mutation=['select','inspect','note','finding-add','finding-remove'].includes(button.dataset.videoAction);
@@ -189,23 +218,47 @@ window.StoryboardVideo = (() => {
   }
   async function refresh() {
     const ticket=++generation, requested=identity();
-    loadedFor='';$('video-runs').replaceChildren();
+    loadedFor='';historyFailureFor=null;runs=[];$('video-runs').replaceChildren();
     $('video-service-status').textContent='正在读取视频服务状态…';
     $('video-runs-status').textContent=current?'正在读取视频任务记录…':'载入分镜后可查看视频记录。';
     const url=current?boardUrl()+'/video-runs?version='+current.version:null;
     const [service,history]=await Promise.allSettled([api(prefix+'/video-adapters'),url?api(url):Promise.resolve(null)]);
     if(ticket!==generation||requested!==identity())return;
-    loadedFor=requested;
     if(service.status==='rejected')$('video-service-status').textContent='无法读取视频服务状态：'+service.reason.message;
     else {
       const state=service.value;
       $('video-service-status').textContent=!state.registered.length?'尚未接入视频服务。':!state.media_validator_configured?'已注册视频服务，输出校验尚未配置。':'已注册视频服务并配置输出校验。';
       if(state.registered.length&&!state.capabilities_verified)$('video-service-status').textContent+=' 服务能力尚未验证。';
     }
-    if(history.status==='rejected')$('video-runs-status').textContent='无法读取视频任务记录：'+history.reason.message;
-    else if(history.value)showRuns(history.value.runs||[]);
+    if(history.status==='rejected'){historyFailureFor=requested;$('video-runs-status').textContent='无法读取视频任务记录：'+history.reason.message;}
+    else if(history.value){
+      loadedFor=requested;
+      runs=history.value.runs||[];
+      const pending=readMemory(pendingKey());if(pending&&runs.some(r=>r.idempotency_key===pending.idempotency_key)){
+        memory(pendingKey(),null);$('video-cost-confirm').checked=false;
+      }
+      showRuns(runs);
+    }
     availability();
   }
   $('refresh-videos').onclick=()=>busy(refresh);
-  return {availability,refresh};
+  $('video-profile').onchange=availability;
+  $('video-cost-confirm').onchange=availability;
+  $('video-form').onsubmit=event=>{event.preventDefault();busy(async()=>{
+    let payload=readMemory(pendingKey());
+    if(!payload){
+      if(!canSelect()||!shot()||!$('video-profile').value||!$('video-cost-confirm').checked)throw new Error('请先核对已保存分镜、首帧与生成参数。');
+      const [profile_id,version]=$('video-profile').value.split(':');
+      payload={expected_version:current.version,shot_key:shot().key,profile:{profile_id,version:Number(version)},idempotency_key:crypto.randomUUID().replaceAll('-','')};
+    }
+    const endpoint=boardUrl()+'/video-runs', key=pendingKey();memory(key,payload);
+    try{await api(endpoint,payload);memory(key,null);$('video-cost-confirm').checked=false;}
+    catch(error){if([400,404,409,422].includes(error.status))memory(key,null);throw error;}
+    await refresh();notice('视频请求已排队；独立视频服务运行时将提交火山生成，请刷新记录查看进度。');
+  });};
+  $('video-config-form').onsubmit=event=>{event.preventDefault();busy(async()=>{
+    const item=await api(prefix+'/model-profiles',{name:$('video-config-name').value,purpose:'video',adapter:'ark_seedance',base_url:'https://ark.cn-beijing.volces.com/api/v3',model:$('video-config-model').value.trim(),api_key_env:$('video-config-env').value.trim(),capabilities:{first_frame:true},video_options:{resolution:$('video-config-resolution').value,generate_audio:$('video-config-audio').checked,watermark:true}});
+    await profiles(item.id+':'+item.version,'video');$('video-config-details').open=false;notice('视频配置已保存；未调用生成，服务权限尚待真实验证。');
+  });};
+  return {availability,refresh,setProfiles};
 })();

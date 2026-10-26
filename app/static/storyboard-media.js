@@ -1,12 +1,17 @@
 'use strict';
 window.StoryboardMedia = (() => {
-  let runs=[], loadedFor='', context='';
+  let runs=[], loadedFor='', context='', imageProfiles=[];
   const roles={first:'首帧',key:'关键帧',last:'尾帧'};
   const labels={queued:'等待生成服务处理',running:'正在生成',succeeded:'已生成',failed:'生成失败',unknown:'结果未知',cancelled:'已取消'};
   const endpoint=()=>boardUrl()+'/media-runs';
   const identity=()=>current?`${project.id}:${current.id}:${current.version}`:'';
   const pendingKey=()=>`framepilot:media-pending:${project?.id}:${current?.id}`;
   const shot=()=>draft?.shots[selected];
+  function suggestedSize() {
+    const profile=imageProfiles.find(p=>p.id+':'+p.version===$('image-profile').value);
+    const large=profile?.config.adapter==='ark_seedream'&&/^doubao-seedream-(4-5|5-0-lite)-/.test(profile.config.model);
+    return (large?{'16:9':'2560x1440','9:16':'1440x2560','1:1':'2048x2048'}:{'16:9':'1536x864','9:16':'864x1536','1:1':'1024x1024'})[draft?.aspect_ratio]||'1536x864';
+  }
   const editable=()=>!!current&&!readonly()&&!dirty&&current.confirmed;
   const promptKey=()=>`framepilot:frame-prompt:${identity()}:${shot()?.key}:${$('frame-role').value}`;
   function image(url,alt) {
@@ -16,17 +21,19 @@ window.StoryboardMedia = (() => {
     }catch{return null;}
   }
   function setProfiles(items,selectId) {
+    imageProfiles=items.filter(p=>p.config.purpose==='image'&&['openai_images','ark_seedream'].includes(p.config.adapter));
     const select=$('image-profile'), previous=selectId||select.value;select.replaceChildren(node('option','选择图像模型'));select.firstChild.value='';
-    for(const item of items.filter(p=>p.config.purpose==='image'&&p.config.adapter==='openai_images')) {
+    for(const item of imageProfiles) {
       const option=node('option',`${item.config.name||item.config.model} · V${item.version}`);option.value=item.id+':'+item.version;select.append(option);
     }
     if([...select.options].some(o=>o.value===previous))select.value=previous;
     else if(select.options.length===2)select.selectedIndex=1;
+    $('image-size').value=suggestedSize();
     availability();
   }
   function render() {
     const next=promptKey();
-    if(context!==next){context=next;$('frame-prompt').value=readMemory(next)||'';$('image-size').value=({'16:9':'1536x864','9:16':'864x1536','1:1':'1024x1024'})[draft?.aspect_ratio]||'1536x864';$('video-input-preview').replaceChildren();}
+    if(context!==next){context=next;$('frame-prompt').value=readMemory(next)||'';$('image-size').value=suggestedSize();$('video-input-preview').replaceChildren();}
     $('media-shot').textContent=shot()?`${shot().key} / ${roles[$('frame-role').value]}`:'先选择镜头';
     const candidates=$('media-candidates');candidates.replaceChildren();
     const relevant=loadedFor===identity()?runs.filter(r=>r.shot_key===shot()?.key&&r.frame_role===$('frame-role').value):[];
@@ -84,7 +91,7 @@ window.StoryboardMedia = (() => {
     return run?image(run.media_url,key+' 已选首帧'):null;
   }
   $('frame-role').onchange=render;
-  $('image-profile').onchange=availability;
+  $('image-profile').onchange=()=>{$('image-size').value=suggestedSize();availability();};
   $('frame-prompt').oninput=()=>memory(promptKey(),$('frame-prompt').value);
   $('refresh-media').onclick=()=>busy(refresh);
   $('preview-video-input').onclick=()=>busy(async()=>{
@@ -108,8 +115,15 @@ window.StoryboardMedia = (() => {
     await refresh();notice('图片请求已接收；请刷新记录查看进度。');
   });};
   $('image-config-form').onsubmit=e=>{e.preventDefault();busy(async()=>{
-    const item=await api(prefix+'/model-profiles',{name:$('image-config-name').value,purpose:'image',adapter:'openai_images',reasoning_protocol:'none',base_url:$('image-config-url').value,model:$('image-config-model').value,api_key_env:$('image-config-env').value.trim()});
+    const item=await api(prefix+'/model-profiles',{name:$('image-config-name').value,purpose:'image',adapter:$('image-config-adapter').value,reasoning_protocol:'none',base_url:$('image-config-url').value,model:$('image-config-model').value,api_key_env:$('image-config-env').value.trim()});
     await profiles(item.id+':'+item.version,'image');$('image-config-details').open=false;notice('图像配置已保存，尚未验证服务连接。');
   });};
-  return {setProfiles,availability,render,refresh,thumbnail};
+  $('image-config-adapter').onchange=()=>{
+    const ark=$('image-config-adapter').value==='ark_seedream';
+    $('image-config-url').value=ark?'https://ark.cn-beijing.volces.com/api/v3':'';
+    $('image-config-url').readOnly=ark;$('image-config-env').value=ark?'ARK_API_KEY':'';
+  };
+  $('image-config-adapter').onchange();
+  const firstFrameSelected=key=>loadedFor===identity()&&runs.some(r=>r.shot_key===key&&r.version===current?.version&&r.selected&&r.applicable&&r.frame_role==='first');
+  return {setProfiles,availability,render,refresh,thumbnail,firstFrameSelected};
 })();

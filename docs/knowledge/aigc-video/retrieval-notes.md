@@ -1,5 +1,7 @@
 # 来源核对与检索边界记录
 
+2026-10-26：S018旧 `docs.volcengine.com/docs/ark/create-video-generation-task-api?lang=zh` 本次请求超时。改用 `https://console.volcengine.com/ark/region:cn-beijing/docs/` 下的 `create-video-generation-task-api`、`get-video-generation-task-api`、`image-generation-api` 和 `model-list`，实际读取协议相关章节。旧地址不判定为永久失效；现行入口已更新来源卡片及catalog。
+
 核对日期：2026-10-19。以下记录用于减少后续重复失败；获取失败仅说明本次工具未取得正文，不证明页面永久不存在。
 
 | 对象 | 本次结果 | 后续直接查找方式 |
