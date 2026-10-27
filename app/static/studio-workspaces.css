@@ -31,3 +31,12 @@
 .studio-mounted #identifier,.studio-mounted #identity{font-size:12px;overflow-wrap:anywhere}
 .studio-mounted main [hidden]{display:none!important}
 @media(max-width:760px){.studio-mounted #studio-workspace main{padding:18px 16px}.studio-mounted .shot-workspace{display:block}.studio-mounted .shot-list{position:static;max-height:240px;border:0;padding-right:0}.studio-mounted .studio-tools>aside{display:block}}
+
+/* Shared palette follows the approved studio shell; content and media stay unchanged. */
+.studio-mounted .studio-tools,.studio-mounted .studio-script,.studio-mounted .board-top,.studio-mounted .export-item,.studio-stage-tabs{border-color:var(--studio-line)}
+.studio-mounted .studio-tools>summary,.studio-mounted .hint{color:var(--studio-muted)}
+.studio-mounted .shot-list{border-color:var(--studio-line)}
+.studio-mounted .shot-card[aria-pressed=true]{border-color:#b6acce;background:#eee9fa}
+.studio-stage-tabs button{color:var(--studio-muted)}
+.studio-stage-tabs button[aria-pressed=true]{color:var(--studio-accent);border-bottom-color:var(--studio-accent)}
+.studio-mounted .studio-preview{background:#eef2f5}

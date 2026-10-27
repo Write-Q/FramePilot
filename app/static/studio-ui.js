@@ -40,28 +40,35 @@ window.FramePilotStudio=(()=>{
     const notice=node('div','studio-notice');notice.id='assistant-notice';notice.hidden=true;notice.setAttribute('role','status');
     const messages=node('div','studio-messages');messages.id='assistant-messages';messages.setAttribute('role','log');messages.setAttribute('aria-label','助手会话');messages.setAttribute('aria-live','polite');messages.setAttribute('aria-relevant','additions text');
     const form=node('form','studio-composer');form.id='assistant-composer';
+    const composerRegion=node('div','studio-composer-region');
     const status=node('p','studio-status','连接会话中…');status.id='assistant-status';status.setAttribute('role','status');
     const recovery=node('div','studio-recovery');
     const attachment=node('div','studio-attachment');attachment.hidden=true;
     const input=node('textarea');input.id='assistant-input';input.rows=3;input.placeholder='告诉助手你想推进什么…';input.setAttribute('aria-label','给制作助手的消息');input.maxLength=8000;input.value=read('composer-draft','',sessionStorage);
     const tools=node('div','studio-composer-tools');
+    const modelTools=node('div','studio-model-tools');
     const modelLabel=node('label','studio-control');modelLabel.append(node('span','studio-sr-only','助手模型'));const model=node('select');model.id='assistant-model';model.setAttribute('aria-label','助手模型');modelLabel.append(model);
     const effortLabel=node('label','studio-control studio-effort-control');effortLabel.append(node('span','studio-sr-only','思考等级'));const effort=node('select');effort.id='assistant-effort';effort.setAttribute('aria-label','思考等级');effortLabel.append(effort);
     const attachButton=button('引用选区',attachSelection,'studio-button studio-text-button');attachButton.title='将工作区当前选中的文字附在下一条消息中';
     const send=button('发送',()=>{} ,'studio-button studio-send');send.type='submit';send.setAttribute('aria-label','发送消息');
-    tools.append(modelLabel,effortLabel,attachButton,send);
+    modelTools.append(modelLabel,effortLabel);tools.append(attachButton,send);
     const configLink=node('a','studio-config-link','配置助手文本模型');configLink.href='/storyboard#config-details';configLink.hidden=true;
     const hint=node('p','studio-composer-hint','Enter 发送 · Shift + Enter 换行');
-    form.append(status,recovery,attachment,input,tools,configLink,hint);panel.append(panelHead,scope,notice,messages,form);
+    form.append(attachment,input,modelTools,tools);composerRegion.append(status,recovery,form,configLink,hint);panel.append(panelHead,scope,notice,messages,composerRegion);
     const separator=node('div','studio-separator');separator.id='studio-separator';separator.tabIndex=0;separator.setAttribute('role','separator');separator.setAttribute('aria-orientation','vertical');separator.setAttribute('aria-label','调整助手宽度');separator.setAttribute('aria-valuemin','300');separator.setAttribute('aria-valuemax','560');separator.setAttribute('aria-controls','assistant-panel');
     const work=node('section','studio-workspace');work.id='studio-workspace';work.setAttribute('aria-label',stages[stage]+'工作区');
     const workHeading=node('div','studio-workspace-heading');const workTitle=node('h1');const workMeta=node('p');workHeading.append(workTitle,workMeta);
     document.body.classList.add('studio-mounted');document.body.insertBefore(root,document.body.firstChild);root.append(nav,mobile,panel,separator,work);work.append(workHeading,workspace);
     let context={},thread=null,binding=null,epoch=0,busy=false,pending=null,profiles=[],selected='',selection=null,poll=null,disposed=false;
     const knownResults=new Set();
+    function fitInput(){input.style.height='auto';input.style.height=Math.max(76,Math.min(180,input.scrollHeight))+'px';}
     let width=Math.max(300,Math.min(560,Number(read('width',360))||360));
     function resize(value){width=Math.max(300,Math.min(560,value));root.style.setProperty('--assistant-width',width+'px');separator.setAttribute('aria-valuenow',String(width));write('width',width);}
     resize(width);
+    fitInput();
+    let inputWidth=-1;
+    const inputResize=typeof ResizeObserver==='function'?new ResizeObserver(entries=>{const next=entries[0].contentRect.width;if(next===inputWidth)return;inputWidth=next;if(next>0)fitInput();}):null;
+    inputResize?.observe(input);
     function collapse(value){root.classList.toggle('studio-assistant-collapsed',value);restore.hidden=!value;collapseButton.setAttribute('aria-expanded',String(!value));write('collapsed',value);if(value)restore.focus();else input.focus();}
     if(read('collapsed',false)){root.classList.add('studio-assistant-collapsed');restore.hidden=false;}
     function showMobile(value){root.dataset.mobile=value;chatTab.setAttribute('aria-pressed',String(value==='assistant'));workspaceTab.setAttribute('aria-pressed',String(value==='workspace'));}
@@ -75,7 +82,7 @@ window.FramePilotStudio=(()=>{
     function renderContext(){const ctx=currentContext();scope.replaceChildren(node('span','studio-context-stage',stages[stage]));if(ctx.project_id){const p=node('span','studio-context-detail',ctx.project_label||'项目 '+ctx.project_id);p.title=ctx.project_label||ctx.project_id;scope.append(p);}else scope.append(node('span','studio-context-detail','未绑定项目'));if(ctx.version_label||ctx.source_version||ctx.version)scope.append(node('span','studio-context-detail',ctx.version_label||'V'+(ctx.source_version||ctx.version)));if(ctx.shot_key){const shot=button('镜头 '+ctx.shot_key,()=>options.onNavigateReference?.({project_id:ctx.project_id,storyboard_id:ctx.storyboard_id,shot_key:ctx.shot_key}),'studio-context-reference');scope.append(shot);}workHeading.hidden=![ctx.project_label,ctx.version_label,ctx.save_label,ctx.context_label].some(Boolean);workTitle.textContent=ctx.project_label||stages[stage]+'工作区';workMeta.textContent=[ctx.version_label,ctx.save_label,ctx.context_label].filter(Boolean).join(' · ');updateLinks();}
     function profileSync(){const chosen=profiles.find(p=>p.id+':'+p.version===model.value);selected=model.value;const old=effort.value||read('effort:'+selected,'default',sessionStorage);const values=chosen?.reasoning_options?.length?chosen.reasoning_options:['default'];effort.replaceChildren(...values.map(value=>{const o=node('option','',efforts[value]||value);o.value=value;return o;}));effort.value=values.includes(old)?old:values[0];effort.title=values.length===1?'配置未声明其他思考等级，沿用服务默认':'按模型配置声明显示';syncControls();}
     function syncControls(){if(pending?.kind==='message'&&pending.body.profile){const frozen=pending.body.profile.profile_id+':'+pending.body.profile.version;if(![...model.options].some(o=>o.value===frozen)){const o=node('option','','上次请求的模型 · V'+pending.body.profile.version);o.value=frozen;model.append(o);}model.value=frozen;const frozenEffort=pending.body.reasoning_effort||'default';if(![...effort.options].some(o=>o.value===frozenEffort)){const o=node('option','',efforts[frozenEffort]||frozenEffort);o.value=frozenEffort;effort.append(o);}effort.value=frozenEffort;}const configured=profiles.some(p=>p.id+':'+p.version===model.value);send.disabled=!thread||busy||!!pending||thread.active||!configured||!input.value.trim()||thread.project_id!==projectOf(currentContext());model.disabled=busy||!!pending;effort.disabled=busy||!!pending||!configured||effort.options.length<2;configLink.hidden=profiles.length>0;attachButton.disabled=busy;}
-    model.addEventListener('change',()=>{write('model',model.value,sessionStorage);profileSync();});effort.addEventListener('change',()=>write('effort:'+model.value,effort.value,sessionStorage));input.addEventListener('input',()=>{write('composer-draft',input.value,sessionStorage);syncControls();});
+    model.addEventListener('change',()=>{write('model',model.value,sessionStorage);profileSync();});effort.addEventListener('change',()=>write('effort:'+model.value,effort.value,sessionStorage));input.addEventListener('input',()=>{write('composer-draft',input.value,sessionStorage);fitInput();syncControls();});
     let composing=false;input.addEventListener('compositionstart',()=>composing=true);input.addEventListener('compositionend',()=>composing=false);
     input.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing&&!composing&&event.keyCode!==229){event.preventDefault();if(!send.disabled)form.requestSubmit();}});
     form.addEventListener('submit',event=>{event.preventDefault();sendMessage();});
@@ -103,7 +110,7 @@ window.FramePilotStudio=(()=>{
       const nearBottom=messages.scrollHeight-messages.scrollTop-messages.clientHeight<90,top=messages.scrollTop;
       messages.replaceChildren();const entries=thread?.messages||[];const proposals=thread?.proposals||[];const displayed=new Set();
       if(!entries.length&&!proposals.length){const empty=node('div','studio-empty');empty.append(node('h3','','一起推进这部作品'),node('p','','可以讨论故事、检查分镜，或整理剪辑思路。涉及修改时，助手会先给出建议，等你确认后执行。'));messages.append(empty);}
-      entries.forEach(m=>{const article=node('article','studio-message studio-message-'+m.role);article.dataset.message=m.id;const label=node('div','studio-message-label',m.role==='user'?'你':m.role==='assistant'?'制作助手':'会话记录');article.append(label);if(m.context?.stage){const ref=node('span','studio-message-context',stages[m.context.stage]||m.context.stage);label.append(ref);}article.append(node('div','studio-message-text',m.text||''));if(m.status&&['unknown','failed','pending','running','executing'].includes(m.status))article.append(node('span','studio-message-state',statuses[m.status]||'处理中'));(m.proposals||[]).forEach(value=>{const p=typeof value==='string'?proposals.find(x=>x.id===value):proposals.find(x=>x.id===value.id)||value;if(p&&!displayed.has(p.id)){article.append(proposalNode(p));displayed.add(p.id);}});messages.append(article);});
+      entries.forEach(m=>{const article=node('article','studio-message studio-message-'+m.role);article.dataset.message=m.id;const label=node('div','studio-message-label');if(m.role==='assistant'){const avatar=node('span','studio-message-avatar','F');avatar.setAttribute('aria-hidden','true');label.append(avatar);}label.append(node('span','studio-message-role',m.role==='user'?'你':m.role==='assistant'?'FramePilot':'会话记录'));article.append(label);if(m.context?.stage){const ref=node('span','studio-message-context',stages[m.context.stage]||m.context.stage);label.append(ref);}article.append(node('div','studio-message-text',m.text||''));if(m.status&&['unknown','failed','pending','running','executing'].includes(m.status))article.append(node('span','studio-message-state',statuses[m.status]||'处理中'));(m.proposals||[]).forEach(value=>{const p=typeof value==='string'?proposals.find(x=>x.id===value):proposals.find(x=>x.id===value.id)||value;if(p&&!displayed.has(p.id)){article.append(proposalNode(p));displayed.add(p.id);}});messages.append(article);});
       proposals.filter(p=>!displayed.has(p.id)).forEach(p=>messages.append(proposalNode(p)));
       messages.scrollTop=nearBottom?messages.scrollHeight:top;
     }
@@ -154,7 +161,7 @@ window.FramePilotStudio=(()=>{
         await apply(data,{decisionId:operation.kind==='decision'?operation.proposalId:null});
         const outcomeUnknown=operation.kind==='message'?thread.messages.slice(-2).some(m=>m.status==='unknown'):thread.proposals.find(p=>p.id===operation.proposalId)?.status==='unknown';
         if(outcomeUnknown){status.textContent='请求结果未知';setNotice('服务已记录请求，但结果尚未确认。请刷新查看状态，或显式重试原请求。','error');return;}
-        savePending(null);if(operation.kind==='message'){if(input.value.trim()===operation.body.text){input.value='';write('composer-draft','',sessionStorage);}selection=null;renderAttachment();}status.textContent=thread.active?'助手正在处理，可刷新查看结果':'已连接';renderMessages();syncControls();
+        savePending(null);if(operation.kind==='message'){if(input.value.trim()===operation.body.text){input.value='';write('composer-draft','',sessionStorage);fitInput();}selection=null;renderAttachment();}status.textContent=thread.active?'助手正在处理，可刷新查看结果':'已连接';renderMessages();syncControls();
       }catch(error){if(generation!==epoch)return;status.textContent=error.unknown?'请求结果未知':'请求未完成';setNotice(error.message+(error.unknown?' 请先刷新查看状态，或显式重试原请求。':' 请刷新会话后检查。'),'error');if(!error.unknown){savePending(null);if(error.status===409)await refresh();}}
       finally{if(generation===epoch){busy=false;renderRecovery();renderMessages();syncControls();}}
     }
@@ -171,7 +178,7 @@ window.FramePilotStudio=(()=>{
     async function loadModels(){try{const data=await request('/api/production/model-profiles');profiles=(Array.isArray(data)?data:data.items||data.profiles||[]).filter(p=>p.executable&&p.config?.adapter==='openai_chat'&&p.config?.purpose==='text');model.replaceChildren(...profiles.map(p=>{const o=node('option','',`${p.config.name||p.config.model} · V${p.version}`);o.value=p.id+':'+p.version;o.title=p.config.model;return o;}));if(!profiles.length){const o=node('option','','先配置文本模型');o.value='';model.append(o);}const saved=read('model',null,sessionStorage);if(profiles.some(p=>p.id+':'+p.version===saved))model.value=saved;profileSync();}catch(error){configLink.hidden=false;model.replaceChildren(node('option','','模型配置读取失败'));setNotice('无法读取模型配置：'+error.message,'error');syncControls();}}
     function setContext(value={}){context={...context,...value};renderContext();if(projectOf(currentContext())!==binding){busy=false;bind();}else{renderMessages();syncControls();}}
     const onContext=event=>setContext(event.detail||{});window.addEventListener('framepilot:studio-context',onContext);
-    const controller={setContext,refresh,setNotice,destroy(){disposed=true;clearTimeout(poll);window.removeEventListener('framepilot:studio-context',onContext);}};
+    const controller={setContext,refresh,setNotice,destroy(){disposed=true;clearTimeout(poll);inputResize?.disconnect();window.removeEventListener('framepilot:studio-context',onContext);}};
     window.FramePilotStudio.current=controller;renderContext();syncControls();bind();loadModels();return controller;
   }
   return {mount};

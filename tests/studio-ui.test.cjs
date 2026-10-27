@@ -152,6 +152,7 @@ test('中断的执行可显式标记未知结果，不宣称取消服务商请�
   const {page,calls}=await fixture(t,{proposals:[{id:'running',title:'执行建议',status:'executing'}]});
   await page.getByRole('button',{name:'标记执行结果未知',exact:true}).click();
   await page.waitForFunction(()=>document.querySelector('[data-proposal=running]').textContent.includes('结果未知'));
+  await page.waitForFunction(()=>document.querySelector('#assistant-notice').textContent.includes('不会取消'));
   assert.equal(calls.filter(x=>x.path.endsWith('/proposals/running/abandon')).length,1);
   assert.match(await page.locator('#assistant-notice').textContent(),/不会取消/);
 });
@@ -181,4 +182,52 @@ test('接受创建建议后绑定同一会话并刷新新项目',async t=>{
   assert.equal(await page.evaluate(()=>ctx.project_id),'created-project');
   assert.equal(await page.locator('#studio-root').getAttribute('data-thread'),'thread-free');
   assert.match(await page.locator('#studio-nav a[data-stage=storyboard]').getAttribute('href'),/project=created-project/);
+});
+
+test('Agent 输入框随长草稿增高，换行与中文组合输入不发送，成功后复位',async t=>{
+  const {page,calls}=await fixture(t);
+  const input=page.locator('#assistant-input');
+  const initial=(await input.boundingBox()).height;
+  await input.fill(Array.from({length:14},(_,i)=>'镜头要求 '+i).join('\n'));
+  assert.ok((await input.boundingBox()).height>initial+30,'long draft should expand the composer');
+  assert.ok((await input.boundingBox()).height<=180,'long draft remains bounded');
+  await input.press('Shift+Enter');
+  await input.dispatchEvent('compositionstart');await input.press('Enter');
+  assert.equal(calls.filter(x=>x.path.endsWith('/messages')).length,0);
+  await input.dispatchEvent('compositionend');await input.press('Enter');
+  await page.waitForFunction(()=>document.querySelector('#assistant-input').value==='');
+  assert.equal(calls.filter(x=>x.path.endsWith('/messages')).length,1);
+  assert.ok((await input.boundingBox()).height<=initial+2,'completed message resets composer height');
+});
+
+test('窄屏长模型名与用户长消息保持可操作、可滚动且不横向溢出',async t=>{
+  const {page}=await fixture(t,{width:320});
+  await page.locator('#assistant-model option').first().evaluate(o=>o.textContent='已配置的很长的真实文本模型名称 · 固定版本 V2');
+  await page.locator('#assistant-input').fill('请检查镜头动作与空间关系。'.repeat(45));
+  await page.getByRole('button',{name:'发送消息',exact:true}).click();
+  await page.locator('.studio-message-user').waitFor();
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  const panel=await page.locator('#assistant-panel').boundingBox();
+  for(const selector of ['#assistant-model','#assistant-effort','#assistant-input','.studio-send']){
+    const box=await page.locator(selector).boundingBox();
+    assert.ok(box.x>=panel.x&&box.x+box.width<=panel.x+panel.width+1,selector+' fits assistant panel');
+    assert.ok(box.y>=panel.y&&box.y+box.height<=panel.y+panel.height+1,selector+' remains visible');
+  }
+  const user=await page.locator('.studio-message-user').boundingBox();
+  assert.ok(user.width<=panel.width-20,'long messages leave readable side space');
+});
+
+test('输入框随侧栏宽度重新排版，重载按保存宽度恢复合适高度',async t=>{
+  const {page}=await fixture(t);
+  const input=page.locator('#assistant-input'),separator=page.locator('#studio-separator');
+  await separator.focus();await page.keyboard.press('End');
+  await input.fill('让镜头中的动作和人物视线形成清楚的叙事关系。'.repeat(4));
+  const wide=(await input.boundingBox()).height;
+  await separator.focus();await page.keyboard.press('Home');
+  await page.waitForFunction(h=>document.querySelector('#assistant-input').getBoundingClientRect().height>h+20,wide,{timeout:2000});
+  await page.keyboard.press('End');
+  await page.waitForFunction(h=>Math.abs(document.querySelector('#assistant-input').getBoundingClientRect().height-h)<2,wide);
+  await page.reload();await page.waitForFunction(()=>document.querySelector('#assistant-status').textContent==='已连接');
+  assert.equal(Math.round((await page.locator('#assistant-panel').boundingBox()).width),560);
+  assert.ok(Math.abs((await input.boundingBox()).height-wide)<2,'saved width is applied before measuring restored draft');
 });

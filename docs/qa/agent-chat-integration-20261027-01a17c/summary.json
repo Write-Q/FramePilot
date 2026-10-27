@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-27",
+  "scope": "Shared production assistant UI across writer, storyboard and editing",
+  "syntax_check": "node --check app/static/studio-ui.js: passed",
+  "shared_assistant_browser_tests": {"passed": 14, "failed": 0},
+  "postgres_browser_tests": {
+    "files": ["tests/test_writer_browser.py", "tests/test_storyboard_browser.py", "tests/test_editing_browser.py"],
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "database": "Independent random temporary PostgreSQL databases",
+    "providers": "Deterministic test substitutes; no paid model calls",
+    "warning": "One unrelated Starlette/AnyIO deprecation warning"
+  },
+  "visual_checks": {
+    "pages": ["/", "/storyboard", "/editing"],
+    "widths": [1440, 390],
+    "assistant_and_workspace_views": 9,
+    "horizontal_overflow": false,
+    "page_errors": 0,
+    "unexpected_non_assistant_post_requests": 0,
+    "boundary": "Actual running application HTML/CSS/scripts; assistant responses replaced by a deterministic visual fixture"
+  },
+  "independent_review": {
+    "finding": "Textarea height was stale after sidebar width changes or saved-width restoration",
+    "resolution": "Regression failed first, then passed with width-only ResizeObserver and teardown cleanup",
+    "other_material_findings": 0
+  },
+  "local_application": {"url": "http://127.0.0.1:8000/", "http_status": 200, "left_running_for_user_trial": true},
+  "limitations": ["Real assistant model response quality not tested", "Current local assistant has no executable text-model profile; configure through the existing UI before sending"],
+  "generated_images": 0,
+  "backend_or_api_changes": false,
+  "business_database_migration": false
+}

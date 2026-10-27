@@ -120,3 +120,91 @@ body.studio-mounted{margin:0;background:#f2f1eb;color:#263c34;font:14px/1.65 "Mi
  #studio-root textarea,#studio-root input{font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){#studio-root *,#studio-root *::before,#studio-root *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Approved soft-studio treatment; the shared layout and recovery controls stay native. */
+body.studio-mounted{--ink:#293644;--muted:#65717f;--line:#dce3e8;--paper:#fffefa;--green:#365c83;padding:12px;background:#deedf7;color:var(--ink)}
+#studio-root{--studio-ink:#293644;--studio-muted:#65717f;--studio-line:#dce3e8;--studio-accent:#365c83;height:calc(100dvh - 24px);border-radius:16px;background:#f8fafb;box-shadow:0 10px 30px #35496814}
+#studio-root :focus-visible{outline-color:#718fa9}
+#studio-root ::selection{background:#d8e7f3;color:#243d55}
+#studio-root ::placeholder{color:#6a7581}
+#studio-root ::-webkit-scrollbar-thumb{background:#c4ced7;border-color:#fafaf8}
+#studio-nav{background:#fffefa}
+#studio-nav .studio-brand{font-size:19px;letter-spacing:-.03em}
+.studio-stages{height:auto;align-items:center;gap:4px;padding:4px;background:#eef1f4;border-radius:8px}
+#studio-nav .studio-stage{padding:5px 18px;font-size:13px;border-radius:5px}
+#studio-nav .studio-stage[aria-current=page]{background:#fff;box-shadow:0 1px 3px #22354b13}
+#studio-nav .studio-stage[aria-current=page]::after{display:none}
+#assistant-panel{background:#fafaf8}
+.studio-assistant-header{padding-top:20px}
+#studio-root .studio-assistant-header h2{font-size:15px}
+#studio-root .studio-button:hover:not(:disabled){background:#e9eff4;color:#304d67}
+.studio-context{gap:7px;border-bottom:0;padding-bottom:14px}
+.studio-context-stage{color:#536b82;background:#eaf0f5;padding:2px 7px}
+.studio-notice{background:#edf2f6;color:#435c73;border-radius:7px}
+.studio-messages{display:flex;flex-direction:column;gap:25px;padding:16px 19px 24px}
+.studio-message{padding:0;flex-shrink:0}
+.studio-message+.studio-message{padding-top:0;border-top:0}
+.studio-message-label{gap:8px;color:#4d6378;flex-wrap:wrap}
+.studio-message-avatar{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#e4eaf0;color:#4d657d;font:600 12px/1 "Segoe UI",sans-serif}
+.studio-message-context{font-size:11px;color:var(--studio-muted)}
+.studio-message-text{line-height:1.85}
+.studio-message-user{align-self:flex-end;max-width:92%}
+.studio-message-user .studio-message-label{justify-content:flex-end;font-weight:400;margin-bottom:5px}
+.studio-message-user .studio-message-role{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap}
+.studio-message-user .studio-message-text{padding:10px 13px;background:#e9edf1;border-radius:14px 14px 4px 14px;color:var(--studio-ink);font-weight:400}
+.studio-empty h3{color:#38536b}
+.studio-composer-region{padding:0 16px 13px;flex-shrink:0;min-width:0;max-height:62%;overflow:auto}
+.studio-status{font-size:11px;margin:0 3px 7px;color:var(--studio-muted)}
+#studio-root .studio-composer{margin:0;padding:13px;border-color:#dce2e7;border-radius:16px;background:#fff}
+#studio-root #assistant-input{resize:none;overflow-y:auto}
+#studio-root #assistant-input:focus-visible{box-shadow:inset 0 -2px 0 #9bb2c5}
+#studio-root .studio-composer:focus-within{border-color:#93adc3}
+.studio-model-tools{display:flex;gap:6px;align-items:center;margin-top:12px;min-width:0}
+#studio-root .studio-control{flex:1 1 0}
+#studio-root .studio-effort-control{flex:0 1 80px}
+#studio-root .studio-control select{color:#52677b;background:#eff3f6}
+.studio-composer-tools{justify-content:space-between;flex-wrap:nowrap;gap:8px;margin-top:9px}
+#studio-root .studio-send{background:#354d65;border-color:#354d65;color:#fff;border-radius:50%;width:42px;min-width:42px;height:42px;padding:0;font-size:12px}
+#studio-root .studio-send:hover:not(:disabled){background:#2a4057;color:#fff}
+#studio-root .studio-send:disabled{background:#e9edf0;color:#7c8995;border-color:transparent;opacity:1}
+.studio-composer-hint{font-size:11px;line-height:1.5;margin:8px 0 0;color:var(--studio-muted);text-align:center}
+.studio-config-link{margin:8px 2px 0;overflow-wrap:anywhere}
+.studio-attachment{background:#ecf1f6;color:#546d84;border-radius:6px}
+.studio-recovery:not(:empty){padding:10px 11px;margin-bottom:10px;background:#f7f1e6;border:0;border-radius:7px}
+.studio-proposal{padding:14px;margin:15px 0 0;border:1px solid #dfe4e9;border-radius:10px;background:#fff;flex-shrink:0}
+.studio-messages>.studio-proposal{margin-top:0}
+.studio-proposal+.studio-proposal{margin-top:16px}
+.studio-proposal h3{font-size:14px;color:#3d566f}
+.studio-proposal p{font-size:13px}
+.studio-proposal-state{font-size:11px;color:#6a5e84;background:#eee9fa;padding:2px 6px;border-radius:4px}
+.studio-proposal summary{color:var(--studio-accent)}
+.studio-proposal pre{background:#f1f4f7;border-radius:5px}
+.studio-proposal-actions{flex-wrap:wrap}
+#studio-root .studio-proposal-actions>.studio-button:first-child{background:var(--studio-accent);border-color:var(--studio-accent);color:#fff}
+.studio-proposal p.studio-proposal-meta{color:var(--studio-muted)}
+.studio-separator{background:#f0f4f7}
+.studio-separator::after{background:#b6c7d4}
+.studio-separator:hover,.studio-separator:focus-visible{background:#dce8f2}
+#studio-workspace{background:linear-gradient(150deg,#edf4f9,#f6f4ef)}
+.studio-workspace-heading{padding:22px 28px 18px;margin:0}
+.studio-workspace-heading h1{font:500 24px/1.5 "Noto Serif SC","Songti SC","SimSun",serif;color:#38536b}
+@media(max-width:1023px){
+ body.studio-mounted{padding:0}
+ #studio-root,.studio-assistant-collapsed#studio-root{height:100dvh;border-radius:0;box-shadow:none}
+ #studio-nav{gap:18px}
+ #studio-nav .studio-brand{font-size:17px}
+ .studio-stages{gap:1px;padding:3px}
+ #studio-nav .studio-stage{font-size:13px;min-height:36px;padding:4px 12px}
+ .studio-mobile-tabs{gap:5px;padding:5px 16px;background:#fffefa}
+ #studio-root .studio-mobile-tabs button{border-radius:6px;min-height:38px}
+ #studio-root .studio-mobile-tabs button[aria-pressed=true]{box-shadow:none;background:#e9eff5;color:#385771}
+ .studio-assistant-header{padding-top:14px}
+ .studio-context{padding-bottom:10px}
+ .studio-messages{padding:18px 18px 24px}
+ .studio-composer-region{padding:0 12px max(12px,env(safe-area-inset-bottom))}
+ #studio-root .studio-composer{margin:0;padding:12px}
+ #studio-root .studio-control{flex:1 1 0}
+ #studio-root .studio-effort-control{flex:0 1 80px}
+ #studio-root .studio-send{width:44px;min-width:44px;height:44px}
+ .studio-workspace-heading{padding:18px 16px}
+}
