@@ -1,0 +1,42 @@
+{
+  "layouts": [
+    {
+      "width": 1024,
+      "overflow": false,
+      "imageCount": 0
+    },
+    {
+      "width": 736,
+      "overflow": false,
+      "imageCount": 0
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "imageCount": 0
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "imageCount": 0
+    }
+  ],
+  "interactions": [
+    "shot selection",
+    "unsaved switch guard",
+    "local save persistence",
+    "frame and prompt context",
+    "proposal comparison and apply",
+    "unsaved confirmation guard",
+    "confirmation feedback",
+    "safe local message",
+    "overview and focus",
+    "mobile panels and draft retention",
+    "empty and whitespace send disabled",
+    "enter and shift enter",
+    "IME composition guard",
+    "quote remove and send context"
+  ],
+  "imageCount": 0,
+  "errors": []
+}
